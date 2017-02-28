@@ -36,6 +36,7 @@ public class JSON_parser{
         String answer = reader.next();
         String question=runQuiz(answer);
         System.out.println(question);*/
+        //System.out.println("HI");
     }
 
     public void setupQuiz(Context ctx) {
