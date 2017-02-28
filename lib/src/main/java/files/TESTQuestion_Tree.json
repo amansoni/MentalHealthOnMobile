@@ -1,0 +1,20 @@
+{
+    "suic-curr-int": [ {
+      "#text": "2.0357",
+      "Yes": [{ 
+        "suic-plans": {
+          "#text": "1.3263",
+          "Yes": "yes",
+          "No": "no"
+        }
+      }],
+      "No": [{
+        "suic-int-p-trig": {
+          "#text": "1.4426",
+          "Yes": "yes",
+		  "No": "no"
+        }
+      }]
+    }]
+  
+}

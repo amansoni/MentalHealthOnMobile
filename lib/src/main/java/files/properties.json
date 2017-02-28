@@ -1,0 +1,10 @@
+{
+    "name": "JSONParser",
+    "version": "1.0.0",
+    "description": "Parse some JSON data",
+    "suic-curr-int": [ {
+		"#text": "Yes",
+        "yes",
+        "no"
+    }]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "OK",
+  "origin_addresses": [ "Vancouver, BC, Canada", "Seattle, État de Washington, États-Unis" ],
+  "destination_addresses": [ "San Francisco, Californie, États-Unis", "Victoria, BC, Canada" ],
+  "rows": [ {
+    "elements": [ {
+      "status": "Yes",
+      "duration": {
+        "value": 340110
+      },
+	  "distance": {
+		"value": 4111
+	  }
+    } ]
+  }]
+}
