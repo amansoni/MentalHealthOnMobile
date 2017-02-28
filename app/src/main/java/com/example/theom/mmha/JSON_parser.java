@@ -31,12 +31,6 @@ public class JSON_parser{
 
     public static void main(String[] args) throws FileNotFoundException, JSONException{
 
-        /*Scanner reader = new Scanner(System.in);  // Reading from System.in
-        System.out.println("Enter in Yes/No answer: ");
-        String answer = reader.next();
-        String question=runQuiz(answer);
-        System.out.println(question);*/
-        //System.out.println("HI");
     }
 
     public void setupQuiz(Context ctx) {
