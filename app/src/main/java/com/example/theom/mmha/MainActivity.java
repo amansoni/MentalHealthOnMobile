@@ -20,13 +20,17 @@ import android.widget.ListView;
 
 import android.support.design.widget.NavigationView;
 import com.example.theom.mmha.Fragments.HomepageFragment;
+import com.example.theom.mmha.Fragments.Map.GmapFragment;
+import com.example.theom.mmha.Fragments.Places.PlacePins;
+import com.example.theom.mmha.Fragments.Places.PlacesList;
+import com.example.theom.mmha.Fragments.Places.SearchDoctorFragment;
 import com.example.theom.mmha.Fragments.QuestionFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, HomepageFragment.OnFragmentInteractionListener, QuestionFragment.OnFragmentInteractionListener{
 
     ListView listView;
     ArrayAdapter<String> listAdapter;
-    String fragmentArray[] = {"Homepage", "Quiz"};
+    String fragmentArray[] = {"Homepage", "Quiz", "Map"};
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
 
@@ -66,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case 1:
                         fragment = new QuestionFragment();
                         break;
+                    case 2:
+                        fragment = new SearchDoctorFragment();
+                        break;
                     default:
                         fragment = new HomepageFragment();
                         break;
@@ -99,6 +106,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public static PlacePins returnPlacePins(){
+        PlacePins placePins = new PlacePins();
+        return placePins;
     }
 
     @Override
