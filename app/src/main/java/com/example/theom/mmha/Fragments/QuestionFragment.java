@@ -4,10 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.theom.mmha.JSON_parser;
-import com.example.theom.mmha.MainActivity;
 import com.example.theom.mmha.R;
-import com.example.theom.mmha.XML_parser;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  * A simple {@link Fragment} subclass.
