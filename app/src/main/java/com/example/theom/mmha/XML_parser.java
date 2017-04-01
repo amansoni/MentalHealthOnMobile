@@ -25,11 +25,11 @@ public class XML_parser extends FragmentActivity{
 
     }
 
-    public NodeList parseXML(Context ctx){
+    public NodeList parseXML(Context ctx, Integer xml_file){
         NodeList nList = null;
         try {
             try {
-                InputStream XMLin = ctx.getResources().openRawResource(R.raw.qt);
+                InputStream XMLin = ctx.getResources().openRawResource(xml_file);
                 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
                 Document doc = dBuilder.parse(new InputSource(XMLin));
@@ -63,16 +63,40 @@ public class XML_parser extends FragmentActivity{
         return nList;
     }
 
-    public String getQuestionText(NodeList nList, String questionID) {
+    public QuestionObject getQuestionText(NodeList nList, String questionID) {
         String questionText = "Couldn't find the question";
+        String values = "Question type not found";
         for (int i = 0; i < nList.getLength(); i++) {
             Element e = (Element) nList.item(i);
             String search_attribute = questionID;
             if (e.getAttribute("code").equals(search_attribute)) {
                 questionText =  e.getAttribute("question");
-                System.out.println("Question: " + questionText);
+                values = e.getAttribute("values");
+                System.out.println("Question: " + questionText + "\nQuestion type: "+values);
             }
         }
-        return questionText;
+        QuestionObject question = new QuestionObject(questionText, values);
+        return question;
+    }
+
+    public QuestionObject getQuestionFormat(NodeList nList, String questionID, QuestionObject question) {
+        String action = "Action not found";
+        String value_mg = "Value_mg not found";
+        Boolean valueFound = false;
+       // while(valueFound == false) {
+            for (int i = 0; i < nList.getLength(); i++) {
+                Element e = (Element) nList.item(i);
+                String search_attribute = questionID;
+                if (e.getAttribute("code").equals(search_attribute)) {
+                    action = e.getAttribute("action");
+                    value_mg = e.getAttribute("value-mg");
+                    question.setQuestionAction(action);
+                    question.setQuestionMG(value_mg);
+                    break;
+                }
+            }
+       // }
+
+        return question;
     }
 }

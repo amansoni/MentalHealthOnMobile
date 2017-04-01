@@ -3,6 +3,7 @@ package com.example.theom.mmha;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.theom.mmha.XML_parser;
@@ -28,6 +29,7 @@ public class JSON_parser{
     static XML_parser xml_parser = new XML_parser();
     String JSON_File;
     JSONObject rootObject;
+    String TAG = "JSON_Parser";
 
     public static void main(String[] args) throws FileNotFoundException, JSONException{
 
@@ -58,21 +60,30 @@ public class JSON_parser{
             }
         }
 
-    public String runQuiz(String answer, Context ctx){
+    public QuestionObject runQuiz(String answer, Context ctx){
         try {
 
             String nextQuestion = getNextQuestion(answer);
-            NodeList nList = xml_parser.parseXML(ctx);
-            String fullTextQuestion = xml_parser.getQuestionText(nList, nextQuestion);
+            NodeList nList = xml_parser.parseXML(ctx, R.raw.qt);
+            QuestionObject question = xml_parser.getQuestionText(nList, nextQuestion);
+            String fullTextQuestion = question.getQuestionText();
             rows = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion);
-            return fullTextQuestion;
+
+            if(question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")){
+                NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
+                question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
+                System.out.println("Action: " + question.getQuestionAction() + "\nValue-mg = " + question.getQuestionMG());
+            }
+
+            return question;
 
 
         } catch (JSONException e) {
             // JSON Parsing error
             e.printStackTrace();
         }
-        return "Leaf Node Reached";
+        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", "No type");
+        return leafQuestion;
     }
 
 

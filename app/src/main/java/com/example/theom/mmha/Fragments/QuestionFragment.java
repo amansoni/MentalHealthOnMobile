@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.theom.mmha.JSON_parser;
+import com.example.theom.mmha.QuestionObject;
 import com.example.theom.mmha.R;
 
 /**
@@ -23,6 +24,11 @@ import com.example.theom.mmha.R;
  * create an instance of this fragment.
  */
 public class QuestionFragment extends Fragment {
+
+    TextView questionTextView;
+    TextView questionActionTextView;
+    TextView questionTypeTextView;
+    TextView questionMGTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -53,17 +59,26 @@ public class QuestionFragment extends Fragment {
         final JSON_parser senorJSON_parser = new JSON_parser();
         senorJSON_parser.setupQuiz(getActivity());
 
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_question, container, false);
+
+        questionTextView = (TextView) v.findViewById(R.id.questionTextView);
+        questionActionTextView = (TextView) v.findViewById(R.id.questionAction);
+        questionTypeTextView = (TextView) v.findViewById(R.id.questionType);
+        questionMGTextView = (TextView) v.findViewById(R.id.questionMG);
+
         Button mYesButton = (Button)v.findViewById(R.id.yesButton);
         mYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Context ctx = getActivity();
                 String answer = "Yes";
-                String question = senorJSON_parser.runQuiz(answer, ctx);
-                TextView textView = (TextView) getView().findViewById(R.id.questionTextView);
-                textView.setText(question);
+                QuestionObject question = senorJSON_parser.runQuiz(answer, ctx);
+                questionTextView.setText("Question: "+question.getQuestionText());
+                questionActionTextView.setText("Action: "+question.getQuestionAction());
+                questionTypeTextView.setText("Type: "+question.getQuestionType());
+                questionMGTextView.setText("MG: "+question.getQuestionMG());
             }
         });
         Button mNoButton = (Button)v.findViewById(R.id.noButton);
@@ -72,9 +87,11 @@ public class QuestionFragment extends Fragment {
             public void onClick(View v) {
                 Context ctx = getActivity();
                 String answer = "No";
-                String question = senorJSON_parser.runQuiz(answer, ctx);
-                TextView textView = (TextView) getView().findViewById(R.id.questionTextView);
-                textView.setText(question);
+                QuestionObject question = senorJSON_parser.runQuiz(answer, ctx);
+                questionTextView.setText("Question: "+question.getQuestionText());
+                questionActionTextView.setText("Action: "+question.getQuestionAction());
+                questionTypeTextView.setText("Type: "+question.getQuestionType());
+                questionMGTextView.setText("MG: "+question.getQuestionMG());
             }
         });
         return v;

@@ -1,0 +1,2897 @@
+{
+  "node": {
+    "-label": "mental-health-risk",
+    "-code": "mental-health-risk",
+    "-min-mg-exceptions": "(hto-sex-asslt gen-dep-stage)",
+    "-populations": "working-age",
+    "-services": "((structure ((iapt ((future-changes needed)))(service-user ((future-changes needed)))))(rendition ((service-user ((su-pop-alt-report-scale-col true)(su-pop-alt-report-scale-labels true))))))",
+    "-overall-formulation": "((title \"Risk formulation\") (headings ((\"RISKS BEING FORMULATED (Problem risks)\" 2)(\"Risk triggers (Precipitating factors)\" 2) (\"Persistent contextual factors (Perpetuating)\" 2) (\"Past factors (Historical, Pre-existing or Predisposing)\" 2) (\"Protective factors\" 2))))",
+    "-overall-management": "((title \"Safety Plan\"))",
+    "-help": "Please note: Risks should be assessed in the context of the person's circumstances following the assessment. This may be the same as the current circumstances but if, for example, they are being referred elsewhere or discharged, the risks should be considered for the new situation.",
+    "node": [
+      {
+        "-label": "suicide",
+        "-code": "suic",
+        "-_FIXME": "TODO - replace mg-deviation-threshold attrib with real a real version",
+        "-value-mg": "((0 0) (10 1))",
+        "-values": "scale",
+        "-mg-deviation-threshold": "0.2",
+        "-question": "In your judgement, what is the risk that the person will attempt suicide?",
+        "-help": "Consider the likelihood in the context of the person's circumstances after the assessment if no further action is taken.",
+        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+        "-scale-type": "((left \"no risk\") (right \"maximum risk\"))",
+        "node": [
+          {
+            "-label": "suicide specific questions",
+            "-code": "sui-specific",
+            "-layer": "0",
+            "-question": "Do you have reason to be concerned about the person's risk of suicide?",
+            "-screening": "0",
+            "-screening-only": "true",
+            "node": [
+              {
+                "-label": "past and current suicide attempts",
+                "-code": "suic-past-att",
+                "-persistent": "hard",
+                "-layer": "0",
+                "-filter-q": "Has the person ever made a suicide attempt? If yes, the questions about them should be answered with reference to the attempts in general rather than any specific one, unless otherwise stated.",
+                "-screening": "0",
+                "node": [
+                  {
+                    "-label": "occurrence of suicide attempts",
+                    "-code": "suic-occur",
+                    "node": [
+                      {
+                        "-label": "most recent suicide attempt",
+                        "-code": "suic-most-rec",
+                        "-value-mg": "((0 1)(2 1)(26 0.5))",
+                        "-persistent": "soft",
+                        "-answer-constraint": "((>= [suic >> sui-specific >> suic-past-att >> suic-occur >> suic-patt-att >> suic-first-occ]))",
+                        "-values": "date-week",
+                        "-layer": "0",
+                        "-question": "When was the most recent suicide attempt?",
+                        "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "more than one suicide attempt",
+                        "-code": "suic-patt-att",
+                        "-persistent": "hard",
+                        "-layer": "0",
+                        "-filter-q": "Has there been more than one suicide attempt?",
+                        "-auto-answer": "[NO suic-first-occ suic >> sui-specific >> suic-past-att >> suic-occur >> suic-most-rec][NO suic-how-many \"1\"]",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "first time suicide attempt occurred",
+                            "-code": "suic-first-occ",
+                            "-value-mg": "((0 0.4) (52 0.4))",
+                            "-persistent": "hard",
+                            "-values": "date-week",
+                            "-question": "When was the first suicide attempt?",
+                            "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases, the duration increases but the effect of recency is much more important on the overall risk judgement."
+                          },
+                          {
+                            "-label": "changing frequency of suicide attempts",
+                            "-code": "suic-escalate",
+                            "-value-mg": "((DECREASING 0) (SAME 0.5) (INCREASING 1))",
+                            "-persistent": "soft",
+                            "-values": "nominal",
+                            "-layer": "0",
+                            "-question": "How have the suicide attempts been changing in frequency over the last two years?",
+                            "-screening": "0"
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "how many suicide attempts",
+                        "-code": "suic-how-many",
+                        "-value-mg": "((0 0)(1 0.5)(3 1))",
+                        "-persistent": "soft",
+                        "-values": "integer",
+                        "-question": "Approximately how many suicide attempts have there been?"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "preparation and seriousness of suicide attempts",
+                    "-code": "suic-prep-serious-at",
+                    "node": [
+                      {
+                        "-label": "suicide note written for one or more previous attempts",
+                        "-code": "suic-note-prev",
+                        "-value-mg": "((YES 1) (NO 0))",
+                        "-persistent": "hard",
+                        "-values": "nominal",
+                        "-question": "Was a suicide note written for any previous or current suicide attempts?"
+                      },
+                      {
+                        "-label": "seriousness of suicide methods",
+                        "-code": "suic-ser-method",
+                        "node": [
+                          {
+                            "-label": "chance of discovery after suicide attempts",
+                            "-code": "suic-discovery",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-question": "Did the person try to hide any suicide attempt, to make sure it was not stopped?",
+                            "-help": "Consider whether anyone was given any prior warning about an intended attempt or whether the person made sure he or she will not be found accidentally by someone (eg no people around, not expecting anyone).",
+                            "-scale-type": "((left \"no hiding\") (right \"tried very hard to hide attempts\"))"
+                          },
+                          {
+                            "-label": "potential lethality of suicide method",
+                            "-code": "suic-lethality",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-layer": "0",
+                            "-question": "How lethal was the most serious method used by the person in any of the suicide attempts (i.e. how likely to succeed in killing the person without any intervention)?",
+                            "-help": "For example, hanging or jumping off a high building will be maximally lethal but self-stabbing or overdosing, less lethal depending exactly how it was done (eg number of pills, type of pills).",
+                            "-scale-type": "((left \"harmless method\") (right \"method extremely likely to kill\"))",
+                            "-screening": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "person's current perspective on suicide attempts",
+                    "-code": "suic-person-per",
+                    "node": [
+                      {
+                        "-label": "thoughts/feelings related to previous suicide attempts",
+                        "-code": "suic-thght-prev",
+                        "node": [
+                          {
+                            "-label": "How much did the person want to succeed with the suicide attempts",
+                            "-code": "suic-ser-succd",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-layer": "0",
+                            "-question": "Do you believe the person wanted the suicide attempts to succeed at the time?",
+                            "-help": "Did he or she immediately regret any of the attempts or wish they had succeeded? Was the person surprised to be alive afterwards?",
+                            "-scale-type": "((left \"no desire to succeed\") (right \"really wanted to succeed\"))",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "regret about trying to complete suicide",
+                            "-code": "suic-regret",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-layer": "0",
+                            "-question": "How much does the person fail to show any regret or remorse over having tried to complete suicide in the past?",
+                            "-help": "This applies to the person's current feelings and includes embarrassment or shame, regret that suicide was attempted, or wishing that the suicide was successful.",
+                            "-scale-type": "((left \"wish they'd never tried\") (right \"no regrets\"))",
+                            "-screening": "0"
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "insight into lethality of previous suicide attempts",
+                        "-code": "suic-leth-insght",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-persistent": "soft",
+                        "-values": "scale",
+                        "-question": "Does the person lack awareness about how dangerous the suicide attempts were?",
+                        "-scale-type": "((left \"aware of the danger\") (right \"completely unaware of the danger\"))"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "-label": "current suicidal situation and behaviour",
+                "-code": "suic-curr-sit-behav",
+                "node": [
+                  {
+                    "-label": "current intention to complete suicide",
+                    "-code": "suic-curr-int",
+                    "-layer": "0",
+                    "-question": "Do you have reason to be concerned about the person's current intention to complete suicide?",
+                    "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "plans and methods for completing suicide",
+                        "-code": "suic-plans",
+                        "-filter-q": "Does the person have any plans for making a future suicide attempt?",
+                        "-help": "Answer yes if people have said anything about how they might end their lives.",
+                        "node": [
+                          {
+                            "-label": "realism of suicide plan",
+                            "-code": "suic-plan-real",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-values": "scale",
+                            "-question": "Can the person easily carry out the suicide plan (consider realism of plan and access to means of putting it into action)?",
+                            "-help": "Consider the person's occupation (eg doctor, vet, farmer), access to equipment (eg weapon, bleach, rope, gun, drugs), availability of suitable locations and contexts (eg being alone, high cliffs/buildings nearby), whether assistance has been obtained by anyone else, and collusion such as a suicide pact.",
+                            "-scale-type": "((left \"no chance of carrying out plan\") (right \"extremely easy to carry out plan\"))"
+                          },
+                          {
+                            "-label": "physical steps taken to implement suicide plan",
+                            "-code": "suic-steps-takn",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-values": "scale",
+                            "-question": "Has the person taken steps towards carrying out the suicide plan?",
+                            "-help": "For example: researching the means of suicide, obtaining the objects for carrying it out (hoarding drugs, getting hosepipe for carbon monoxide poisoning, buying rope or cord), rehearsing the planned suicide.",
+                            "-scale-type": "((left \"no steps at all\") (right \"preparations complete\"))"
+                          },
+                          {
+                            "-label": "potential lethality of prospective suicide method",
+                            "-code": "suic-prosp-leth",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-values": "scale",
+                            "-question": "How likely is the chosen method to succeed?",
+                            "-help": "For example, hanging or jumping off a high building will be maximally lethal but self-stabbing or overdosing, less lethal depending exactly how it was done (eg number of pills, type of pills). Consider also the likelihood of someone intervening to prevent success.",
+                            "-scale-type": "((left \"no chance of succeeding\") (right \"extremely likely to succeed\"))"
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "informed someone about intention to complete suicide",
+                        "-code": "suic-int-inform",
+                        "-value-mg": "((YES 1) (NO 0))",
+                        "-values": "nominal",
+                        "-question": "Has the person told anyone about an intention to complete suicide?",
+                        "-help": "This includes making threats or talking about intentions to complete suicide."
+                      },
+                      {
+                        "-label": "end-of-life preparations for intended suicide act",
+                        "-code": "suic-eol-prep",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Has the person made end-of-life preparations matching those that would cause you most concern about suicide risk (eg written a will, sorted finances, put house in order, written suicide note)?",
+                        "-scale-type": "((left \"no preparations\") (right \"finished all preparations\"))"
+                      },
+                      {
+                        "-label": "self-harm behaviour indicative of suicide",
+                        "-code": "suic-s-h-behv",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-persistent": "soft",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Does the person have a pattern of self-harming that indicates suicidal intention?",
+                        "-help": "This includes self harming behaviour that is failing to provide any relief to the person's situation, no reassurance about future behaviour, a detrimental change in the pattern of attempts (eg escalating frequency of attempts, methods involved), and whether the method used is so dangerous as to be likely to result in death (eg lethal laceration, excessively reckless driving).",
+                        "-scale-type": "(left \"no self-harming\") (right \"self-harming strongly indicates suicide intention\")",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "spiritual/religious values/beliefs affecting suicide risk",
+                        "-code": "suic-rel-belief",
+                        "-value-mg": "((STRONGLY-PROTECT 0) (PROTECT 0) (NO-EFFECT 0) (INCREASE 0.5) (STRONGLY-INCREASE 1))",
+                        "-persistent": "soft",
+                        "-values": "nominal",
+                        "-question": "What effect do the person's spiritual/religious values, beliefs, or attitudes to dying have on risk of suicide?"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "potential triggers for prospective suicide",
+                    "-code": "suic-int-p-trig",
+                    "-layer": "0",
+                    "-question": "Do you have reason to be concerned about anything that could trigger suicide attempts?",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "potential triggers of suicide",
+                        "-code": "suic-pot-trig",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Is the person exposed to feelings or circumstances that may trigger a suicide attempt?",
+                        "-help": "Consider relevant emotions such as desperation, anguish, agitation, anxiety, frustration, compulsion, feeling rejected, external triggers of previous suicide attempts, mental health problems, relationship triggers (eg argument, row), changes to relationships (eg divorce, break up of relationship, loss of or change of carer ), alcohol misuse, media influence (eg copycat behaviour), their mental state (eg any dilemmas that can't be resolved), or their current setting (eg police station, custody), change in environment such as going into care or being released from care.",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"no such feelings/circumstances\") (right \"surrounded by such feelings/circumstances\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "potential triggers match those that previously caused suicide attempts",
+                        "-code": "suic-p-trig-mtch",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Do the person's current feelings or circumstances match those that are known to have triggered any previous suicide attempts?",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"no previous attempts\") (right \"current feelings/circumstances identical to those in a previous attempt\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "family history of suicide",
+                        "-code": "suic-fam-hist",
+                        "-value-mg": "((YES 1) (NO 0))",
+                        "-persistent": "hard",
+                        "-values": "nominal",
+                        "-question": "Has there been any history of suicide attempts in the person's family?",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "suicidal ideation",
+                    "-code": "suic-ideation",
+                    "-layer": "0",
+                    "-filter-q": "Is the person having suicidal thoughts or fantasies?",
+                    "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1))(\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "ability to control suicidal ideation",
+                        "-code": "suic-id-control",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Does the person lack ability to control suicidal thoughts or fantasies?",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1))(\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"easily controlled thoughts\") (right \"no control over thoughts\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "content of suicidal ideation indicates high risk",
+                        "-code": "suic-id-hi-risk",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Does the content of the suicidal thoughts or fantasies make it more likely the person will attempt suicide?",
+                        "-help": "What are the thoughts or fantasies about and how does the content raise alarm bells about suicide risk?",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1))(\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"no change to the likelihood\") (right \"greatly increased likelihood\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "frequency of suicidal ideation",
+                        "-code": "suic-id-freq",
+                        "-value-mg": "((DAILY 1) (WEEKLY 0.5) (MONTHLY 0.2) (LESS-THAN-MONTHLY 0))",
+                        "-values": "nominal",
+                        "-question": "How often do the suicidal thoughts or fantasies occur?"
+                      },
+                      {
+                        "-label": "strength, intensity, intrusiveness, and persistence of suicidal ideation",
+                        "-code": "suic-id-strngth",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "How persistent, intrusive, or intense are the suicidal thoughts or fantasies?",
+                        "-help": "Think about how much the suicidal thoughts overwhelm any other thoughts and how real they seem.",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1)))(\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"thoughts hardly noticed\") (right \"can't think about anything else\"))",
+                        "-screening": "0"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "appearance indicators of suicide",
+                    "-code": "app-suic",
+                    "node": [
+                      {
+                        "-label": "self-harming injuries",
+                        "-code": "gen-sh-cuts",
+                        "-generic": "sh >> sh-specific >> sh-past-curr-ep >> sh-occ-of-ep >> gen-sh-cuts"
+                      },
+                      {
+                        "-label": "appearance indicators of self neglect",
+                        "-code": "sn-appearnce",
+                        "-generic": "sn >> sn-appearnce"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "-label": "direct risk children",
+            "-code": "gen-direct",
+            "-generic": "generic >> gen-direct"
+          }
+        ]
+      },
+      {
+        "-label": "self-harm",
+        "-code": "sh",
+        "-value-mg": "((0 0) (10 1))",
+        "-values": "scale",
+        "-question": "In your judgement, what is the risk that the person will self-harm?",
+        "-help": "Consider the likelihood in the context of the person's circumstances after the assessment if no further action is taken.",
+        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+        "-scale-type": "((left \"no risk\") (right \"maximum risk\"))",
+        "node": [
+          {
+            "-label": "self-harm specific questions",
+            "-code": "sh-specific",
+            "-layer": "0",
+            "-question": "Do you have reason to be concerned about the person's risk of self-harming?",
+            "-screening": "0",
+            "-screening-only": "true",
+            "node": [
+              {
+                "-label": "past and current episodes of self-harm",
+                "-code": "sh-past-curr-ep",
+                "-persistent": "hard",
+                "-layer": "0",
+                "-filter-q": "Has the person ever engaged in self-harming behaviour? If yes, the questions about them should be answered with reference to the general episodes rather than any specific one, unless otherwise stated.",
+                "-screening": "0",
+                "node": [
+                  {
+                    "-label": "occurrence of self-harm episodes",
+                    "-code": "sh-occ-of-ep",
+                    "node": [
+                      {
+                        "-label": "self-harming injuries",
+                        "-code": "gen-sh-cuts",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person display evidence of recent self-harming injuries?",
+                        "-help": "Consider cuts, burns, ligature marks, etc.",
+                        "-scale-type": "((left \"no self-harming injuries\") (right \"covered in self-harming injuries\"))"
+                      },
+                      {
+                        "-label": "most recent self-harm episode",
+                        "-code": "sh-most-rec-ep",
+                        "-value-mg": "((0 1)(14 1)(60 0.5)(365 0))",
+                        "-persistent": "soft",
+                        "-answer-constraint": "((>= [sh >> sh-specific >> sh-past-curr-ep >> sh-occ-of-ep >> sh-patt-of-eps >> sh-first-time-ep]))",
+                        "-values": "date-day",
+                        "-question": "When was the most recent self-harm episode?",
+                        "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.6 1.1)))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "multiple self-harm episodes",
+                        "-code": "sh-patt-of-eps",
+                        "-persistent": "hard",
+                        "-filter-q": "Has there been more than one self-harm episode?",
+                        "-auto-answer": "[NO sh-first-time-ep sh >> sh-specific >> sh-past-curr-ep >> sh-occ-of-ep >> sh-most-rec-ep]",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "first time self-harm episode occurred",
+                            "-code": "sh-first-time-ep",
+                            "-value-mg": "((0 0.4) (52 0.4))",
+                            "-persistent": "hard",
+                            "-values": "date-week",
+                            "-question": "When was the first self-harm episode?",
+                            "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                          },
+                          {
+                            "-label": "frequency of self-harming episodes",
+                            "-code": "sh-freq-eps",
+                            "-value-mg": "((DAILY 1) (WEEKLY 0.75) (MONTHLY 0.3) (LESS-THAN-MONTHLY 0))",
+                            "-persistent": "soft",
+                            "-values": "nominal",
+                            "-question": "How often do the episodes of self-harm occur?",
+                            "-action": "((\"open-url(http://http://www.egrist.org/information-and-support)\"(0.3 1.1)))"
+                          },
+                          {
+                            "-label": "change in self-harm frequency",
+                            "-code": "sh-incrse-eps",
+                            "-value-mg": "((DECREASING 0) (SAME 0.5) (INCREASING 1))",
+                            "-persistent": "soft",
+                            "-values": "nominal",
+                            "-layer": "0",
+                            "-question": "Have the self-harm episodes changed in frequency over the last year?",
+                            "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(1.1)))",
+                            "-screening": "0"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "seriousness of self-harm episodes",
+                    "-code": "sh-seriousns-eps",
+                    "node": [
+                      {
+                        "-label": "chance of being helped after self-harming",
+                        "-code": "sh-hlp-after",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-persistent": "soft",
+                        "-values": "scale",
+                        "-question": "Does the person try to hide any self-harming?",
+                        "-help": "Consider whether anyone was given any prior warning about an intended attempt or whether the person made sure he or she will not be found accidentally by someone (eg no people around, not expecting anyone).",
+                        "-scale-type": "((left \"no hiding\") (right \" tries very hard to hide self-harming\"))"
+                      },
+                      {
+                        "-label": "potential lethality of self-harm method",
+                        "-code": "sh-lethality-mth",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-persistent": "soft",
+                        "-values": "scale",
+                        "-question": "In general, how likely is it that the chosen self-harm methods could lead to death?",
+                        "-help": "For example, hanging or jumping off a high building will be maximally lethal but self-stabbing or overdosing, less lethal depending exactly how it was done (eg number of pills, type of pills, degree of cuts and their location).",
+                        "-scale-type": "((left \"extremely unlikely\") (right \"extremely likely\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "change in self-harming method",
+                        "-code": "sh-change-mth",
+                        "-value-mg": "((no-change 0) (recent-change 1))",
+                        "-values": "nominal",
+                        "-add-for-template": "(template-forensic)",
+                        "-question": "Have the self-harming methods suddenly changed?",
+                        "-help": "Think about whether the normal method of self-harming has changed to something different in the last few days. Unfamiliarity with the method can have unpredictable or dangerous outcomes."
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "self-harming not a cry for help",
+                    "-code": "sh-for-hlp-diff",
+                    "-value-mg": "((0 0) (10 1))",
+                    "-persistent": "soft",
+                    "-values": "scale",
+                    "-question": "How much are the self-harming episodes more than a cry for help (driven by the underlying problem rather than trying to get help with it)",
+                    "-help": "Think about how the self-harming is being used. Is it to show others the person needs help or is it a way of coping with their problems alone?",
+                    "-scale-type": "((left \"purely to get help\") (right \"nothing to do with getting help\"))"
+                  },
+                  {
+                    "-label": "self-harm helping to cope with difficulties",
+                    "-code": "sh-hlp-cope-diff",
+                    "-value-mg": "((yes 0) (somewhat 0.5) (no 1))",
+                    "-persistent": "soft",
+                    "-values": "nominal",
+                    "-question": "Did the self-harm episodes help the person cope with difficulties?"
+                  }
+                ]
+              },
+              {
+                "-label": "current self-harm situation and context",
+                "-code": "self-harm-curr-sit-behav",
+                "node": [
+                  {
+                    "-label": "potential triggers for prospective self-harm",
+                    "-code": "sh-pot-triggs-p",
+                    "-layer": "0",
+                    "-question": "Do you have reason to be concerned about anything that could trigger self-harm?",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "potential triggers of self-harm",
+                        "-code": "sh-pot-triggs",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Is the person exposed to feelings or circumstances that may trigger self-harming?",
+                        "-help": "Consider relevant emotions such as desperation, anguish, agitation, anxiety, frustration, compulsion, feeling rejected, external triggers of previous suicide attempts, mental health problems, relationship triggers (eg argument, row), changes to relationships (eg divorce, break up of relationship, loss of or change of carer ), alcohol misuse, media influence (eg copycat behaviour), their mental state (eg any dilemmas that can't be resolved), or their current setting (eg police station, custody), change in environment such as going into care or being released from care.",
+                        "-scale-type": "((left \"no such feelings/circumstances\") (right \"surrounded by such feelings/circumstances\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "potential triggers match those previously triggering self-harm",
+                        "-code": "sh-pot-trigs-mtch",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Do the person's current feelings or circumstances match those that are known to have triggered any previous episodes of self harm?",
+                        "-scale-type": "((left \"no previous self-harming\") (right \"current feelings/circumstances identical to those in previous self-harming\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "family history of self-harm",
+                        "-code": "sh-family-hist",
+                        "-value-mg": "((YES 1) (NO 0))",
+                        "-persistent": "hard",
+                        "-values": "nominal",
+                        "-question": "Has there been any history of self-harm in the person's family?"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "self-harm ideation",
+                    "-code": "sh-ideation",
+                    "-layer": "0",
+                    "-filter-q": "Is the person having self-harming thoughts or fantasies?",
+                    "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(1.1)))",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "frequency of self-harm ideation",
+                        "-code": "sh-freq-ideatn",
+                        "-value-mg": "((DAILY 1) (WEEKLY 0.5) (MONTHLY 0.2) (LESS-THAN-MONTHLY 0))",
+                        "-values": "nominal",
+                        "-question": "How often do the self-harming thoughts or fantasies occur?"
+                      },
+                      {
+                        "-label": "strength, intensity, intrusiveness, and persistence of self-harm ideation",
+                        "-code": "sh-strength",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "How persistent, intrusive, and intense are the self-harming thoughts?",
+                        "-help": "Think about how much the self-harming thoughts overwhelm any other thoughts and how real they seem.",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"thoughts hardly noticed\") (right \"can't think about anything else\"))",
+                        "-screening": "0"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "-label": "direct risk children",
+            "-code": "gen-direct",
+            "-generic": "generic >> gen-direct"
+          }
+        ]
+      },
+      {
+        "-label": "harm to others or damage to property",
+        "-code": "hto",
+        "-value-mg": "((0 0) (10 1))",
+        "-values": "scale",
+        "-question": "In your judgement, what is the risk that the person will cause harm to people/animals or damage property?",
+        "-help": "Consider the likelihood and consequences in the context of the person's circumstances after the assessment if no further action is taken.",
+        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+        "-scale-type": "((left \"no risk\") (right \"maximum risk\"))",
+        "node": [
+          {
+            "-label": "harm/damage specific questions",
+            "-code": "hto-specific",
+            "-layer": "0",
+            "-question": "Do you have reason to be concerned about the person's risk of harm to others or destructive behaviour?",
+            "-screening": "0",
+            "-screening-only": "true",
+            "node": [
+              {
+                "-label": "past and current episodes of harm or damage",
+                "-code": "hto-past-curr-ep",
+                "-persistent": "hard",
+                "-layer": "0",
+                "-filter-q": "Has the person ever engaged in episodes of harm to people/animals or damage to property (fire setting, vandalism, etc)? If yes, the questions about them should be answered with reference to the attempts in general rather than any specific one, unless otherwise stated.",
+                "-screening": "0",
+                "node": [
+                  {
+                    "-label": "type and seriousness of harm or damage episodes",
+                    "-code": "hto-type",
+                    "node": [
+                      {
+                        "-label": "physical or sexual assaults",
+                        "-code": "hto-phys-sex",
+                        "-persistent": "hard",
+                        "-filter-q": "Has the person ever carried out any physical or sexual assaults?",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "any physical assaults",
+                            "-code": "hto-any-violent",
+                            "-persistent": "hard",
+                            "-layer": "0",
+                            "-filter-q": "Were any of the episodes physical assaults/abuse?",
+                            "-screening": "0",
+                            "node": [
+                              {
+                                "-label": "seriousness of violent assault/physical abuse",
+                                "-code": "hto-violent",
+                                "-value-mg": "((0 0) (10 1))",
+                                "-persistent": "soft",
+                                "-values": "scale",
+                                "-question": "How serious was the most severe physical assault or abuse?",
+                                "-scale-type": "((left \"minor\") (right \"extremely serious\"))",
+                                "-screening": "0"
+                              },
+                              {
+                                "-label": "most recent violent harm to others",
+                                "-code": "hto-recent-violent-eps",
+                                "-value-mg": "((0 1)(2 1)(52 0.5))",
+                                "-persistent": "soft",
+                                "-answer-constraint": "((>= [hto >> hto-specific >> hto-past-curr-ep >> hto-type >> hto-phys-sex >> hto-any-violent >> hto-first-time-violent-ep]))",
+                                "-values": "date-week",
+                                "-question": "When was the most recent episode of assault/physical abuse?",
+                                "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                                "-screening": "0"
+                              },
+                              {
+                                "-label": "frequency of physical assaults",
+                                "-code": "hto-violent-prev-freq",
+                                "-persistent": "soft",
+                                "-value-mg": "((ONLY-ONCE 0.2)(LESS-THAN-EVERY-YEAR 0.4) (ONCE-EVERY-YEAR 0.6)(SEVERAL-TIMES-YEAR 0.7)(MONTHLY 0.8)(WEEKLY 0.9)(DAILY 1))",
+                                "-values": "nominal",
+                                "-question": "How frequent are the physical assaults?",
+                                "-screening": "0"
+                              },
+                              {
+                                "-label": "first time physical harm to others occurred",
+                                "-code": "hto-first-time-violent-ep",
+                                "-value-mg": "((0 0.4) (12 0.4))",
+                                "-persistent": "hard",
+                                "-values": "date-month",
+                                "-question": "When was the first episode of assault/physical abuse?",
+                                "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                              }
+                            ]
+                          },
+                          {
+                            "-label": "any non-consensual sexual assault",
+                            "-code": "hto-any-sex-asslt",
+                            "-persistent": "hard",
+                            "-filter-q": "Were any of the previous assaults rape or some other form of sexual abuse?",
+                            "-screening": "0",
+                            "node": [
+                              {
+                                "-label": "type of non-consensual sexual assault",
+                                "-code": "hto-sex-asslt",
+                                "-value-mg": "((INDECENT-EXPOSURE 0.2)(FONDLING 0.4) (ORAL-RAPE 0.8) (ANAL-RAPE 1) (VAGINAL-RAPE 1))",
+                                "-persistent": "soft",
+                                "-values": "nominal",
+                                "-question": "Tick the most serious form of sexual assault by the person?",
+                                "-help": "This includes forcible fondling, sexual assault with an object, forcible oral or anal intercourse, and forcible rape.",
+                                "-screening": "0"
+                              },
+                              {
+                                "-label": "most recent episode of sexual assault",
+                                "-code": "hto-recent-sexual-eps",
+                                "-value-mg": "((0 1)(2 1)(52 0.5))",
+                                "-persistent": "soft",
+                                "-answer-constraint": "((>= [hto >> hto-specific >> hto-past-curr-ep >> hto-type >> hto-phys-sex >> hto-any-sex-asslt >> hto-first-time-sexual-ep]))",
+                                "-values": "date-week",
+                                "-question": "When was the most recent episode of sexual assault?",
+                                "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                                "-screening": "0"
+                              },
+                              {
+                                "-label": "frequency of sexual assaults",
+                                "-code": "hto-sexual-prev-freq",
+                                "-persistent": "soft",
+                                "-value-mg": "((ONLY-ONCE 0.2)(LESS-THAN-EVERY-YEAR 0.4) (ONCE-EVERY-YEAR 0.6)(SEVERAL-TIMES-YEAR 0.7)(MONTHLY 0.8)(WEEKLY 0.9)(DAILY 1))",
+                                "-values": "nominal",
+                                "-question": "How frequent are the episodes of sexual assault?",
+                                "-screening": "0"
+                              },
+                              {
+                                "-label": "first time sexual assault occurred",
+                                "-code": "hto-first-time-sexual-ep",
+                                "-value-mg": "((0 0.4) (12 0.4))",
+                                "-persistent": "hard",
+                                "-values": "date-month",
+                                "-question": "When was the first episode of sexual assault?",
+                                "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                              }
+                            ]
+                          },
+                          {
+                            "-label": "history of using weapons",
+                            "-code": "hto-weapons-hist",
+                            "-value-mg": "((YES 1) (NO 0))",
+                            "-persistent": "hard",
+                            "-values": "nominal",
+                            "-question": "Did any previous episodes of harm to others involve weapons (eg guns, knives)?",
+                            "-screening": "0"
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "emotional episodes of harm to others",
+                        "-code": "hto-emotional-eps",
+                        "-persistent": "hard",
+                        "-filter-q": "Has the person ever emotionally abused other people (including racial abuse)?",
+                        "-help": "Consider verbal abuse, insults, name calling, emotional bullying, constant criticism, humiliation.",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "seriousness of emotional harm to others",
+                            "-code": "hto-emotional-ep",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-question": "How serious was the emotional abuse?",
+                            "-scale-type": "((left \"minor\") (right \"extremely serious\"))",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "most recent episode of emotional abuse",
+                            "-code": "hto-recent-emotional-eps",
+                            "-value-mg": "((0 1)(2 1)(52 0.5))",
+                            "-persistent": "soft",
+                            "-answer-constraint": "((>= [hto >> hto-specific >> hto-past-curr-ep >> hto-type >> hto-emotional-eps >> hto-first-time-emotional-ep]))",
+                            "-values": "date-week",
+                            "-question": "When was the most recent episode of emotional abuse?",
+                            "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "frequency of emotional abuse",
+                            "-code": "hto-emotional-prev-freq",
+                            "-persistent": "soft",
+                            "-value-mg": "((ONLY-ONCE 0.2)(LESS-THAN-EVERY-YEAR 0.4) (ONCE-EVERY-YEAR 0.6)(SEVERAL-TIMES-YEAR 0.7)(MONTHLY 0.8)(WEEKLY 0.9)(DAILY 1))",
+                            "-values": "nominal",
+                            "-question": "How frequent are the episodes of emotional abuse?",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "first episode of emotional abuse",
+                            "-code": "hto-first-time-emotional-ep",
+                            "-value-mg": "((0 0.4) (12 0.4))",
+                            "-persistent": "hard",
+                            "-values": "date-month",
+                            "-question": "When was the first episode of emotional abuse?",
+                            "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "any deliberate damage to property",
+                        "-code": "hto-any-dest-prprty",
+                        "-persistent": "hard",
+                        "-filter-q": "Has the person ever engaged in deliberate damage to property (excluding fire setting)?",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "deliberate damage to property",
+                            "-code": "hto-dest-prprty",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-question": "How serious was the damage to property?",
+                            "-scale-type": "((left \"minor\") (right \"extremely serious\"))",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "most recent deliberate damage to property",
+                            "-code": "hto-recent-destructive-eps",
+                            "-value-mg": "((0 1) (2 1)(52 0.5))",
+                            "-persistent": "soft",
+                            "-answer-constraint": "((>= [hto >> hto-specific >> hto-past-curr-ep >> hto-type >> hto-any-dest-prprty >> hto-first-time-destructive-ep]))",
+                            "-values": "date-week",
+                            "-question": "When was the most recent deliberate damage to property?",
+                            "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "frequency of destructive episodes",
+                            "-code": "hto-destructive-prev-freq",
+                            "-persistent": "soft",
+                            "-value-mg": "((ONLY-ONCE 0.2)(LESS-THAN-EVERY-YEAR 0.4) (ONCE-EVERY-YEAR 0.6)(SEVERAL-TIMES-YEAR 0.7)(MONTHLY 0.8)(WEEKLY 0.9)(DAILY 1))",
+                            "-values": "nominal",
+                            "-question": "How frequent are the episodes of damage to property?",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "first time deliberate damage to property occurred?",
+                            "-code": "hto-first-time-destructive-ep",
+                            "-value-mg": "((0 0.4) (12 0.4))",
+                            "-persistent": "hard",
+                            "-values": "date-month",
+                            "-question": "When was the first deliberate damage to property?",
+                            "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "any fire-setting",
+                        "-code": "hto-any-fire-setting",
+                        "-persistent": "hard",
+                        "-filter-q": "Has the person ever engaged in fire setting behaviour?",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "fire-setting",
+                            "-code": "hto-fire-setting",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-question": "How serious were the acts of fire setting?",
+                            "-scale-type": "((left \"minor\") (right \"extremely serious\"))",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "most recent episode of fire setting",
+                            "-code": "hto-recent-fire-setting-eps",
+                            "-value-mg": "((0 1)(2 1) (52 0.5))",
+                            "-persistent": "soft",
+                            "-answer-constraint": "((>= [hto >> hto-specific >> hto-past-curr-ep >> hto-type >> hto-any-fire-setting >> hto-first-time-fire-setting-ep]))",
+                            "-values": "date-week",
+                            "-question": "When was the most recent episode of fire setting?",
+                            "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "frequency of fire-setting episodes",
+                            "-code": "hto-fire-setting-prev-freq",
+                            "-persistent": "soft",
+                            "-value-mg": "((ONLY-ONCE 0.2)(LESS-THAN-EVERY-YEAR 0.4) (ONCE-EVERY-YEAR 0.6)(SEVERAL-TIMES-YEAR 0.7)(MONTHLY 0.8)(WEEKLY 0.9)(DAILY 1))",
+                            "-values": "nominal",
+                            "-question": "How frequent are the fire-setting episodes?",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "first time fire-setting episode occurred",
+                            "-code": "hto-first-time-fire-setting-ep",
+                            "-value-mg": "((0 0.4) (12 0.4))",
+                            "-persistent": "hard",
+                            "-values": "date-month",
+                            "-question": "When was the first episode of fire setting?",
+                            "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                          }
+                        ]
+                      },
+                      {
+                        "-label": "any abuse of animals",
+                        "-code": "hto-any-to-anmls",
+                        "-persistent": "hard",
+                        "-filter-q": "Has the person ever abused animals?",
+                        "-screening": "0",
+                        "node": [
+                          {
+                            "-label": "abuse of animals",
+                            "-code": "hto-to-anmls",
+                            "-value-mg": "((0 0) (10 1))",
+                            "-persistent": "soft",
+                            "-values": "scale",
+                            "-question": "How serious was the animal abuse?",
+                            "-help": "Think about how the person harmed the animal(s), and the seriousness of the injuries inflicted.",
+                            "-scale-type": "((left \"minor\") (right \"extremely serious\"))"
+                          },
+                          {
+                            "-label": "most recent episode of animal abuse",
+                            "-code": "hto-recent-animal-eps",
+                            "-value-mg": "((0 1)(2 1) (52 0.5))",
+                            "-persistent": "soft",
+                            "-answer-constraint": "((>= [hto >> hto-specific >> hto-past-curr-ep >> hto-type >> hto-any-to-anmls >> hto-first-time-animal-ep]))",
+                            "-values": "date-week",
+                            "-question": "When was the most recent episode of animal abuse?",
+                            "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine."
+                          },
+                          {
+                            "-label": "frequency of animal abuse",
+                            "-code": "hto-animal-prev-freq",
+                            "-persistent": "soft",
+                            "-value-mg": "((ONLY-ONCE 0.2)(LESS-THAN-EVERY-YEAR 0.4) (ONCE-EVERY-YEAR 0.6)(SEVERAL-TIMES-YEAR 0.7)(MONTHLY 0.8)(WEEKLY 0.9)(DAILY 1))",
+                            "-values": "nominal",
+                            "-question": "How frequent are the episodes of animal abuse?",
+                            "-screening": "0"
+                          },
+                          {
+                            "-label": "first time animal abuse occurred",
+                            "-code": "hto-first-time-animal-ep",
+                            "-value-mg": "((0 0.4) (12 0.4))",
+                            "-persistent": "hard",
+                            "-values": "date-month",
+                            "-question": "When was the first episode of animal abuse?",
+                            "-help": "This is measuring the duration of the risk behaviour in the person's life as opposed to recency. If recency decreases the duration increases but the effect of recency is much more important on the overall risk judgement."
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "targets of harm to others",
+                    "-code": "hto-targets",
+                    "-value-mg": "((CARERS-FAMILY 1)(SHARED-ACCOM-NEIGHBOURS 1) (FRIENDS-COLLEAGUES 1) (HEALTH-WORKERS 1) (AUTHORITY-FIGS 1) (ETHNIC 1))",
+                    "-persistent": "soft",
+                    "-multiple-tick": "((CARERS-FAMILY \"Has anyone been harmed within the domestic setting?\" [carers or family]) (SHARED-ACCOM-NEIGHBOURS \"Have any neighbours or people sharing your living space been harmed?\" [neighbours or people sharing living space])(FRIENDS-COLLEAGUES \"Have any friends or colleagues been harmed?\" [friends or colleagues]) (HEALTH-WORKERS \"Have any health workers been harmed?\" [health workers]) (AUTHORITY-FIGS \"Have any authority figures been harmed?\" [authority figures]) (ETHNIC \"Has anyone from a different ethnic background been harmed?\" [those from a different ethnic background]))",
+                    "-values": "nominal",
+                    "-layer": "0",
+                    "-question": "Are there any particular groups of people, rather than complete strangers, that the person is known to have targeted for harm?",
+                    "-help": "Select the boxes for all those that apply.",
+                    "-screening": "0"
+                  },
+                  {
+                    "-label": "person's current perspective on harm or damage episodes",
+                    "-code": "hto-curr-persp-ep",
+                    "-value-mg": "((0 0) (10 1))",
+                    "-persistent": "soft",
+                    "-values": "scale",
+                    "-question": "Does the person believe there was nothing wrong with causing harm or damage?",
+                    "-scale-type": "((left \"definitely wrong\") (right \"nothing wrong\"))",
+                    "-screening": "0"
+                  }
+                ]
+              },
+              {
+                "-label": "current harm or damage situation and related behaviour",
+                "-code": "harm-dam-curr-sit-behav",
+                "node": [
+                  {
+                    "-label": "intention for harm or damage",
+                    "-code": "hto-intention",
+                    "-layer": "0",
+                    "-question": "Do you believe the person has an intention/plan to cause harm or damage?",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "means and ability to carry out harm or damage plan",
+                        "-code": "hto-means-plan",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person have the means and know-how to carry out the plan for harm or damage?",
+                        "-help": "Consider how easy it is for the person to access weapons or any other equipment required for the plan. Does the equipment require specialist skills to use and has the person got them?",
+                        "-scale-type": "((left \"no means or know-how\") (right \"complete means and know-how\"))"
+                      },
+                      {
+                        "-label": "physical steps taken to implement harm or damage plan",
+                        "-code": "hto-steps-plan",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Has the person taken steps towards implementing the plan to harm or damage (eg made threats, monitored the victim)?",
+                        "-scale-type": "((left \"no steps\") (right \"preparations complete\"))"
+                      },
+                      {
+                        "-label": "planning to harm a particular person",
+                        "-code": "hto-targets-id",
+                        "-value-mg": "((YES 1) (NO 0))",
+                        "-values": "nominal",
+                        "-question": "Has the person got any particular victims (specific individuals) in mind for harming?"
+                      },
+                      {
+                        "-label": "appearance indicators of harm or damage",
+                        "-code": "app-harm-dam",
+                        "-value-mg": "((0 0)(10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person's appearance (not body language or behaviour) cause you concern about risk of harm or damage (eg sweating, blood, state of clothes)?",
+                        "-scale-type": "((left \"no concern\") (right \"extremely concerned\"))"
+                      },
+                      {
+                        "-label": "spiritual/religious values/beliefs affecting harm or damage risk",
+                        "-code": "hto-religious",
+                        "-value-mg": "((STRONGLY-REDUCE 0) (REDUCE 0) (NO-EFFECT 0) (INCREASE 0.5) (STRONGLY-INCREASE 1))",
+                        "-persistent": "soft",
+                        "-values": "nominal",
+                        "-question": "What effect do the person's spiritual/religious values or beliefs have on the risk of harm or damage?"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "potential triggers for prospective harm or damage",
+                    "-code": "pot-trig-hto",
+                    "-layer": "0",
+                    "-question": "Do you have reason to be concerned about anything that could trigger harm or damage?",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "potential triggers of harm or damage",
+                        "-code": "hto-pot-trig",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Is the person exposed to feelings or circumstances that could trigger episodes of harm or damage?",
+                        "-scale-type": "((left \"no such feelings/circumstances\") (right \"surrounded by such feelings/circumstances\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "potential triggers match those previously triggering harm or damage",
+                        "-code": "hto-pot-trig-mtch",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "Do the person's current feelings or circumstances match those that are known to have triggered any previous harm or damage?",
+                        "-scale-type": "((left \"no previous harm or damage\") (right \"current feelings/circumstances identical to those in previous harm or damage\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "interest in violent pursuits",
+                        "-code": "gen-violent-purs",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-persistent": "soft",
+                        "-values": "scale",
+                        "-question": "Does the person have an interest in pursuits related to violence (eg weapons, violent videos or computer games)?",
+                        "-scale-type": "((left \"no interest\") (right \"extremely interested\"))"
+                      },
+                      {
+                        "-label": "family history relating to harm or damage",
+                        "-code": "hto-fam-hist",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-persistent": "soft",
+                        "-values": "scale",
+                        "-question": "Is there a history of violence, abuse, or aggression in the person's family?",
+                        "-help": "Consider criminal history and mental health problems in the person's family.",
+                        "-scale-type": "((left \"no history\") (right \"long and severe history\"))"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "ideation about violence",
+                    "-code": "hto-ideation-vio",
+                    "-layer": "0",
+                    "-filter-q": "Is the person having thoughts or fantasies about harming people/animals or damaging property?",
+                    "-screening": "0",
+                    "node": [
+                      {
+                        "-label": "high risk content of harm or damage ideation",
+                        "-code": "hto-hi-rsk-ideatn",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the content of the person's thoughts or fantasies about harm or damage make it more likely he or she will do it?",
+                        "-help": "What are the thoughts or fantasies about and how does the content raise alarm bells about harming people/animals or damaging property?  Consider thoughts or fantasies about weapons, destructions, harming people (eg women) or animals.",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"no change to the likelihood\") (right \"greatly increased likelihood\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "frequency of harm or damage ideation",
+                        "-code": "hto-freq-ideatn",
+                        "-value-mg": "((DAILY 1) (WEEKLY 0.5) (MONTHLY 0.2) (LESS-THAN-MONTHLY 0))",
+                        "-values": "nominal",
+                        "-question": "How often do the thoughts or fantasies about harm or damage occur?"
+                      },
+                      {
+                        "-label": "strength, intensity, intrusiveness, and persistence of harm or damage ideation",
+                        "-code": "hto-strgth-ideatn",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-layer": "0",
+                        "-question": "How persistent, intrusive, or intense are the thoughts/fantasies of harm or damage?",
+                        "-help": "Consider the seriousness, intensity, and strength of the violence thoughts, how intrusive or pervasive they are, their persistence, and level of reality or concreteness.",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                        "-scale-type": "((left \"thoughts hardly noticed\") (right \"can't think about anything else\"))",
+                        "-screening": "0"
+                      },
+                      {
+                        "-label": "thoughts/fantasies of harm or damage linked to real people, events, and circumstances",
+                        "-code": "hto-ideatn-link",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Do the thoughts/fantasies of harm or damage relate to the people, events, and circumstances in the person's own world (ie the realism of the thoughts)?",
+                        "-help": "Consider how much the fantasies are based on the person's own world and people in it rather than fictional people, locations and environments that are not linked to those of the person, or scenarios that are completely unrealistic given the person's own capabilities and circumstances.",
+                        "-scale-type": "((left \"not based on real life\") (right \"entirely about real life\"))"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "-label": "direct risk children",
+            "-code": "gen-direct",
+            "-generic": "generic >> gen-direct"
+          }
+        ]
+      },
+      {
+        "-label": "risk to dependents",
+        "-code": "risk-dep",
+        "-_FIXME": "TODO - replace mg-deviation-threshold attrib with real a real version",
+        "-value-mg": "((0 0) (10 1))",
+        "-values": "scale",
+        "-mg-deviation-threshold": "0.2",
+        "-question": "In your judgement, does the person put any dependents at risk (consider both children and adults)?",
+        "-help": "Consider the risk in the context of the person's circumstances after the assessment if no further action is taken.",
+        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+        "-scale-type": "((left \"no dependents or no risk\") (right \"extreme risk\"))",
+        "node": {
+          "-label": "dependents risk-specific questions",
+          "-code": "dependents-specific",
+          "-layer": "0",
+          "-question": "Do you have reason to be concerned about the person's risk to dependents?",
+          "-screening": "0",
+          "-screening-only": "true",
+          "node": {
+            "-label": "child protection issues",
+            "-code": "child-prot",
+            "-value-mg": "((yes 1) (no 0))",
+            "-persistent": "soft",
+            "-values": "nominal",
+            "-layer": "0",
+            "-question": "Are there any child protection issues?",
+            "-screening": "0"
+          }
+        }
+      },
+      {
+        "-label": "self neglect",
+        "-code": "sn",
+        "-value-mg": "((0 0) (10 1))",
+        "-values": "scale",
+        "-question": "In your judgement, to what extent is the person failing to look after him or herself?",
+        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+        "-scale-type": "((left \"not failing at all\") (right \"failing completely\"))",
+        "node": [
+          {
+            "-label": "appearance indicators of self neglect",
+            "-code": "sn-appearnce",
+            "-generic-type": "g",
+            "-layer": "0",
+            "-filter-q": "Is the person showing signs of self-neglect?",
+            "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+            "-screening": "0",
+            "node": [
+              {
+                "-label": "hair and clothing indicative of self neglect",
+                "-code": "sn-hair-clothes",
+                "-value-mg": "((0 0) (10 1))",
+                "-values": "scale",
+                "-question": "Do the person's hair and clothing indicate self-neglect?",
+                "-help": "Consider inappropriateness of clothing (eg inappropriate to the current weather, size is too big, etc), state of clothing (eg tatty or dirty clothing, infested with fleas), worn shoes, dishevelled hair, etc.",
+                "-scale-type": "((left \"no indication\") (right \"clear indication of self-neglect\"))"
+              },
+              {
+                "-label": "personal hygiene",
+                "-code": "sn-hygiene",
+                "-value-mg": "((0 0) (10 1))",
+                "-generic-type": "g",
+                "-values": "scale",
+                "-question": "Does the person have poor personal hygiene (eg smell, dirty hair and nails)?",
+                "-help": "Consider smell (eg body, breath, urine. etc), state of teeth, general cleanliness (eg hair, body, skin, nails, face).",
+                "-scale-type": "((left \"good personal hygiene\") (right \"very poor personal hygiene\"))"
+              },
+              {
+                "-label": "recent change in appearance of self neglect",
+                "-code": "sn-recnt-app-chnge",
+                "-value-mg": "((0 0) (10 1))",
+                "-values": "scale",
+                "-question": "Has there been a recent change in appearance suggestive of self-neglect?",
+                "-scale-type": "((left \"no change\") (right \"extreme change suggesting self-neglect\"))"
+              },
+              {
+                "-label": "skin",
+                "-code": "sn-skin",
+                "-value-mg": "((0 0) (10 1))",
+                "-values": "scale",
+                "-question": "To what extent does the person's skin (condition, lesions, injuries, etc) indicate self-neglect?",
+                "-scale-type": "((left \"no indication\") (right \"clear indication of self-neglect\"))"
+              }
+            ]
+          },
+          {
+            "-label": "direct risk children",
+            "-code": "gen-direct",
+            "-generic": "generic >> gen-direct"
+          }
+        ]
+      },
+      {
+        "-label": "vulnerability of service user",
+        "-code": "vuln-su",
+        "-value-mg": "((0 0) (10 1))",
+        "-values": "scale",
+        "-question": "In your judgement, how vulnerable is the person (consider physical, emotional, sexual, and financial vulnerability)?",
+        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+        "-scale-type": "((left \"not vulnerable\") (right \"extremely vulnerable\"))",
+        "node": [
+          {
+            "-label": "vulnerability specific questions",
+            "-code": "vuln-specific",
+            "-layer": "0",
+            "-question": "Do you have reason to be concerned about the person's vulnerability?",
+            "-screening": "0",
+            "-screening-only": "true",
+            "node": [
+              {
+                "-label": "falls",
+                "-code": "falls",
+                "-persistent": "hard",
+                "-layer": "0",
+                "-filter-q": "Does the person have a history of falls or other accidents?",
+                "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                "-screening": "0",
+                "node": [
+                  {
+                    "-label": "recent-falls",
+                    "-code": "recent-falls",
+                    "-value-mg": "((yes 1) (no 0))",
+                    "-persistent": "soft",
+                    "-values": "nominal",
+                    "-question": "Have any of the falls or accidents occurred recently (within the last year approximately)?"
+                  },
+                  {
+                    "-label": "causes of falls and accidents known",
+                    "-code": "falls-reasons",
+                    "-value-mg": "((yes 0) (no 1))",
+                    "-persistent": "soft",
+                    "-values": "nominal",
+                    "-question": "Are the reasons for the falls or accidents known (eg physical health problems, hazards in the home)?",
+                    "-help": "The key issue is whether any reasons are still unknown because this will make it difficult to put in place interventions reducing the risk"
+                  },
+                  {
+                    "-label": "fragility fractures",
+                    "-code": "frailty",
+                    "-value-mg": "((yes 1) (no 0))",
+                    "-persistent": "soft",
+                    "-values": "nominal",
+                    "-question": "Has the person ever sustained a fragility fracture (broken bone after a minor bump or fall), e.g. wrist, hip, vertebra, humerus?"
+                  }
+                ]
+              },
+              {
+                "-label": "person's appearance and behaviour indicators of vulnerability",
+                "-code": "vuln-app-behavr",
+                "-layer": "0",
+                "-question": "Do you have reason to be concerned about appearance or behaviour issues that may be putting the person at risk (consider physical, emotional, sexual, and financial vulnerability)?",
+                "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                "-screening": "0",
+                "node": [
+                  {
+                    "-label": "appearance indicators of self neglect",
+                    "-code": "sn-appearnce",
+                    "-generic": "sn >> sn-appearnce"
+                  },
+                  {
+                    "-label": "appearance suggesting abuse by others",
+                    "-code": "app-vuln-abuse",
+                    "-value-mg": "((0 0)(10 1))",
+                    "-values": "scale",
+                    "-question": "Does the person's appearance cause you concern about abuse by others (eg bruises, scratches, blood, state of clothes)?",
+                    "-scale-type": "((left \"no suggestion of abuse by others\") (right \"appearance of extreme abuse\"))"
+                  },
+                  {
+                    "-label": "behaviour causing potential vulnerability to abuse by others",
+                    "-code": "vuln-abuse-behav",
+                    "node": [
+                      {
+                        "-label": "sexual vulnerability",
+                        "-code": "sex-vuln",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person's behaviour make him or her vulnerable to sexual harrassment or abuse?",
+                        "-scale-type": "((left \"not vulnerable\") (right \"extremely vulnerable\"))"
+                      },
+                      {
+                        "-label": "physical vulnerability",
+                        "-code": "phys-vuln",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person's behaviour make him or her vulnerable to physical harrassment or abuse?",
+                        "-scale-type": "((left \"not vulnerable\") (right \"extremely vulnerable\"))"
+                      },
+                      {
+                        "-label": "emotional vulnerability",
+                        "-code": "emot-vuln",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person's behaviour make him or her vulnerable to emotional harrassment or abuse?",
+                        "-scale-type": "((left \"not vulnerable\") (right \"extremely vulnerable\"))"
+                      },
+                      {
+                        "-label": "financial vulnerability",
+                        "-code": "finan-vuln",
+                        "-value-mg": "((0 0) (10 1))",
+                        "-values": "scale",
+                        "-question": "Does the person's behaviour make him or her vulnerable to financial abuse?",
+                        "-scale-type": "((left \"not vulnerable\") (right \"extremely vulnerable\"))"
+                      }
+                    ]
+                  },
+                  {
+                    "-label": "wandering behaviour",
+                    "-code": "wandering",
+                    "-value-mg": "((yes 1) (no 0))",
+                    "-persistent": "soft",
+                    "-values": "nominal",
+                    "-question": "Does the person have a history of wandering behaviour?",
+                    "-help": "Consider previous episodes and current situation."
+                  },
+                  {
+                    "-label": "confusion and disorientation",
+                    "-code": "dis-conf",
+                    "-value-mg": "((0 0) (10 1))",
+                    "-values": "scale",
+                    "-question": "Is the person confused or disorientated as a result of recent changes in circumstances (eg hospital admission, new carer)?",
+                    "-help": "This question is about temporary cognitive disorders due to a recent change in a person's situation rather than longer-term organic problems that are covered in the mental faculties/cognitive capacity questions.",
+                    "-scale-type": "((left \"not confused\") (right \"extremely confused\"))"
+                  }
+                ]
+              },
+              {
+                "-label": "ability to live independently",
+                "-code": "indep-living",
+                "-layer": "0",
+                "-question": "Do you have reason to be concerned about the person's ability to live independently?",
+                "-screening": "0",
+                "node": [
+                  {
+                    "-label": "dependence on carers",
+                    "-code": "carers",
+                    "-value-mg": "((0 0) (10 1))",
+                    "-persistent": "soft",
+                    "-values": "scale",
+                    "-question": "How much does the person depend on carers?",
+                    "-help": "Consider how much the person is reliant on carers for general living requirements",
+                    "-scale-type": "((left \"no carers\") (right \"extremely dependent\"))"
+                  },
+                  {
+                    "-label": "living skills",
+                    "-code": "gen-liv-skills",
+                    "-value-mg": "((0 0) (10 1))",
+                    "-persistent": "soft",
+                    "-values": "scale",
+                    "-question": "Does the person lack the ability to look after daily living requirements (cooking, shopping, cleaning, etc)?",
+                    "-help": "Consider lack of ability to maintain safe and clean environment, to look after personal hygiene (eg dressing), ability to budget, cooking skills, etc.",
+                    "-scale-type": "((left \"able to look after living requirements\")(right \"totally unable\"))"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "-label": "direct risk children",
+            "-code": "gen-direct",
+            "-generic": "generic >> gen-direct"
+          }
+        ]
+      },
+      {
+        "-label": "general risk and safety issues",
+        "-code": "generic",
+        "-layer": "0",
+        "-question": "These questions are not about specific risks but there are some that may help assess the patient if you have not already decided what to do. Do you wish to answer them now?",
+        "-screening": "0",
+        "-screening-only": "true",
+        "node": {
+          "-label": "direct risk children",
+          "-code": "gen-direct",
+          "-generic-type": "gd",
+          "node": [
+            {
+              "-label": "state of mind",
+              "-code": "gen-state-mind",
+              "-generic-type": "gd",
+              "node": [
+                {
+                  "-label": "feelings/emotions",
+                  "-code": "gen-feel-emot",
+                  "-generic-type": "gd",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about risks due to the person's feelings/emotions?",
+                  "-screening": "0",
+                  "node": [
+                    {
+                      "-label": "mood swings/lability",
+                      "-code": "gen-mood-swings",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person have sudden mood changes or swings?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no sudden mood changes\") (right \" moods always changing suddenly\"))"
+                    },
+                    {
+                      "-label": "negative feelings about the self",
+                      "-code": "gen-negative-self",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person have negative feelings about him or herself (eg self-hatred, guilt, shame, humiliation)?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"no negative feelings\") (right \"extremely negative feelings\"))"
+                    },
+                    {
+                      "-label": "hopelessness",
+                      "-code": "gen-hopeless",
+                      "-generic-type": "g",
+                      "-header": "Questions on hopelessness",
+                      "node": [
+                        {
+                          "-label": "plans for the future",
+                          "-code": "gen-plans-future",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Does the person lack any plans for the future?",
+                          "-help": "Consider how soon are the plans for (eg next week), how concrete are the plans, etc.",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-wellbeing": "wellbeing",
+                          "-scale-type": "((left \"lots of plans\") (right \"no plans\"))"
+                        },
+                        {
+                          "-label": "life not worth living",
+                          "-code": "gen-life-not-livng",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-layer": "0",
+                          "-question": "Does the person think life is not worth living?",
+                          "-help": "This includes having nothing to look forward to, no possibility of change for the better, pessimism, etc.",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-scale-type": "((left \"well worth living\") (right \"not worth living at all\"))",
+                          "-screening": "0"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "angry emotions",
+                      "-code": "gen-angry-emotns",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person displaying anger?",
+                      "-help": "This includes person being angry, irritable, frustrated, aggressive, etc.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no anger\") (right \"extremely angry\"))",
+                      "-screening": "0"
+                    },
+                    {
+                      "-label": "anxiety-based emotions",
+                      "-code": "gen-anx-emotns",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person anxious or fearful?",
+                      "-help": "This includes the person feeling panic, fear, insecurity, threat, suspicion, having no trust in themselves.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"not anxious\") (right \"extremely anxious/fearful\"))"
+                    },
+                    {
+                      "-label": "helplessness",
+                      "-code": "gen-helpless",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person feel helpless?",
+                      "-help": "This includes person feeling trapped, despair, lack of or out of control.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"not helpless\") (right \"completely helpless\"))"
+                    },
+                    {
+                      "-label": "sad/downbeat",
+                      "-code": "gen-sad",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person feeling sad or low?",
+                      "-help": "This includes person feeling grief, flat, lonely, unhappy.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"not sad\") (right \"extremely sad/low\"))"
+                    },
+                    {
+                      "-label": "distress",
+                      "-code": "gen-distress",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person distressed?",
+                      "-help": "This includes person being tormented, agitated, etc.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"no distress\") (right \"extremely distressed\"))"
+                    },
+                    {
+                      "-label": "jealousy",
+                      "-code": "gen-jealous",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person feeling jealous?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\" (0.5 1.1)))",
+                      "-scale-type": "((left \"no jealousy\") (right \"extremely jealous\"))"
+                    }
+                  ]
+                },
+                {
+                  "-label": "person's perspective of self worth",
+                  "-code": "gen-self-worth-p",
+                  "-persistent": "soft",
+                  "-generic-type": "gd",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about risks due to the person's sense of self worth?",
+                  "-help": "Consider both grandiose feelings (eg feeling of being powerful/omnipotent, exaggerated self worth, sense of being special) and feelings of worthlessness (nothing to lose, don't care about the consequences), both of which may indicate a propensity for risky behaviours.",
+                  "-screening": "0",
+                  "node": [
+                    {
+                      "-label": "grandiosity",
+                      "-code": "grandiosity",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person feel special and able to control everything?",
+                      "-scale-type": "((left \"not particularly special\") (right \"totally special and in complete control\"))"
+                    },
+                    {
+                      "-label": "worthlessness",
+                      "-code": "worthlessness",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-layer": "0",
+                      "-question": "Does the person regard him or herself as worthless?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"worthwhile\") (right \"completely worthless\"))",
+                      "-screening": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "-label": "personality and way of thinking",
+              "-code": "gen-person-thinking",
+              "-generic-type": "gd",
+              "node": [
+                {
+                  "-label": "personality issues",
+                  "-code": "gen-personality",
+                  "-persistent": "soft",
+                  "-generic-type": "gd",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about personality factors and their impact on risks?",
+                  "-screening": "0",
+                  "node": [
+                    {
+                      "-label": "assertiveness",
+                      "-code": "gen-assertive",
+                      "-value-mg": "(([suic >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 1) (SOMEWHAT-ASSERTIVE 0.3) (NORMALLY-ASSERTIVE 0) (VERY-ASSERTIVE 0) (EXTREMELY-ASSERTIVE 0))) ([sh >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 1) (SOMEWHAT-ASSERTIVE 0.3) (NORMALLY-ASSERTIVE 0) (VERY-ASSERTIVE 0) (EXTREMELY-ASSERTIVE 0))) ([sn >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 1) (SOMEWHAT-ASSERTIVE 0.3) (NORMALLY-ASSERTIVE 0) (VERY-ASSERTIVE 0) (EXTREMELY-ASSERTIVE 0))) ([hto >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 0) (SOMEWHAT-ASSERTIVE 0.1) (NORMALLY-ASSERTIVE 0.2) (VERY-ASSERTIVE 0.5) (EXTREMELY-ASSERTIVE 1))) ([risk-dep >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 0.5) (SOMEWHAT-ASSERTIVE 0.3) (NORMALLY-ASSERTIVE 0) (VERY-ASSERTIVE 0.3)    (EXTREMELY-ASSERTIVE 1))) ([vuln-su >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 1) (SOMEWHAT-ASSERTIVE 0.3) (NORMALLY-ASSERTIVE 0) (VERY-ASSERTIVE 0) (EXTREMELY-ASSERTIVE 0)))([absconding >> gen-person-thinking >> gen-personality >> gen-assertive] ((NOT-ASSERTIVE 0) (SOMEWHAT-ASSERTIVE 0.1) (NORMALLY-ASSERTIVE 0.2) (VERY-ASSERTIVE 0.5) (EXTREMELY-ASSERTIVE 1))))",
+                      "-persistent": "soft",
+                      "-generic-type": "gd",
+                      "-values": "nominal",
+                      "-question": "How assertive is the person?",
+                      "-help": "How much are you able to put your views across, insist that others listen to you or to make sure you get what you need from others",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                    },
+                    {
+                      "-label": "ability to empathise",
+                      "-code": "gen-empathy-abil",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person lack empathy?",
+                      "-help": "Think about what is normal empathy you would expect in people and how much this may be lacking.",
+                      "-scale-type": "((left \"empathy\")(right \"no empathy\"))"
+                    },
+                    {
+                      "-label": "dependence",
+                      "-code": "gen-dependence",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Is the person overdependent (weak, over-reliant on others, easily influenced, unable to function independently)?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"not over-dependent\") (right \"totally over-dependent\"))"
+                    },
+                    {
+                      "-label": "controlling/organisational approach",
+                      "-code": "gen-controlling",
+                      "-value-mg": "(([suic >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 0.5) (disorganised 0.2) (normal 0) (very-organised 0.5)(obsessional-perfectionist 1))) ([sh >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 0.5) (disorganised 0.2) (normal 0) (very-organised 0.5)(obsessional-perfectionist 1))) ([sn >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 1) (disorganised 0.2) (normal 0) (very-organised 0)(obsessional-perfectionist 0))) ([hto >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 0) (disorganised 0) (normal 0) (very-organised 0)(obsessional-perfectionist 0))) ([risk-dep >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 1) (disorganised 0.2) (normal 0) (very-organised 0.1)(obsessional-perfectionist 0.5))) ([vuln-su >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 1) (disorganised 0.2) (normal 0) (very-organised 0.1)(obsessional-perfectionist 0.2)))([absconding >> gen-person-thinking >> gen-personality >> gen-controlling] ((chaotic 0) (disorganised 0) (normal 1) (very-organised 1)(obsessional-perfectionist 0))))",
+                      "-persistent": "soft",
+                      "-generic-type": "gd",
+                      "-values": "nominal",
+                      "-question": "How organised is the person's general approach to life?",
+                      "-help": "This includes person being regimented, perfectionist, having obsessional traits, or having chaotic approach to organising life.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                    },
+                    {
+                      "-label": "capacity to cope with major life stresses",
+                      "-code": "gen-coping-abil",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person lack the ability to cope with major life stresses?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"able to cope\")(right \"unable to cope\"))"
+                    },
+                    {
+                      "-label": "hostility",
+                      "-code": "gen-hostile",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "How hostile is the person?",
+                      "-help": "Think about whether the person tends to be unfriendly, prickly, aggressive or argumentative.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                      "-scale-type": "((left \"not hostile\") (right \"extremely hostile\"))",
+                      "-screening": "0"
+                    },
+                    {
+                      "-label": "impulsiveness",
+                      "-code": "gen-impulse",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-layer": "0",
+                      "-question": "How impulsive is the person?",
+                      "-help": "not at all, extremely impulsive. Think about how likely you are to do things on the spur of the moment.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.4 0.6))(\"open-url(http://www.egrist.org/information-and-support)\"(0.7 1.1)))",
+                      "-scale-type": "((left \"not impulsive\") (right \"extremely impulsive\"))",
+                      "-screening": "0"
+                    },
+                    {
+                      "-label": "reliability",
+                      "-code": "gen-reliable",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "How unreliable is the person (eg untrustworthy or unpredictable)?",
+                      "-scale-type": "((left \"reliable and trustworthy\")(right \"totally unreliable and untrustworthy\"))"
+                    },
+                    {
+                      "-label": "personality disorder",
+                      "-code": "gen-pers-dis",
+                      "-value-mg": "((YES 1) (NO 0))",
+                      "-persistent": "hard",
+                      "-values": "nominal",
+                      "-question": "Does the person have a diagnosed personality disorder?"
+                    }
+                  ]
+                },
+                {
+                  "-label": "problems with mental faculties/cognitive capacity",
+                  "-code": "ment-fac",
+                  "-persistent": "soft",
+                  "-generic-type": "g",
+                  "-layer": "0",
+                  "-filter-q": "Is there any impaired cognitive function (thinking processes, memory, concentration) or dementia?",
+                  "node": [
+                    {
+                      "-label": "impaired cognitive function",
+                      "-code": "gen-impaird-cog",
+                      "-value-mg": "((none 0)(mild 0.3)(moderate 0.6)(severe 1))",
+                      "-persistent": "soft",
+                      "-values": "nominal",
+                      "-question": "What is the current level of impaired thinking processes and memory?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                    },
+                    {
+                      "-label": "changes in thinking processes and memory",
+                      "-code": "gen-cog-think-mem",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Have the thinking processes and memory recently got worse?",
+                      "-help": "Consider changes within the last few months, including the person's inability to follow conversation, long silences during conversation with the person, etc. Maximum deterioration should be considered equivalent to full dementia.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"no change\") (right \"recently become totally confused and forgetful\"))"
+                    },
+                    {
+                      "-label": "concentration",
+                      "-code": "gen-concentr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Is the person able to concentrate?",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"able to concentrate\")(right \"unable to concentrate\"))"
+                    },
+                    {
+                      "-label": "learning disabilities",
+                      "-code": "gen-learn-disab",
+                      "-value-mg": "((none 0)(mild 0.3)(moderate 0.6)(severe 0.8) (profound 1))",
+                      "-persistent": "soft",
+                      "-values": "nominal",
+                      "-question": "Do you believe the person has learning disabilities?",
+                      "-help": "Think about reading difficulties or inability to solve problems.",
+                      "-scale-type": "((left \"no learning disabilities\") (right \"severe learning disabilities\"))"
+                    }
+                  ]
+                },
+                {
+                  "-label": "insight and responsibility",
+                  "-code": "insight-resp",
+                  "-generic-type": "g",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about the person's lack of insight and sense of responsibility?",
+                  "node": [
+                    {
+                      "-label": "insight into behaviour and consequences",
+                      "-code": "gen-insght-behvr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person fail to understand the potential consequences of taking risks?",
+                      "-scale-type": "((left \"full understanding\")(right \"no understanding\"))"
+                    },
+                    {
+                      "-label": "responsibility for impact of behaviour on others",
+                      "-code": "gen-resp-impct-oth",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person lack any sense of responsibility for the outcomes of risk-taking behaviour?",
+                      "-scale-type": "((left \"full responsibility\")(right \"no responsibility\"))"
+                    },
+                    {
+                      "-label": "need for help with difficulties",
+                      "-code": "gen-nd-hlp-diff",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person lack insight about needing help with mental-health issues?",
+                      "-scale-type": "(left \"full insight\") (right \"no insight\")"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "-label": "health and care",
+              "-code": "gen-health-care",
+              "-generic-type": "gd",
+              "node": [
+                {
+                  "-label": "history of mental health problems",
+                  "-code": "mental-health",
+                  "-persistent": "hard",
+                  "-layer": "0",
+                  "-filter-q": "Does the person have any history of depression, mania, hallucinations, or delusions?",
+                  "-screening": "0",
+                  "node": [
+                    {
+                      "-label": "clinical diagnosis of depression",
+                      "-code": "clin-depression",
+                      "-persistent": "hard",
+                      "-layer": "0",
+                      "-filter-q": "Has the person ever been diagnosed with clinical depression?",
+                      "-screening": "0",
+                      "node": {
+                        "-label": "stage of depression",
+                        "-code": "gen-dep-stage",
+                        "-value-mg": "((FIRST-DIAGNOSIS 1) (RECOVERY-SINGLE-EPISODE 0) (RECOVERY-REPEAT-EPISODES 0.4) (RELAPSE 1))",
+                        "-persistent": "soft",
+                        "-values": "nominal",
+                        "-layer": "0",
+                        "-question": "Tick the most appropriate label for the current depression status?",
+                        "-help": "First diagnosis - first time the person is known to have suffered from depression; recovery single episode - in recovery from a first period of depression; recovery repeat episodes - in recovery from a repeated period of depression; relapse - the person has gone back into depression having suffered from it previously",
+                        "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                        "-screening": "0"
+                      }
+                    },
+                    {
+                      "-label": "current symptoms of mental illness",
+                      "-code": "gen-mntl-cur-sympt",
+                      "-layer": "0",
+                      "-filter-q": "Is the person currently suffering from mania, hallucinations, or delusions?",
+                      "-screening": "0",
+                      "node": [
+                        {
+                          "-label": "mania/hypomania",
+                          "-code": "gen-mania",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Is the person displaying manic or hypomanic behaviour (fast speech, excessive irritability, recklessness, impulsivity, etc)?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-scale-type": "((left \"not manic\") (right \"extremely manic\"))"
+                        },
+                        {
+                          "-label": "voice hallucinations",
+                          "-code": "gen-voice-hal",
+                          "-generic-type": "g",
+                          "-layer": "0",
+                          "-filter-q": "Does the person hear voices that are not present in reality?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-screening": "0",
+                          "node": [
+                            {
+                              "-label": "type of voices",
+                              "-code": "gen-voices-type",
+                              "node": [
+                                {
+                                  "-label": "danger of voices to self",
+                                  "-code": "gen-voice-dang-s",
+                                  "-value-mg": "((0 0) (10 1))",
+                                  "-values": "scale",
+                                  "-layer": "0",
+                                  "-question": "How much do the voices urge the person to harm or endanger him/herself?",
+                                  "-help": "Is the person hearing voices that are encouraging suicidal behaviour such as jumping off a bridge? Are the voices threatening the person with dire consequences if they are disobeyed? How influential are the voices (do they represent God or any other figure of authority for the person)?",
+                                  "-scale-type": "((left \"no urging\") (right \"strongly urging\"))",
+                                  "-screening": "0"
+                                },
+                                {
+                                  "-label": "danger of voices to others",
+                                  "-code": "gen-voice-dang-o",
+                                  "-value-mg": "((0 0) (10 1))",
+                                  "-values": "scale",
+                                  "-layer": "0",
+                                  "-question": "How much do the voices urge the person to harm/endanger other people?",
+                                  "-scale-type": "((left \"no urging\") (right \"strongly urging\"))",
+                                  "-screening": "0"
+                                }
+                              ]
+                            },
+                            {
+                              "-label": "likelihood of acting on the voices",
+                              "-code": "gen-prob-act-voice",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-layer": "0",
+                              "-question": "Will the person act on the voices?",
+                              "-help": "Consider ability to distract from and to resist voices, level of belief in voices and will to obey them.",
+                              "-scale-type": "((left \"extremely unlikely\") (right \"extremely likely\"))",
+                              "-screening": "0"
+                            }
+                          ]
+                        },
+                        {
+                          "-label": "paranoid delusions",
+                          "-code": "gen-paranoid-del",
+                          "-generic-type": "g",
+                          "-layer": "0",
+                          "-filter-q": "Does the person suffer from delusions (ie clearly incorrect and illogical ideas about his or her life and circumstances)?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-screening": "0",
+                          "node": [
+                            {
+                              "-label": "type of paranoid delusions",
+                              "-code": "gen-type-paranoid-del",
+                              "node": [
+                                {
+                                  "-label": "thoughts about particular individuals",
+                                  "-code": "gen-paran-del-spec",
+                                  "-value-mg": "((0 0) (10 1))",
+                                  "-values": "scale",
+                                  "-question": "Is the person obsessed about the perceived bad behaviour of particular known people?",
+                                  "-help": "Examples include an obsession with the partner having an affair, being spied upon by neighbours or the police, believing a neighbour is engaging in child abuse, etc.",
+                                  "-scale-type": "((left \"no obsession\") (right \"completely obsessed\"))"
+                                },
+                                {
+                                  "-label": "being harmed, killed, or persecuted",
+                                  "-code": "gen-paran-del-pers",
+                                  "-value-mg": "((0 0) (10 1))",
+                                  "-values": "scale",
+                                  "-question": "Is the person obsessed about being harmed or persecuted by particular known people?",
+                                  "-help": "This includes obsession with imminent death, being infected, people dying without person's intervention, being sexually abused in sleep, persecutory ideas, conspiracy, being watched, etc.",
+                                  "-scale-type": "((left \"no obsession\") (right \"completely obsessed\"))"
+                                }
+                              ]
+                            },
+                            {
+                              "-label": "likelihood of acting on delusions",
+                              "-code": "gen-prob-act-par-del",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-layer": "0",
+                              "-question": "How likely is it that the person will act on any delusions?",
+                              "-scale-type": "((left \"extremely unlikely\") (right \"extremely likely\"))",
+                              "-screening": "0"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "-label": "physical health problems",
+                  "-code": "gen-phys-hlth-prb",
+                  "-generic-type": "gd",
+                  "-persistent": "soft",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about risks due to any physical health problems?",
+                  "node": [
+                    {
+                      "-label": "chronic disease",
+                      "-code": "gen-chronic-disease",
+                      "-value-mg": "((tinnitus 1)(diabetes 1)(multiple-sclerosis 1)(asthma 1)(heart-disease 1)(kidney-disease 1)(lung-disease 1)(arthritis 1)(high-blood-pressure 1)(other 1))",
+                      "-multiple-tick": "((tinnitus \"Is tinnitus one of the chronic health conditions?\" [tinnitus])(diabetes \"Is diabetes one of the chronic health conditions\" [diabetes])(multiple-sclerosis \"Is multiple sclerosis one of the chronic health conditions?\" [multiple sclerosis])(asthma \"Is asthma one of the chronic health conditions?\" [asthma])(heart-disease \"Is heart disease one of the chronic health conditions?\" [heart disease])(kidney-disease \"Is kidney disease one of the chronic health conditions?\" [kidney disease])(lung-disease \"Is lung disease one of the chronic health conditions?\" [lung disease])(arthritis \" Is arthritis one of the chronic health conditions?\" [arthritis])(high-blood-pressure \"Is high blood pressure one of the chronic health conditions?\" [high blood pressure])(other \"Are there any other chronic health conditions?\" [any other condition]))",
+                      "-persistent": "soft",
+                      "-values": "nominal",
+                      "-question": "Does the person suffer from any chronic health conditions?",
+                      "-help": "If you ticked 'other' (which is at the bottom of all the conditions so may not be visible without scrolling) then please give the condition in the comment box.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                    },
+                    {
+                      "-label": "when life-threatening or degenerative illness first diagnosed",
+                      "-code": "gen-phys-hlth-deg-diag",
+                      "-value-mg": "((3 1) (36 0))",
+                      "-persistent": "hard",
+                      "-values": "date-month",
+                      "-question": "If the person has a life-threatening or degenerative illness (eg cancer, multiple sclerosis, Parkinson's, emphysema, HIV), when was it first diagnosed?",
+                      "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                    },
+                    {
+                      "-label": "pain",
+                      "-code": "gen-phys-hlth-pain",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "If the person suffers from chronic or periodic pain, how bad is it?",
+                      "-help": "Consider the level of pain, how much it affects the person (eg episodic, chronic), treatment of pain (eg poorly controlled), location of pain (eg pain in bones), etc.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no pain\") (right \"extremely bad pain\"))"
+                    },
+                    {
+                      "-label": "mobility and dexterity",
+                      "-code": "gen-phys-hlth-disa",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person suffer from problems that affect mobility and/or dexterity (eg eyesight, balance, disability due to disease or trauma)?",
+                      "-help": "Think about the ability to balance, hand-eye co-ordination, any problems linked to sight, hearing, touch, smell etc that might affect movement. Also think about any disabilities affecting muscles, joints, limbs etc. that make it hard to walk, climb stairs, etc.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no mobility/dexterity problems\") (right \"serious difficulties with mobility/dexterity\"))"
+                    },
+                    {
+                      "-label": "communication impairment",
+                      "-code": "gen-com-imp",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Does the person have trouble communicating as a result of physical health problems (eg hearing, speech)?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no communication problems\") (right \"extreme difficulty comunicating\"))"
+                    },
+                    {
+                      "-label": "deterioration in physical health",
+                      "-code": "gen-phys-hlth-det",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Has the person's physical health got worse over the last few months, including temporary or repeating problems?",
+                      "-help": "Think about both short and long-term problems e.g. repeated infections and chronic constipation, as well as disability, or disfigurement etc.",
+                      "-scale-type": "((left \"stayed the same\") (right \"got much worse\"))"
+                    }
+                  ]
+                },
+                {
+                  "-label": "concordance with health services/medication/therapies",
+                  "-code": "gen-meds-therpy",
+                  "-generic-type": "g",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about the person's concordance with health treatment?",
+                  "node": [
+                    {
+                      "-label": "concordance",
+                      "-code": "gen-meds-concord",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person failing to concord with medication or therapies, either deliberately or due to multiple medications, for example?",
+                      "-help": "Think about the extent to which health-care advice is followed, or medication or treatment is not taken either deliberately or by mistake, because it is confusing or forgotten.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"doing everything as prescribed\")(right \"not following prescriptions at all\"))"
+                    },
+                    {
+                      "-label": "person's perception of the supportiveness of service received",
+                      "-code": "gen-serv-perc-supp",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person think health or social care services are not supportive?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"extremely supportive\")(right \"no support at all\"))"
+                    },
+                    {
+                      "-label": "perceived benefit of medication/therapies",
+                      "-code": "gen-med-perc-benft",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person and/or carer think any medication/therapies are not working properly?",
+                      "-help": "Consider person's belief in physical side effects (eg weight gain, distress), psychological/emotional side effects (eg hospitalisation is seen as punishment), or faith in services.  Also consider effect of medication/therapies on insight, how soon does the person respond to treatment, level of response (eg successful outcome), etc.",
+                      "-scale-type": "((left \"working properly or not on medication/treatment\")(right \"not working at all\"))"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "-label": "involvement with life and others",
+              "-code": "gen-involve-social",
+              "-generic-type": "gd",
+              "node": [
+                {
+                  "-label": "motivation and engagement with world",
+                  "-code": "motive-eng",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about the person's motivation and engagement with the world?",
+                  "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                  "node": [
+                    {
+                      "-label": "engagement with world",
+                      "-code": "gen-eng-world",
+                      "-generic-type": "gd",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "node": [
+                        {
+                          "-label": "physical withdrawal from world",
+                          "-code": "gen-phys-withd",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Is the person physically isolated from the world?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-scale-type": "((left \"not isolated\") (right \"completely isolated\"))"
+                        },
+                        {
+                          "-label": "mental withdrawal",
+                          "-code": "gen-mental-withd",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Has the person mentally disengaged or withdrawn from the world?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-wellbeing": "wellbeing",
+                          "-scale-type": "((left \"no withdrawal\")(right \"totally withdrawn\"))"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "general motivation in life",
+                      "-code": "gen-motivation",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person lack motivation in general life?",
+                      "-help": "Has the person no plans, lack interests, have no desire to change, displays excessive apathy, etc.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"motivated\")(right \"no motivation at all\"))"
+                    },
+                    {
+                      "-label": "lack of energy, drive, or enthusiasm",
+                      "-code": "gen-listless",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person appear listless or lacking energy and drives (eg loss of enthusiasm and libido)?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-wellbeing": "wellbeing",
+                      "-scale-type": "((left \"energetic and enthusiastic\")(right \"no energy or enthusiasm at all\"))"
+                    }
+                  ]
+                },
+                {
+                  "-label": "social context",
+                  "-code": "gen-soc-contxt",
+                  "-generic-type": "gd",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about risks due to the person's social context (relationships, living arrangements, finances, employment, any detrimental changes)?",
+                  "node": [
+                    {
+                      "-label": "relationships",
+                      "-code": "gen-relatnshps",
+                      "-persistent": "soft",
+                      "-generic-type": "gd",
+                      "-layer": "0",
+                      "-question": "Do you have reason to be concerned about risks due to the person's current relationships?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "node": [
+                        {
+                          "-label": "external network of relationships",
+                          "-code": "gen-net-relat",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-persistent": "soft",
+                          "-values": "scale",
+                          "-question": "Does the person lack a good network of relationships outside the home?",
+                          "-help": "Think about people who don't live in the same house, including other family members, friends, neighbours, carers.",
+                          "-wellbeing": "wellbeing",
+                          "-scale-type": "((left \"good network\")(right \"no network\"))"
+                        },
+                        {
+                          "-label": "nature of relationships",
+                          "-code": "gen-relat-nature",
+                          "node": [
+                            {
+                              "-label": "any supportive relationships",
+                              "-code": "gen-relat-supp",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-persistent": "soft",
+                              "-values": "scale",
+                              "-question": "Does the person lack supportive relationships?",
+                              "-help": "This includes proximity and stability in relationships, supportive relationships (eg confiding and caring relationships), relationships that provide security, respect and empathy. Emphasis should be on the importance and centrality of relationships within the family.",
+                              "-wellbeing": "wellbeing",
+                              "-scale-type": "((left \"supportive relationships\")(right \"no supportive relationships\"))"
+                            },
+                            {
+                              "-label": "detrimental relationships",
+                              "-code": "gen-relat-detr",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-persistent": "soft",
+                              "-values": "scale",
+                              "-question": "Does the person have detrimental relationships (eg bullied, over-protected) or ones with people who have antisocial behaviours or who take advantage of the person?",
+                              "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                              "-scale-type": "((left \"no bad relationship\") (right \"extremely bad relationship(s)\"))"
+                            }
+                          ]
+                        },
+                        {
+                          "-label": "detrimental changes to relationships",
+                          "-code": "gen-relat-detr-chg",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Does the person think important relationships have changed for the worse or soon will do (eg divorce, separation, rows, carer's role, bereavement)?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-scale-type": "((left \"no changes for the worse\") (right \"extreme changes for the worse\"))"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "living arrangements",
+                      "-code": "gen-living-arr",
+                      "-generic-type": "gd",
+                      "-layer": "0",
+                      "-question": "Do you have reason to be concerned about risks due to the person's living arrangements?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "node": [
+                        {
+                          "-label": "frequency of moving accommodation",
+                          "-code": "gen-move-freq",
+                          "-value-mg": "((LESS-THAN-EVERY-YEAR 0) (ONCE-EVERY-YEAR 0.5) (SEVERAL-TIMES-YEAR 0.8) (ONCE-A-MONTH-OR-MORE 1))",
+                          "-persistent": "soft",
+                          "-values": "nominal",
+                          "-question": "How often does the person's living place change?"
+                        },
+                        {
+                          "-label": "losing accommodation",
+                          "-code": "gen-accom-loss",
+                          "-value-mg": "((yes 1)(no 0))",
+                          "-persistent": "soft",
+                          "-values": "nominal",
+                          "-question": "Has the accommodation recently been taken away from the person or is it under threat of being taken away?"
+                        },
+                        {
+                          "-label": "support at home",
+                          "-code": "gen-home-type",
+                          "-value-mg": "((HOMELESS 1) (HOSTEL 0.8) (TWENTY-FOUR-HOUR-CARE-OR-SUPERVISION 0) (daily-support 0.1)(limited-support 0.2)(no-support 0.5))",
+                          "-persistent": "soft",
+                          "-values": "nominal",
+                          "-question": "What type of supported living does the person have"
+                        },
+                        {
+                          "-label": "neighbourhood",
+                          "-code": "gen-neighbrhd",
+                          "node": [
+                            {
+                              "-label": "isolated accommodation",
+                              "-code": "gen-isol-accom",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-persistent": "soft",
+                              "-values": "scale",
+                              "-question": "Is the person's accommodation isolated from other living abodes and resources?",
+                              "-help": "This includes ability to reach resources (eg person can't drive).",
+                              "-scale-type": "((left \"not isolated\")(right \"totally isolated\"))"
+                            },
+                            {
+                              "-label": "risky neighbourhood",
+                              "-code": "gen-neigbrhd-rsky",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-persistent": "soft",
+                              "-values": "scale",
+                              "-question": "Does the neighbourhood or care environment increase the person's particular risks (eg violent, easy access to drugs and unhelpful temptations)?",
+                              "-help": "Consider neighbours, type of neighbourhood (eg inner city, deprived, rough, drug and violent areas), locations tempting risky acts (eg kindergarten), nature of the institution the person may be in, etc.",
+                              "-scale-type": "((left \"no increase in risks\") (right \"huge increase in risks\"))"
+                            }
+                          ]
+                        },
+                        {
+                          "-label": "state of accommodation",
+                          "-code": "gen-accom-state",
+                          "node": [
+                            {
+                              "-label": "care of home",
+                              "-code": "gen-accom-hm-care",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-question": "Is the person's accommodation showing lack of care?",
+                              "-help": "Consider cleanliness of the home and the general state of repair of objects/furniture within it.",
+                              "-scale-type": "((left \"well cared for\")(right \"totally lacking care\"))"
+                            },
+                            {
+                              "-label": "habitable accommodation",
+                              "-code": "gen-accom-habitbl",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-question": "Does the person think the accommodation is unfit to live in?",
+                              "-help": "This includes warmth, power supply, services or food provided with accommodation.",
+                              "-scale-type": "((left \"fit to live in\")(right \"totally unfit to live in\"))"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "financial and employment concerns",
+                      "-code": "gen-finance-empl",
+                      "-generic-type": "gd",
+                      "-layer": "0",
+                      "-question": "Do you have reason to be concerned about risks due to the person's employment and/or finances?",
+                      "node": [
+                        {
+                          "-label": "financial problems",
+                          "-code": "gen-finance-prob",
+                          "-persistent": "soft",
+                          "-header": "Questions on financial problems",
+                          "node": [
+                            {
+                              "-label": "anxiety about perceived level of debts",
+                              "-code": "gen-perc-debt-anx",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-question": "How anxious is the person about perceived levels of debt?",
+                              "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                              "-scale-type": "((left \"no debts/not anxious\") (right \"extremely anxious\"))"
+                            },
+                            {
+                              "-label": "chronic poverty",
+                              "-code": "gen-poverty",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-persistent": "soft",
+                              "-values": "scale",
+                              "-question": "Does the person's income fail to cover the essential living costs of the household (food, rent, heating, etc)?",
+                              "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                              "-scale-type": "((left \"can cover the costs\")(right \"nowhere near enough\"))"
+                            }
+                          ]
+                        },
+                        {
+                          "-label": "employment",
+                          "-code": "gen-employment",
+                          "-persistent": "soft",
+                          "-header": "Questions on employment",
+                          "node": [
+                            {
+                              "-label": "frequency of changing jobs",
+                              "-code": "gen-job-chg-frq",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-persistent": "soft",
+                              "-values": "scale",
+                              "-question": "How unstable is the person's employment history (eg always changing, poor disciplinary record)?",
+                              "-help": "Consider person's inability to sustain at work, any work or disciplinary records, etc.",
+                              "-scale-type": "((left \"stable\")(right \"completely unstable\"))"
+                            },
+                            {
+                              "-label": "recent or potential detrimental change to employment",
+                              "-code": "gen-rec-bad-job-ch",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-question": "Does the person believe a recent change in employment to be detrimental (eg loss of job, retirement, work stress)?",
+                              "-help": "If the assessment is for child/adolescent, consider whether a favourite teacher has left or disliked teachers have arrived, whether the classes have changed meaning friends may be in different ones, or whether certain enjoyed activities such as sports, clubs, and hobbies have been lost. If the young person is in a job, then consider changes in managers or work colleagues.",
+                              "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                              "-scale-type": "((left \"no change for the worse\") (right \"really bad changes\"))"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "-label": "general current behaviour",
+                  "-code": "gen-currnt-bhvr",
+                  "-generic-type": "gd",
+                  "-layer": "0",
+                  "-question": "Do you have reason to be concerned about the person's general current behaviour (eg risk-taking, sleep patterns, daily activities, challenging behaviour)?",
+                  "node": [
+                    {
+                      "-label": "reckless risk taking",
+                      "-code": "gen-rsk-behavr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person take reckless risks (eg with sexual behaviour, driving, gambling and other leisure pursuits)?",
+                      "-scale-type": "((left \"no reckless risks\") (right \"extremely reckless risks\"))"
+                    },
+                    {
+                      "-label": "unintentional risk making",
+                      "-code": "gen-unint-risk-behavr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person's behaviour lead to unintentional risks (eg fire or harm due to being careless, thoughtless or forgetful; self-injurious behaviour)?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no unintentional risk\") (right \"high unintentional risk\"))"
+                    },
+                    {
+                      "-label": "sleep disturbance",
+                      "-code": "gen-sleep-dist",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person experience problems with sleeping?",
+                      "-help": "This includes insomnia, deprived sleep patterns, etc.",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"sleeping really well\")(right \"sleeping really badly\"))"
+                    },
+                    {
+                      "-label": "uncharacteristic recent change in behaviour",
+                      "-code": "gen-unusl-rec-bhvr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Has the person been behaving out of character or unpredictably in recent weeks?",
+                      "-help": "Out of character is not a change in mood but something you would not expect from the person's particular personality and the way variations in life circumstances are usually addressed.",
+                      "-scale-type": "((left \"not out of character\") (right \"completely out of character\"))"
+                    },
+                    {
+                      "-label": "challenging behaviour",
+                      "-code": "gen-chall-bhvr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person display challenging behaviour (eg antisocial, disruptive, resistance to advice, predatory, false accusations)",
+                      "-help": "Think about whether they have no consideration for other people by, for example, making a lot of noise, whether they pester and pursue others inappropriately or take advantage of vulnerable people, etc.",
+                      "-scale-type": "((left \"not challenging\") (right \"extremely challenging\"))"
+                    },
+                    {
+                      "-label": "daily activity",
+                      "-code": "gen-day-actvty",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "node": [
+                        {
+                          "-label": "structure of day",
+                          "-code": "gen-day-struct",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Does the person's day lack any structure?",
+                          "-help": "Think about whether they have a timetable or regular things to do, be responsible for, or to turn up for. Are the days completely haphazard and unplanned?",
+                          "-scale-type": "((left \"structured\")(right \"no structure at all\"))"
+                        },
+                        {
+                          "-label": "general level of activity during the day",
+                          "-code": "gen-day-actvty-lev",
+                          "-value-mg": "(([suic >> gen-involve-social >> gen-currnt-bhvr >> gen-day-actvty >> gen-day-actvty-lev] ((INACTIVE 0.3) (UNDERACTIVE 0.1) (NORMAL 0) (OVERACTIVE 0.5) (HYPERACTIVE 1))) ([sh >> gen-involve-social >> gen-currnt-bhvr >> gen-day-actvty >> gen-day-actvty-lev] ((INACTIVE 0.3) (UNDERACTIVE 0.1) (NORMAL 0) (OVERACTIVE 0.5) (HYPERACTIVE 1))) ([sn >> gen-involve-social >> gen-currnt-bhvr >> gen-day-actvty >> gen-day-actvty-lev] ((INACTIVE 1) (UNDERACTIVE 0.5) (NORMAL 0) (OVERACTIVE 0) (HYPERACTIVE 0))) ([hto >> gen-involve-social >> gen-currnt-bhvr >> gen-day-actvty >> gen-day-actvty-lev] ((INACTIVE 0) (UNDERACTIVE 0) (NORMAL 0) (OVERACTIVE 0.5) (HYPERACTIVE 1))) ([vuln-su >> gen-involve-social >> gen-currnt-bhvr >> gen-day-actvty >> gen-day-actvty-lev] ((INACTIVE 1) (UNDERACTIVE 0.5) (NORMAL 0) (OVERACTIVE 0.1) (HYPERACTIVE 0.3)))([absconding >> gen-involve-social >> gen-currnt-bhvr >> gen-day-actvty >> gen-day-actvty-lev] ((INACTIVE 0) (UNDERACTIVE 0) (NORMAL 0) (OVERACTIVE 0.5) (HYPERACTIVE 1))))",
+                          "-generic-type": "gd",
+                          "-values": "nominal",
+                          "-question": "What is the person's general level of activity?",
+                          "-help": "Consider how the person spends his or her leisure time: is he or she slumped in front of the television or spending excessive amounts of time in a passive/inert state? If the person is unemployed, are there any efforts to get a job or fill the time with gainful work? Alternatively, is the person constantly organising and engaging in activities with no time for reflection or rest, behaving hyperactively, with no spare capacity?",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "appropriateness of diet",
+                      "-code": "gen-app-diet",
+                      "-persistent": "soft",
+                      "-generic-type": "g",
+                      "-header": "Questions about diet",
+                      "node": [
+                        {
+                          "-label": "eating healthily",
+                          "-code": "gen-diet-eating",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Does the person fail to eat a healthy diet?",
+                          "-help": "This includes the person having very low calorie intake, eating disorders, etc.",
+                          "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                          "-scale-type": "((left \"healthy diet\")(right \"very unhealthy diet\"))"
+                        },
+                        {
+                          "-label": "weight",
+                          "-code": "gen-diet-weight",
+                          "-persistent": "soft",
+                          "node": [
+                            {
+                              "-label": "person's weight",
+                              "-code": "gen-diet-weigt-ext",
+                              "-value-mg": "((EXTREME-UNDERWEIGHT 1) (UNDERWEIGHT 0.5) (WEIGHT-OK 0) (OVERWEIGHT 0.5) (EXTREME-OVERWEIGHT 1))",
+                              "-persistent": "soft",
+                              "-values": "nominal",
+                              "-question": "Is the person's weight a cause of concern? Tick the appropriate description."
+                            },
+                            {
+                              "-label": "extreme weight change",
+                              "-code": "gen-diet-weigt-chg",
+                              "-value-mg": "((0 0) (10 1))",
+                              "-values": "scale",
+                              "-question": "Has the person experienced weight change in recent months?",
+                              "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                              "-scale-type": "((left \"no change\") (right \"extreme change (gain or loss)\"))"
+                            }
+                          ]
+                        },
+                        {
+                          "-label": "drinking",
+                          "-code": "gen-diet-drink",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Does the person fail to have appropriate fluid intake (too much or too little)?",
+                          "-scale-type": "((left \"fluid intake fine\")(right \"totally inappropriate fluid intake (too much/too little)\"))"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "-label": "substance misuse",
+                  "-code": "gen-subs-misuse",
+                  "-persistent": "hard",
+                  "-generic-type": "gd",
+                  "-layer": "0",
+                  "-filter-q": "Does the person have a history of misusing drugs or alcohol?",
+                  "-screening": "0",
+                  "node": [
+                    {
+                      "-label": "detrimental effects of alcohol misuse",
+                      "-code": "gen-alc-misuse",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-layer": "0",
+                      "-question": "Does alcohol currently have a bad effect on the person's life?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no bad effect\") (right \"extremely bad effect\"))",
+                      "-screening": "0"
+                    },
+                    {
+                      "-label": "detrimental effects of drugs misuse",
+                      "-code": "gen-drug-misuse",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-layer": "0",
+                      "-question": "Do drugs currently have a bad effect on the person's life?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no bad effect\") (right \"extremely bad effect\"))",
+                      "-screening": "0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "-label": "adverse life events",
+              "-code": "adv-life-event",
+              "-persistent": "hard",
+              "-generic-type": "gd",
+              "-filter-q": "Does the person have any adverse life events (eg suffered abuse, criminal justice proceedings, detrimental upbringing/education, eating disorders)?",
+              "node": [
+                {
+                  "-label": "abuse to person",
+                  "-code": "gen-life-abuse",
+                  "-persistent": "hard",
+                  "-generic-type": "g",
+                  "-filter-q": "Has the person ever been the victim of any form of abuse (eg physical, sexual, financial, emotional)?",
+                  "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                  "node": [
+                    {
+                      "-label": "sexual abuse",
+                      "-code": "gen-life-sex-abuse",
+                      "-persistent": "hard",
+                      "-filter-q": "Has the person ever been sexually abused?",
+                      "node": [
+                        {
+                          "-label": "most recent episode of sexual abuse",
+                          "-code": "gen-sex-abse-last",
+                          "-value-mg": "((0 1) (5 0.5))",
+                          "-persistent": "soft",
+                          "-values": "date-year",
+                          "-question": "When was the most recent episode of sexual abuse?",
+                          "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine."
+                        },
+                        {
+                          "-label": "sexual abuse during childhood (0 to 16)",
+                          "-code": "gen-sex-abse-as-ch",
+                          "-value-mg": "((YES 1) (NO 0))",
+                          "-persistent": "hard",
+                          "-values": "nominal",
+                          "-question": "Was the first episode of sexual abuse during childhood or early adolescence?"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "physical abuse",
+                      "-code": "gen-phys-abse",
+                      "-persistent": "hard",
+                      "-filter-q": "Has the person ever been physically abused?",
+                      "node": [
+                        {
+                          "-label": "most recent episode of physical abuse",
+                          "-code": "gen-phys-abse-last",
+                          "-value-mg": "((0 1) (24 0.5))",
+                          "-persistent": "soft",
+                          "-values": "date-month",
+                          "-question": "When was the most recent episode of physical abuse?",
+                          "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine."
+                        },
+                        {
+                          "-label": "physical abuse during childhood (0 to 16)",
+                          "-code": "gen-phy-abse-as-ch",
+                          "-value-mg": "((YES 1) (NO 0))",
+                          "-persistent": "hard",
+                          "-values": "nominal",
+                          "-question": "Was the first episode of physical abuse during childhood or early adolescence?"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "emotional abuse",
+                      "-code": "gen-emot-abse",
+                      "-persistent": "hard",
+                      "-filter-q": "Has the person ever been emotionally abused due to, for example, race, religion, sexual orientation, appearance?",
+                      "-help": "This includes the person being verbally abused, insulted, called names, emotionally bullied, constantly criticised, humiliated, etc.",
+                      "node": [
+                        {
+                          "-label": "most recent episode of emotional abuse",
+                          "-code": "gen-emot-abse-last",
+                          "-value-mg": "((0 1) (24 0.5))",
+                          "-persistent": "soft",
+                          "-values": "date-month",
+                          "-question": "When was the most recent episode of emotional abuse?",
+                          "-help": "Don't worry if you don't know the exact date. An approximate date or just the year and/or month is fine."
+                        },
+                        {
+                          "-label": "emotional abuse during childhood (0 to 16)",
+                          "-code": "gen-emo-abse-as-ch",
+                          "-value-mg": "((YES 1) (NO 0))",
+                          "-persistent": "hard",
+                          "-values": "nominal",
+                          "-question": "Was the first episode of emotional abuse during childhood or early adolescence?"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "financial abuse",
+                      "-code": "gen-financial-abuse",
+                      "-value-mg": "((YES 1) (NO 0))",
+                      "-persistent": "hard",
+                      "-values": "nominal",
+                      "-question": "Has the person ever been financially abused?"
+                    }
+                  ]
+                },
+                {
+                  "-label": "other challenging experiences",
+                  "-code": "other-chall-exp",
+                  "-header": "Other challenging experiences",
+                  "node": [
+                    {
+                      "-label": "forensic/criminal proceedings",
+                      "-code": "gen-forensic-proc",
+                      "-persistent": "hard",
+                      "-filter-q": "Has the person ever faced serious criminal justice proceedings (court cases, custodial sentences, etc)?",
+                      "node": {
+                        "-label": "current/criminal proceedings",
+                        "-code": "gen-forensic-proc-curr",
+                        "-value-mg": "((YES 1) (NO 0))",
+                        "-persistent": "soft",
+                        "-values": "nominal",
+                        "-question": "Are the serious criminal justice proceedings current?"
+                      }
+                    },
+                    {
+                      "-label": "environment person grew up in",
+                      "-code": "gen-env-grew-up",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "hard",
+                      "-values": "scale",
+                      "-question": "Did the person grow up in emotionally disturbed or disruptive environments?",
+                      "-help": "This includes difficult, violent, and chaotic, environments or ones with poor emotional attachments.",
+                      "-scale-type": "((left \"no disturbance/disruption\") (right \"extremely disturbed/disrupted\"))"
+                    },
+                    {
+                      "-label": "eating disorders",
+                      "-code": "gen-eating-dis",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "soft",
+                      "-values": "scale",
+                      "-question": "Has the person suffered from eating disorders in the past?",
+                      "-action": "((\"open-url(http://www.egrist.org/information-and-support)\"(0.5 1.1)))",
+                      "-scale-type": "((left \"no eating disorders\") (right \"serious eating disorder\"))"
+                    },
+                    {
+                      "-label": "educational experience",
+                      "-code": "gen-educ-expr",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-persistent": "hard",
+                      "-values": "scale",
+                      "-question": "Did the person have a bad time at school?",
+                      "-help": "Consider poor achievements, educational problems, bullying, unpleasant teachers, etc.",
+                      "-scale-type": "((left \"no problems with school\") (right \"terrible time at school\"))"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "-label": "person's behavioural presentation during assessment",
+              "-code": "gen-presentation",
+              "-generic-type": "gd",
+              "-filter-q": "Are you concerned about the person's behavioural presentation with respect to potential risks (eg verbal and physical behaviour, uneasy `gut' feeling in yourself)?",
+              "-screening": "0",
+              "node": [
+                {
+                  "-label": "person's engagement with assessor",
+                  "-code": "gen-engagement",
+                  "-generic-type": "gd",
+                  "-filter-q": "Are you concerned about the person's engagement with you during the assessment?",
+                  "node": [
+                    {
+                      "-label": "rapport",
+                      "-code": "gen-rapport",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "How difficult is it to have rapport with the person?",
+                      "-scale-type": "((left \"easy\")(right \"very difficult\"))"
+                    },
+                    {
+                      "-label": "person's responsiveness",
+                      "-code": "gen-responsve",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person unwilling to communicate or respond to questions?",
+                      "-help": "Consider how cooperative the person is (eg talks about problems/issues, tells you what you want to hear), time taken to respond, ability to handle questions appropriately (eg hostility to probing questions), uncommunicative (mute, withdrawn, not open, not answering), withholding information (eg person's plans, feelings, degree of withholding) etc.",
+                      "-scale-type": "((left \"willing\") (right \"extremely unwilling\"))"
+                    },
+                    {
+                      "-label": "assessor's uneasiness about the person",
+                      "-code": "gen-gut-assmnt",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Do you have an uneasy 'gut' feeling about the person (eg about the person's honesty, something doesn't quite add up, something missing)?",
+                      "-scale-type": "((left \"no uneasy gut feeling\") (right \"extremely uneasy gut feeling\"))"
+                    }
+                  ]
+                },
+                {
+                  "-label": "verbal indicators of risk",
+                  "-code": "gen-risk-verbal",
+                  "-generic-type": "gd",
+                  "-filter-q": "Are you concerned about verbal indicators of risk?",
+                  "node": [
+                    {
+                      "-label": "tone",
+                      "-code": "gen-risk-tone",
+                      "node": [
+                        {
+                          "-label": "degree of aggression/hostility",
+                          "-code": "gen-risk-aggrsv",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "How aggressive/hostile is the person's tone of voice?",
+                          "-help": "Consider the tone of voice (threatening, angry, etc); is the person shouting or, in contrast, very quite and matter of fact?",
+                          "-scale-type": "((left \"not agressive/hostile\") (right \"extremely aggressive/hostile\"))"
+                        },
+                        {
+                          "-label": "how upbeat or downbeat/depressed",
+                          "-code": "gen-risk-upbeat",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "How depressed and downbeat is the person's tone of voice?",
+                          "-scale-type": "((left \"not depressed/downbeat\")(right \"extremely depressed/downbeat\"))"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "degree to which the person is making sense",
+                      "-code": "gen-coherence",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Is the person failing to make sense (eg incoherent, irrational)?",
+                      "-scale-type": "((left \"makes sense\") (right \"makes no sense at all\"))"
+                    }
+                  ]
+                },
+                {
+                  "-label": "body language and expression",
+                  "-code": "gen-body-face",
+                  "-generic-type": "gd",
+                  "-filter-q": "Are you concerned about the person's body language and expression?",
+                  "node": [
+                    {
+                      "-label": "body language indicating distress",
+                      "-code": "gen-distrss-b-lang",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person's body language indicate distress?",
+                      "-help": "This includes person being hunched, tearful, fidgety, or preoccupied, having agitated movements or head in hands.",
+                      "-scale-type": "((left \"no indication\") (right \"indicates extreme distress\"))"
+                    },
+                    {
+                      "-label": "movements, posture, facial expression indicating low mood",
+                      "-code": "gen-low-mood",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Do the person's movements, posture, and facial expression indicate a low, downbeat, or gloomy mood?",
+                      "-help": "This includes person being sleepy, restless, hunched, unsmiling, gloomy or morose, having stooped posture, head down, or head in hands.",
+                      "-scale-type": "((left \"no indication\") (right \"indicates extremely low/gloomy/downbeat mood\"))"
+                    },
+                    {
+                      "-label": "aggressive/threatening movements, posture, or expression",
+                      "-code": "gen-threat-move",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "How aggressive or threatening are the person's movements and posture?",
+                      "-help": "This includes person sitting forward, clenching fists, pacing, getting very close, banging fists, digging nails into hands, etc.",
+                      "-scale-type": "((left \"not aggressive or threatening\")(right \"extremely aggressive or threatening\"))"
+                    },
+                    {
+                      "-label": "preoccupied/detached demeanour",
+                      "-code": "gen-detached",
+                      "-value-mg": "((0 0) (10 1))",
+                      "-values": "scale",
+                      "-question": "Does the person appear detached or preoccupied?",
+                      "-scale-type": "((left \"not detached or preoccupied\") (right \"extremely detached or preoccupied\"))"
+                    },
+                    {
+                      "-label": "eyes",
+                      "-code": "gen-eyes",
+                      "-generic-type": "gd",
+                      "node": [
+                        {
+                          "-label": "avoid eye contact",
+                          "-code": "gen-avoid-eye-contact",
+                          "-value-mg": "((0 0) (10 1))",
+                          "-values": "scale",
+                          "-question": "Does the person avoid eye contact?",
+                          "-help": "consider avoidance that is deliberate or indicative of non-normal behaviour rather than something that may be cultural.",
+                          "-scale-type": "((left \"no avoidance\") (right \"total avoidance\"))"
+                        },
+                        {
+                          "-label": "eye movement",
+                          "-code": "gen-eye-movement",
+                          "-value-mg": "(([suic >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 1) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))) ([sh >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 1) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))) ([sn >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 1) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))) ([hto >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 1) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))) ([risk-dep >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 1) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))) ([vuln-su >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 1) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))) ([absconding >> gen-presentation >> gen-body-face >> gen-eyes >> gen-eye-movement] ((UNRESPONSIVE-GLAZED 0) (APPROPRIATE 0) (FIXED-STARING 1) (DARTING 1))))",
+                          "-generic-type": "gd",
+                          "-values": "nominal",
+                          "-question": "How would you describe the person's general eye movement?"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "-label": "congruence of physical, verbal, and emotional presentation",
+                  "-code": "gen-congruence",
+                  "-value-mg": "((0 0) (10 1))",
+                  "-values": "scale",
+                  "-question": "How inconsistent are the person's physical, verbal, and emotional presentations (lack of congruence)?",
+                  "-scale-type": "((left \"consistent\") (right \"totally inconsistent\"))"
+                }
+              ]
+            },
+            {
+              "-label": "demographics",
+              "-code": "gen-demog",
+              "-generic-type": "gd",
+              "node": [
+                {
+                  "-label": "age",
+                  "-code": "gen-age",
+                  "-value-mg": "(([suic >> gen-demog >> gen-age] ((14 0) (20 1) (30 0.5) (50 0) (60 0.3) (80 1))) ([sh >> gen-demog >> gen-age] ((10 0) (15 1) (20 1) (30 0.5) (60 0))) ([sn >> gen-demog >> gen-age] ((15 0) (50 0.2) (80 1))) ([hto >> gen-demog >> gen-age] ((12 0) (20 1) (25 1) (35 0.5) (50 0))) ([risk-dep >> gen-demog >> gen-age] ((18 0) (25 1) (50 0))) ([vuln-su >> gen-demog >> gen-age] ((18 1) (50 0) (70 0.8) (80 1)))([absconding >> gen-demog >> gen-age] ((12 0) (20 1) (30 1) (70 0))))",
+                  "-persistent": "hard",
+                  "-generic-type": "gd",
+                  "-values": "date-year",
+                  "-question": "Date of birth"
+                },
+                {
+                  "-label": "gender",
+                  "-code": "gen-gender",
+                  "-value-mg": "(([suic >> gen-demog >> gen-gender] ((MALE 1) (FEMALE 0))) ([sh >> gen-demog >> gen-gender] ((MALE 0) (FEMALE 1))) ([sn >> gen-demog >> gen-gender] ((MALE 1) (FEMALE 0))) ([hto >> gen-demog >> gen-gender] ((MALE 1) (FEMALE 0))) ([risk-dep >> gen-demog >> gen-gender] ((MALE 1) (FEMALE 0))) ([vuln-su >> gen-demog >> gen-gender] ((MALE 0) (FEMALE 1)))([absconding >> gen-demog >> gen-gender] ((MALE 1) (FEMALE 0))))",
+                  "-persistent": "hard",
+                  "-generic-type": "gd",
+                  "-values": "nominal",
+                  "-question": "Gender"
+                },
+                {
+                  "-label": "relationship status",
+                  "-code": "gen-marital-status",
+                  "-filter-q": "Does the person have a partner?",
+                  "node": {
+                    "-label": "living with partner",
+                    "-code": "partner-share-acc",
+                    "-value-mg": "((no 1)(yes 0))",
+                    "-persistent": "soft",
+                    "-values": "nominal",
+                    "-question": "Does the person live with his or her partner?"
+                  }
+                },
+                {
+                  "-label": "occupants sharing accommodation other than a partner",
+                  "-code": "gen-accom-share",
+                  "-persistent": "soft",
+                  "-filter-q": "Does the person share the living accommodation with anyone who is not the partner?",
+                  "node": [
+                    {
+                      "-label": "Dependents",
+                      "-code": "gen-accom-depndnts",
+                      "-persistent": "soft",
+                      "-filter-q": "Does the person live with dependents (relatives or children)?",
+                      "node": [
+                        {
+                          "-label": "number of dependents",
+                          "-code": "gen-accom-num-dep",
+                          "-value-mg": "((0 0) (8 1))",
+                          "-persistent": "soft",
+                          "-values": "integer",
+                          "-question": "How many dependents does the person live with"
+                        },
+                        {
+                          "-label": "age of youngest dependent",
+                          "-code": "gen-dep-ygnst-age",
+                          "-value-mg": "((0 1) (10 0.7) (18 0))",
+                          "-persistent": "soft",
+                          "-values": "integer",
+                          "-question": "What is the age of the youngest dependent?"
+                        }
+                      ]
+                    },
+                    {
+                      "-label": "number of non-dependents sharing accommodation",
+                      "-code": "gen-accm-share-nd",
+                      "-value-mg": "((0 0)(5 1))",
+                      "-persistent": "soft",
+                      "-values": "integer",
+                      "-question": "How many non-dependents share the living accommodation",
+                      "-help": "This includes partner, carer, friends/communal, sibling(s), parent(s), and other relative(s)."
+                    }
+                  ]
+                },
+                {
+                  "-label": "ethnicity",
+                  "-code": "gen-ethnicity",
+                  "-value-mg": "(([suic >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))) ([sh >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))) ([sn >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))) ([hto >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))) ([risk-dep >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))) ([vuln-su >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))) ([absconding >> gen-demog >> gen-ethnicity] ((WHITE-BRITISH 0) (WHITE-IRISH 0) (OTHER-WHITE 0) (WHITE-BLACK-CARIBBEAN 0) (WHITE-BLACK-AFRICAN 0)    (WHITE-ASIAN 0) (OTHER-MIXED 0) (INDIAN 0) (PAKISTANI 0) (BANGLADESHI 0) (OTHER-ASIAN 0) (BLACK-CARIBBEAN 0)    (BLACK-AFRICAN 0) (OTHER-BLACK 0) (CHINESE 0) (OTHER-ETHNIC 0))))",
+                  "-persistent": "hard",
+                  "-generic-type": "gd",
+                  "-values": "nominal",
+                  "-question": "What is the person's ethnic group?"
+                },
+                {
+                  "-label": "Multi-Agency Public Protection Arrangements",
+                  "-code": "mappa",
+                  "-value-mg": "((YES 1)(NO 0))",
+                  "-persistent": "soft",
+                  "-generic-type": "gd",
+                  "-values": "nominal",
+                  "-question": "Does the person have any Multi-Agency Public Protection Arrangements (MAPPA)?",
+                  "-help": "Multi-Agency Public Protection Arrangements (MAPPA) are for people under the remit of responsible authorities for managing serious risks to the public."
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

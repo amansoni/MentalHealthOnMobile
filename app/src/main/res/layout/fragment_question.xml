@@ -12,19 +12,46 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp">
-        <TextView
-            android:id="@+id/questionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="30dp"
-            android:text="@string/question_text"
-            android:textSize="25dp"/>
+            android:layout_height="400dp"
+            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/questionTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="30dp"
+                    android:text="@string/question_text"
+                    android:textSize="25dp"/>
+
+                <TextView
+                    android:id="@+id/questionAction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="30dp"
+                    android:textSize="15dp"/>
+
+                <TextView
+                    android:id="@+id/questionType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="30dp"
+                    android:textSize="15dp"/>
+
+                <TextView
+                    android:id="@+id/questionMG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="30dp"
+                    android:textSize="15dp"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
             android:orientation="horizontal"
             android:gravity="center">
                 <Button
