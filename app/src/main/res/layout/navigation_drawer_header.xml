@@ -14,22 +14,27 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="100px"
-        android:layout_height="34px"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/ic_grist_logo_white" />
-
-    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="My Safety App"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        app:srcCompat="@drawable/ic_grist_logo_white"
+        />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/app_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:text="My Safety App"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        />
+
+    <TextView
+        android:id="@+id/more_info_address"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="egrist.org" />
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:text="egrist.org"
+        android:clickable="true"/>
 
 </LinearLayout>

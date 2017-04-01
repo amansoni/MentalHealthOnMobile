@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -24,6 +26,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.theom.mmha.Fragments.Map.GmapFragment;
 import com.example.theom.mmha.Fragments.Places.GooglePlace;
 import com.example.theom.mmha.Fragments.Places.GooglePlacesUtility;
 import com.example.theom.mmha.Fragments.Places.PlaceDetail;
@@ -70,7 +73,7 @@ public class MapLocationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_location_item, container, false);
+        View v = inflater.inflate(R.layout.activity_scrolling, container, false);
 
         //Display menu items
         setHasOptionsMenu(true);
@@ -111,15 +114,26 @@ public class MapLocationFragment extends Fragment {
             placeImage = getArguments().getByteArray("placeImage");
         }
 
-        Button showOnMap = (Button) v.findViewById(R.id.show_on_map);
-        showOnMap.setOnClickListener(new View.OnClickListener() {
+
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new CoordinatorFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putDouble("searchAreaLat", place.getGeometry().getLocation().getLat());
+                bundle.putDouble("searchAreaLong", place.getGeometry().getLocation().getLng());
+                bundle.putSerializable("googlePlaceList", places);
+
+                Fragment fragment = new GmapFragment();
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.relativeLayout, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
+                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();*/
             }
         });
 
@@ -150,13 +164,7 @@ public class MapLocationFragment extends Fragment {
                 changeIcon(item);*/
                 return true;
             case R.id.create_postcard:
-                //Launch postcard fragment
-                /*Fragment fragment = new PostcardFragment();
-                Bundle bundle = new Bundle();
-                bundle.putByteArray("photo",placeImage);
-                fragment.setArguments(bundle);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(main.example.admin123.citytour.R.id.relativeLayout, fragment).commit();*/
+
                 return true;
             case R.id.visited:
                /* isVisited=!isVisited;
@@ -205,7 +213,7 @@ public class MapLocationFragment extends Fragment {
             place = placeDetail.getResult();
 
             fillInLayout(place);
-            ImageView iv = (ImageView) getView().findViewById(R.id.favourite_image);
+            ImageView iv = (ImageView) getView().findViewById(R.id.location_image);
             iv.setBackground(locationPhoto);
         }
     }

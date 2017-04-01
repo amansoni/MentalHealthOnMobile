@@ -53,13 +53,14 @@ public class SearchDoctorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_hospital_finder, null);
-
+       // View v = getActivity().getLayoutInflater().inflate(R.layout.fragment_hospital_finder, null);
+        View v = inflater.inflate(R.layout.fragment_hospital_finder, container, false);
         //Create the Google Places AutoComplete Widget
         autocompleteFragment = (SupportPlaceAutocompleteFragment)
-                getActivity().getSupportFragmentManager().findFragmentById(R.id.location_autocomplete_fragment);
+                getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-
+        //Listener for Google Places AutoComplete widget
+        autoCompleteProcess();
 
         Button searchButton = (Button) v.findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +79,6 @@ public class SearchDoctorFragment extends Fragment {
         });
 
 
-        //Listener for Google Places AutoComplete widget
-        autoCompleteProcess();
 
         return v;
     }

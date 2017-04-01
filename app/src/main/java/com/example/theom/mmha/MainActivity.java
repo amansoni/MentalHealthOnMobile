@@ -1,5 +1,6 @@
 package com.example.theom.mmha;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.theom.mmha.Fragments.HomepageFragment;
 import com.example.theom.mmha.Fragments.Places.PlacePins;
@@ -40,6 +42,19 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+
+        TextView egristLink = (TextView) header.findViewById(R.id.more_info_address);
+        egristLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "https://www.egrist.org";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
 
         Fragment fragment = new HomepageFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
