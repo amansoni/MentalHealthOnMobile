@@ -1,9 +1,10 @@
-package com.example.theom.mmha.Fragments;
+package com.example.theom.mmha.MySafety_Quiz;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.theom.mmha.JSON_parser;
-import com.example.theom.mmha.QuestionObject;
 import com.example.theom.mmha.R;
 
 /**
@@ -29,6 +28,9 @@ public class QuestionFragment extends Fragment {
     TextView questionActionTextView;
     TextView questionTypeTextView;
     TextView questionMGTextView;
+    TextView questionCodeTextView;
+    private AnsweredQuestionsDBHelper answersDB;
+    String TAG = "QuestionFragment";
 
     private OnFragmentInteractionListener mListener;
 
@@ -59,6 +61,11 @@ public class QuestionFragment extends Fragment {
         final JSON_parser senorJSON_parser = new JSON_parser();
         senorJSON_parser.setupQuiz(getActivity());
 
+        //Create database to store assessment answers
+        answersDB = new AnsweredQuestionsDBHelper(getActivity());
+
+        boolean inserted = answersDB.insertData("First Assessment", "Bob Charles", "Theo Matthews", "", "");
+        Log.i(TAG, "Insertion to DB was "+inserted);
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_question, container, false);
@@ -67,6 +74,7 @@ public class QuestionFragment extends Fragment {
         questionActionTextView = (TextView) v.findViewById(R.id.questionAction);
         questionTypeTextView = (TextView) v.findViewById(R.id.questionType);
         questionMGTextView = (TextView) v.findViewById(R.id.questionMG);
+        questionCodeTextView = (TextView) v.findViewById(R.id.questionCode);
 
         Button mYesButton = (Button)v.findViewById(R.id.yesButton);
         mYesButton.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +87,7 @@ public class QuestionFragment extends Fragment {
                 questionActionTextView.setText("Action: "+question.getQuestionAction());
                 questionTypeTextView.setText("Type: "+question.getQuestionType());
                 questionMGTextView.setText("MG: "+question.getQuestionMG());
+                questionCodeTextView.setText("Code: "+question.getQuestionCode());
             }
         });
         Button mNoButton = (Button)v.findViewById(R.id.noButton);
@@ -92,6 +101,7 @@ public class QuestionFragment extends Fragment {
                 questionActionTextView.setText("Action: "+question.getQuestionAction());
                 questionTypeTextView.setText("Type: "+question.getQuestionType());
                 questionMGTextView.setText("MG: "+question.getQuestionMG());
+                questionCodeTextView.setText("Code: "+question.getQuestionCode());
             }
         });
         return v;

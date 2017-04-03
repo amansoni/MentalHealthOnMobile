@@ -3,8 +3,6 @@ package com.example.theom.mmha;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -21,7 +19,7 @@ import android.widget.TextView;
 import com.example.theom.mmha.Fragments.HomepageFragment;
 import com.example.theom.mmha.Fragments.Places.PlacePins;
 import com.example.theom.mmha.Fragments.Places.SearchDoctorFragment;
-import com.example.theom.mmha.Fragments.QuestionFragment;
+import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomepageFragment.OnFragmentInteractionListener, QuestionFragment.OnFragmentInteractionListener {

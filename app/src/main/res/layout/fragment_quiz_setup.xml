@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:text="Assessment Title"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Name of assessment session"
+        android:ems="10"
+        android:id="@+id/assessmentTitle"
+        android:gravity="center"/>
+
+
+    <TextView
+        android:text="Patient Name"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Name of patient"
+        android:ems="10"
+        android:id="@+id/patientName"
+        android:gravity="center"/>
+
+
+    <TextView
+        android:text="Interviewer Name"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Name of interviewer"
+        android:ems="10"
+        android:id="@+id/interviewName"
+        android:gravity="center"/>
+
+    <TextView
+        android:text="Notes"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Notes about the session before you begin"
+        android:ems="10"
+        android:id="@+id/preSessionNotes"
+        android:gravity="center"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Start Quiz"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:background="@drawable/custom_button"
+        android:id="@+id/startQuiz"/>
+
+</LinearLayout>

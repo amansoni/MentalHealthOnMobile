@@ -11,6 +11,10 @@
             android:icon="@drawable/ic_question_answer_black_24px"
             android:title="Quiz" />
         <item
+            android:id="@+id/nav_quiz_history"
+            android:icon="@drawable/ic_history_black_24px"
+            android:title="Quiz History" />
+        <item
             android:id="@+id/nav_hospital"
             android:icon="@drawable/ic_local_hospital_black_24px"
             android:title="Hospital Search" />

@@ -1,21 +1,15 @@
-package com.example.theom.mmha;
+package com.example.theom.mmha.MySafety_Quiz;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.widget.TextView;
 
-import com.example.theom.mmha.XML_parser;
+import com.example.theom.mmha.R;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.Scanner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,7 +76,7 @@ public class JSON_parser{
             // JSON Parsing error
             e.printStackTrace();
         }
-        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", "No type");
+        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", "No type", "No Code");
         return leafQuestion;
     }
 

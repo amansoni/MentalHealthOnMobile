@@ -1,4 +1,4 @@
-package com.example.theom.mmha;
+package com.example.theom.mmha.MySafety_Quiz;
 
 /**
  * Created by Theo on 01/04/2017.
@@ -9,8 +9,10 @@ public class QuestionObject {
     String questionType;
     String questionAction;
     String questionMG;
+    String questionCode;
 
-    public QuestionObject(String questionText, String questionType){
+    public QuestionObject(String questionText, String questionType, String questionCode){
+        this.questionCode=questionCode;
         this.questionText=questionText;
         this.questionType=questionType;
     }
@@ -38,4 +40,6 @@ public class QuestionObject {
     public String getQuestionMG(){
         return questionMG;
     }
+
+    public String getQuestionCode(){ return questionCode;}
 }

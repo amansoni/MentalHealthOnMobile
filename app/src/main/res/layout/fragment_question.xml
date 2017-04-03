@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="com.example.theom.mmha.Fragments.QuestionFragment">
+    tools:context="com.example.theom.mmha.MySafety_Quiz.QuestionFragment">
 
         <TextView
             android:layout_width="match_parent"
@@ -22,6 +22,14 @@
                     android:paddingStart="30dp"
                     android:text="@string/question_text"
                     android:textSize="25dp"/>
+
+                <TextView
+                    android:id="@+id/questionCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="30dp"
+                    android:paddingStart="30dp"
+                    android:textSize="15dp"/>
 
                 <TextView
                     android:id="@+id/questionAction"

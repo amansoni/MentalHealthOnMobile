@@ -1,4 +1,4 @@
-package com.example.theom.mmha;
+package com.example.theom.mmha.MySafety_Quiz;
 
 /**
  * Created by theom on 15/02/2017.
@@ -13,7 +13,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import java.io.File;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -75,7 +74,7 @@ public class XML_parser extends FragmentActivity{
                 System.out.println("Question: " + questionText + "\nQuestion type: "+values);
             }
         }
-        QuestionObject question = new QuestionObject(questionText, values);
+        QuestionObject question = new QuestionObject(questionText, values, questionID);
         return question;
     }
 
