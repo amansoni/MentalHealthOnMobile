@@ -22,9 +22,10 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     public static final String COL_2 = "QUESTION_SESSION";
     public static final String COL_3 = "PATIENT_NAME";
     public static final String COL_4 = "INTERVIEWER_NAME";
-    public static final String COL_5 = "ANSWERED_QUESTIONS";
+    public static final String COL_5 = "ASSESSMENT_ANSWERS";
     public static final String COL_6 = "NOTES";
     public static final String COL_7 = "DATETIME";
+    String TAG = "DBHelper";
 
     public AnsweredQuestionsDBHelper(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -63,6 +64,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
             if (result == -1) {
                 return false;
             }else {
+                Log.i(TAG, "Inserted the values: "+question_session + ", "+ patient_name);
                 return true;
             }
         }catch (SQLiteConstraintException e){
@@ -92,7 +94,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     }
 
     //Update user notes
-    public Integer updateUserNotes(String locationTitle, String userNotes){
+    public Integer updateAssessmentAnswers(String locationTitle, String userNotes){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_1, locationTitle);
@@ -103,51 +105,4 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
         return result;
     }
 
-    //Update user notes
-    public Integer updateIsVisited(String locationTitle, Boolean isVisited){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(COL_1, locationTitle);
-
-        Log.i("DB_Helper", "Update query: "+locationTitle+ " isVisted: "+isVisited);
-        Integer result = db.update(TABLE_NAME, cv, "NAME = ?", new String[]{locationTitle});
-        return result;
-    }
-
-
-    public Integer addLocationPhoto(String locationTitle, byte[] image) throws SQLiteException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new  ContentValues();
-        cv.put(COL_7,   image);
-        Integer result = db.update(TABLE_NAME, cv, "NAME = ?", new String[]{locationTitle});
-        return result;
-    }
-
-    public Integer addUserPhoto(String locationTitle, byte[] image, String whichCol) throws SQLiteException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new  ContentValues();
-        cv.put(whichCol,   image);
-        Integer result = db.update(TABLE_NAME, cv, "NAME = ?", new String[]{locationTitle});
-        return result;
-    }
-
-    public boolean isLocationFavourite(String locationTitle) throws SQLException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        int count = -1;
-        Cursor c = null;
-        try {
-            String query = "SELECT COUNT(*) FROM "
-                    + TABLE_NAME + " WHERE " + COL_1 + " = ?";
-            c = db.rawQuery(query, new String[] {locationTitle});
-            if (c.moveToFirst()) {
-                count = c.getInt(0);
-            }
-            return count > 0;
-        }
-        finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-    }
 }

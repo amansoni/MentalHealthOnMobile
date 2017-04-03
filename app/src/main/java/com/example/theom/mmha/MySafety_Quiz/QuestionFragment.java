@@ -64,9 +64,6 @@ public class QuestionFragment extends Fragment {
         //Create database to store assessment answers
         answersDB = new AnsweredQuestionsDBHelper(getActivity());
 
-        boolean inserted = answersDB.insertData("First Assessment", "Bob Charles", "Theo Matthews", "", "");
-        Log.i(TAG, "Insertion to DB was "+inserted);
-
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_question, container, false);
 

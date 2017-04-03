@@ -7,13 +7,13 @@
             android:icon="@drawable/ic_home_black_24px"
             android:title="Home" />
         <item
-            android:id="@+id/nav_questions"
+            android:id="@+id/nav_assessment"
             android:icon="@drawable/ic_question_answer_black_24px"
-            android:title="Quiz" />
+            android:title="Assessment" />
         <item
-            android:id="@+id/nav_quiz_history"
+            android:id="@+id/nav_prev_assessment"
             android:icon="@drawable/ic_history_black_24px"
-            android:title="Quiz History" />
+            android:title="Previous Assessments" />
         <item
             android:id="@+id/nav_hospital"
             android:icon="@drawable/ic_local_hospital_black_24px"

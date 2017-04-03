@@ -51,7 +51,7 @@
         android:inputType="textPersonName"
         android:hint="Name of interviewer"
         android:ems="10"
-        android:id="@+id/interviewName"
+        android:id="@+id/interviewerName"
         android:gravity="center"/>
 
     <TextView

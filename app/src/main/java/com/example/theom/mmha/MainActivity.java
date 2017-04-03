@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             fragment = new HomepageFragment();
-        } else if (id == R.id.nav_questions) {
+        } else if (id == R.id.nav_assessment) {
             fragment = new QuestionFragment();
         } else if (id == R.id.nav_hospital) {
             fragment = new SearchDoctorFragment();
