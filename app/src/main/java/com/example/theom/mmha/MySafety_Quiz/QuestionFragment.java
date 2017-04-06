@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.example.theom.mmha.R;
 
+import org.json.JSONException;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -31,6 +33,7 @@ public class QuestionFragment extends Fragment {
     TextView questionCodeTextView;
     private AnsweredQuestionsDBHelper answersDB;
     String TAG = "QuestionFragment";
+    Boolean isLeafNode = false;
 
     private OnFragmentInteractionListener mListener;
 
@@ -74,33 +77,22 @@ public class QuestionFragment extends Fragment {
         questionCodeTextView = (TextView) v.findViewById(R.id.questionCode);
 
         Button mYesButton = (Button)v.findViewById(R.id.yesButton);
-        mYesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context ctx = getActivity();
-                String answer = "Yes";
-                QuestionObject question = senorJSON_parser.runQuiz(answer, ctx);
-                questionTextView.setText("Question: "+question.getQuestionText());
-                questionActionTextView.setText("Action: "+question.getQuestionAction());
-                questionTypeTextView.setText("Type: "+question.getQuestionType());
-                questionMGTextView.setText("MG: "+question.getQuestionMG());
-                questionCodeTextView.setText("Code: "+question.getQuestionCode());
-            }
-        });
         Button mNoButton = (Button)v.findViewById(R.id.noButton);
-        mNoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context ctx = getActivity();
-                String answer = "No";
-                QuestionObject question = senorJSON_parser.runQuiz(answer, ctx);
-                questionTextView.setText("Question: "+question.getQuestionText());
-                questionActionTextView.setText("Action: "+question.getQuestionAction());
-                questionTypeTextView.setText("Type: "+question.getQuestionType());
-                questionMGTextView.setText("MG: "+question.getQuestionMG());
-                questionCodeTextView.setText("Code: "+question.getQuestionCode());
-            }
-        });
+
+        if(isLeafNode == false) {
+            mYesButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GetFragmentText("Yes", senorJSON_parser);
+                }
+            });
+            mNoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    GetFragmentText("No", senorJSON_parser);
+                }
+            });
+        }
         return v;
     }
 
@@ -160,5 +152,45 @@ public class QuestionFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    public Boolean GetFragmentText(String answer, JSON_parser senorJSON_parser){
+
+        Context ctx = getActivity();
+        QuestionObject question = null;
+
+        try {
+            question = senorJSON_parser.runQuiz(answer, ctx);
+        } catch (JSONException e) {
+            question = new QuestionObject("Leaf Node Reached", "Nothing", "No Code");
+
+            isLeafNode = true;
+
+            Log.i(TAG, "LEAG NODE REACED, isLeaf = "+isLeafNode);
+            ChangeButtonStatus();
+            e.printStackTrace();
+        }
+        questionTextView.setText("Question: "+question.getQuestionText());
+        questionActionTextView.setText("Action: "+question.getQuestionAction());
+        questionTypeTextView.setText("Type: "+question.getQuestionType());
+        questionMGTextView.setText("MG: "+question.getQuestionMG());
+        questionCodeTextView.setText("Code: "+question.getQuestionCode());
+
+        return isLeafNode;
+    }
+
+    public void ChangeButtonStatus(){
+        Button mYesButton = (Button)getActivity().findViewById(R.id.yesButton);
+        Button mNoButton = (Button)getActivity().findViewById(R.id.noButton);
+        mYesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        mNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
     }
 }

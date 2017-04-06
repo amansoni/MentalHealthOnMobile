@@ -1,6 +1,7 @@
 package com.example.theom.mmha.MySafety_Quiz;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.theom.mmha.R;
 
@@ -54,15 +55,16 @@ public class JSON_parser{
             }
         }
 
-    public QuestionObject runQuiz(String answer, Context ctx){
+    public QuestionObject runQuiz(String answer, Context ctx) throws JSONException {
+
+        String nextQuestion = getNextQuestion(answer);
+        NodeList nList = xml_parser.parseXML(ctx, R.raw.qt);
+        QuestionObject question = xml_parser.getQuestionText(nList, nextQuestion);
+        String fullTextQuestion = question.getQuestionText();
+        String nodeInformation = "No node information";
+
         try {
-
-            String nextQuestion = getNextQuestion(answer);
-            NodeList nList = xml_parser.parseXML(ctx, R.raw.qt);
-            QuestionObject question = xml_parser.getQuestionText(nList, nextQuestion);
-            String fullTextQuestion = question.getQuestionText();
             rows = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion);
-
             if(question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")){
                 NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
                 question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
@@ -73,20 +75,25 @@ public class JSON_parser{
 
 
         } catch (JSONException e) {
+
+                nodeInformation = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion).toString();
+                Log.i(TAG, "Running tesat");
             // JSON Parsing error
             e.printStackTrace();
         }
-        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", "No type", "No Code");
+
+
+        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", nodeInformation, "No Code");
         return leafQuestion;
     }
 
 
-    public static String getNextQuestion(String userinput){
+    public static String getNextQuestion(String userInput){
         String nextQuestion = "";
         try {
             for (int i = 0; i < rows.length(); i++) { // Loop over each each row
                 JSONObject row = rows.getJSONObject(i); // Get row object
-                JSONArray answer = row.getJSONArray(userinput);
+                JSONArray answer = row.getJSONArray(userInput);
                 JSONObject child = answer.getJSONObject(0);
                 Iterator<String> iterator = child.keys();
                 while (iterator.hasNext()) {
