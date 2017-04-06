@@ -74,7 +74,7 @@ public class XML_parser extends FragmentActivity{
                 System.out.println("Question: " + questionText + "\nQuestion type: "+values);
             }
         }
-        QuestionObject question = new QuestionObject(questionText, values, questionID);
+        QuestionObject question = new QuestionObject(questionText, values, questionID, false);
         return question;
     }
 

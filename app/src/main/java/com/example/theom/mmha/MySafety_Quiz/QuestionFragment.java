@@ -162,7 +162,7 @@ public class QuestionFragment extends Fragment {
         try {
             question = senorJSON_parser.runQuiz(answer, ctx);
         } catch (JSONException e) {
-            question = new QuestionObject("Leaf Node Reached", "Nothing", "No Code");
+            question = new QuestionObject("Leaf Node Reached", "Nothing", "No Code", true);
 
             isLeafNode = true;
 

@@ -10,11 +10,13 @@ public class QuestionObject {
     String questionAction;
     String questionMG;
     String questionCode;
+    Boolean isLeafNode;
 
-    public QuestionObject(String questionText, String questionType, String questionCode){
+    public QuestionObject(String questionText, String questionType, String questionCode, Boolean isLeafNode){
         this.questionCode=questionCode;
         this.questionText=questionText;
         this.questionType=questionType;
+        this.isLeafNode=isLeafNode;
     }
 
     public String getQuestionText(){
@@ -42,4 +44,8 @@ public class QuestionObject {
     }
 
     public String getQuestionCode(){ return questionCode;}
+
+    public Boolean isNode(){
+        return isLeafNode;
+    }
 }

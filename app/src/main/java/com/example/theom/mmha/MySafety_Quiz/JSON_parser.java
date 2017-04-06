@@ -25,6 +25,7 @@ public class JSON_parser{
     String JSON_File;
     JSONObject rootObject;
     String TAG = "JSON_Parser";
+    Boolean leafNodeReached = false;
 
     public static void main(String[] args) throws FileNotFoundException, JSONException{
 
@@ -50,10 +51,10 @@ public class JSON_parser{
                 e.printStackTrace();
             }
         }catch (JSONException e) {
-                // JSON Parsing error
-                e.printStackTrace();
-            }
+            // JSON Parsing error
+            e.printStackTrace();
         }
+    }
 
     public QuestionObject runQuiz(String answer, Context ctx) throws JSONException {
 
@@ -63,27 +64,29 @@ public class JSON_parser{
         String fullTextQuestion = question.getQuestionText();
         String nodeInformation = "No node information";
 
-        try {
-            rows = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion);
-            if(question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")){
-                NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
-                question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
-                System.out.println("Action: " + question.getQuestionAction() + "\nValue-mg = " + question.getQuestionMG());
+        if (leafNodeReached == false) {
+            try {
+                rows = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion);
+                if (question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")) {
+                    NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
+                    question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
+                    System.out.println("Action: " + question.getQuestionAction() + "\nValue-mg = " + question.getQuestionMG());
+                }
+
+                return question;
+
+
+            } catch (JSONException e) {
+
+                nodeInformation = rows.getJSONObject(0).getJSONArray(answer).toString();
+                Log.i(TAG, "Running tesat NODE information " + nodeInformation);
+                leafNodeReached = true;
+                // JSON Parsing error
+                e.printStackTrace();
             }
-
-            return question;
-
-
-        } catch (JSONException e) {
-
-                nodeInformation = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion).toString();
-                Log.i(TAG, "Running tesat");
-            // JSON Parsing error
-            e.printStackTrace();
         }
 
-
-        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", nodeInformation, "No Code");
+        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", nodeInformation, "No Code", true);
         return leafQuestion;
     }
 
