@@ -33,7 +33,8 @@ public class QuestionFragment extends Fragment {
     TextView questionCodeTextView;
     private AnsweredQuestionsDBHelper answersDB;
     String TAG = "QuestionFragment";
-    Boolean isLeafNode = false;
+    Boolean leafNodeReached = false;
+    QuestionObject currentQuestion;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,8 +63,8 @@ public class QuestionFragment extends Fragment {
                              Bundle savedInstanceState) {
         //Parsing the JSON
         final JSON_parser senorJSON_parser = new JSON_parser();
-        senorJSON_parser.setupQuiz(getActivity());
-
+        QuestionObject firstQuestion = senorJSON_parser.setupQuiz(getActivity());
+        currentQuestion = firstQuestion;
         //Create database to store assessment answers
         answersDB = new AnsweredQuestionsDBHelper(getActivity());
 
@@ -76,10 +77,16 @@ public class QuestionFragment extends Fragment {
         questionMGTextView = (TextView) v.findViewById(R.id.questionMG);
         questionCodeTextView = (TextView) v.findViewById(R.id.questionCode);
 
+        questionTextView.setText("Question: "+firstQuestion.getQuestionText());
+        questionActionTextView.setText("Action: "+firstQuestion.getQuestionAction());
+        questionTypeTextView.setText("Type: "+firstQuestion.getQuestionType());
+        questionMGTextView.setText("MG: "+firstQuestion.getQuestionMG());
+        questionCodeTextView.setText("Code: "+firstQuestion.getQuestionCode());
+
         Button mYesButton = (Button)v.findViewById(R.id.yesButton);
         Button mNoButton = (Button)v.findViewById(R.id.noButton);
 
-        if(isLeafNode == false) {
+        if(leafNodeReached == false) {
             mYesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -160,23 +167,26 @@ public class QuestionFragment extends Fragment {
         QuestionObject question = null;
 
         try {
-            question = senorJSON_parser.runQuiz(answer, ctx);
+            if (leafNodeReached == false) {
+                question = senorJSON_parser.runQuiz(answer, ctx, currentQuestion);
+                leafNodeReached = question.isLeafNode();
+
+                questionTextView.setText("Question: "+question.getQuestionText());
+                questionActionTextView.setText("Action: "+question.getQuestionAction());
+                questionTypeTextView.setText("Type: "+question.getQuestionType());
+                questionMGTextView.setText("MG: "+question.getQuestionMG());
+                questionCodeTextView.setText("Code: "+question.getQuestionCode());
+
+                currentQuestion=question;
+            }else{
+                Log.i(TAG, "Houston, we reached the leaf node.");
+            }
+
         } catch (JSONException e) {
-            question = new QuestionObject("Leaf Node Reached", "Nothing", "No Code", true);
-
-            isLeafNode = true;
-
-            Log.i(TAG, "LEAG NODE REACED, isLeaf = "+isLeafNode);
-            ChangeButtonStatus();
             e.printStackTrace();
         }
-        questionTextView.setText("Question: "+question.getQuestionText());
-        questionActionTextView.setText("Action: "+question.getQuestionAction());
-        questionTypeTextView.setText("Type: "+question.getQuestionType());
-        questionMGTextView.setText("MG: "+question.getQuestionMG());
-        questionCodeTextView.setText("Code: "+question.getQuestionCode());
 
-        return isLeafNode;
+        return leafNodeReached;
     }
 
     public void ChangeButtonStatus(){

@@ -71,7 +71,7 @@ public class XML_parser extends FragmentActivity{
             if (e.getAttribute("code").equals(search_attribute)) {
                 questionText =  e.getAttribute("question");
                 values = e.getAttribute("values");
-                System.out.println("Question: " + questionText + "\nQuestion type: "+values);
+                System.out.println("Question: " + questionText);
             }
         }
         QuestionObject question = new QuestionObject(questionText, values, questionID, false);

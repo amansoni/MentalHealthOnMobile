@@ -45,7 +45,9 @@ public class QuestionObject {
 
     public String getQuestionCode(){ return questionCode;}
 
-    public Boolean isNode(){
+    public Boolean isLeafNode(){
         return isLeafNode;
     }
+
+    public void setLeafNode(Boolean isLeafNode){this.isLeafNode = isLeafNode;}
 }

@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.json.JSONArray;
@@ -18,24 +19,29 @@ import org.json.JSONObject;
 import org.w3c.dom.NodeList;
 
 
-public class JSON_parser{
+public class JSON_parser {
 
     static JSONArray rows = null;
     static XML_parser xml_parser = new XML_parser();
     String JSON_File;
     JSONObject rootObject;
     String TAG = "JSON_Parser";
+    NodeList nList;
+    QuestionObject firstQuestion;
+    Boolean isFirstQuestion = true;
     Boolean leafNodeReached = false;
 
-    public static void main(String[] args) throws FileNotFoundException, JSONException{
+    public static void main(String[] args) throws FileNotFoundException, JSONException {
 
     }
 
-    public void setupQuiz(Context ctx) {
+    public QuestionObject setupQuiz(Context ctx) {
+        QuestionObject question;
         try {
-            String jsonStr;
-            InputStream JSONin = ctx.getResources().openRawResource(R.raw.finalresults);
             try {
+
+                String jsonStr;
+                InputStream JSONin = ctx.getResources().openRawResource(R.raw.finalresults);
                 int count = 0;
                 byte[] bytes = new byte[32768];
                 StringBuilder builder = new StringBuilder();
@@ -46,75 +52,79 @@ public class JSON_parser{
                 JSONin.close();
                 jsonStr = builder.toString();
                 rootObject = new JSONObject(jsonStr); // Parse the JSON to a JSONObject
-                rows = rootObject.getJSONArray("suic-curr-int"); // Get all JSONArray rows
+
+                rows = rootObject.getJSONArray("screening-tree"); // Get all JSONArray rows
+
+                nList = xml_parser.parseXML(ctx, R.raw.qt);
+
+                String firstQuestionText = getNextQuestionCode("first-question");
+                firstQuestion = xml_parser.getQuestionText(nList, firstQuestionText);
+
             } catch (IOException e) {
+                firstQuestion = new QuestionObject("Couldn't setup assessment", "", "", false);
                 e.printStackTrace();
             }
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             // JSON Parsing error
+            firstQuestion = new QuestionObject("Couldn't setup assessment", "", "", false);
             e.printStackTrace();
         }
+
+        return firstQuestion;
     }
 
-    public QuestionObject runQuiz(String answer, Context ctx) throws JSONException {
-
-        String nextQuestion = getNextQuestion(answer);
-        NodeList nList = xml_parser.parseXML(ctx, R.raw.qt);
-        QuestionObject question = xml_parser.getQuestionText(nList, nextQuestion);
-        String fullTextQuestion = question.getQuestionText();
+    public QuestionObject runQuiz(String answer, Context ctx, QuestionObject currentQuestion) throws JSONException {
+        QuestionObject question;
+        String nextQuestion;
         String nodeInformation = "No node information";
 
-        if (leafNodeReached == false) {
-            try {
-                rows = rows.getJSONObject(0).getJSONArray(answer).getJSONObject(0).getJSONArray(nextQuestion);
-                if (question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")) {
-                    NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
-                    question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
-                    System.out.println("Action: " + question.getQuestionAction() + "\nValue-mg = " + question.getQuestionMG());
-                }
+        nextQuestion = getNextQuestionCode(answer);
+        question = xml_parser.getQuestionText(nList, nextQuestion);
 
-                return question;
-
-
-            } catch (JSONException e) {
-
-                nodeInformation = rows.getJSONObject(0).getJSONArray(answer).toString();
-                Log.i(TAG, "Running tesat NODE information " + nodeInformation);
-                leafNodeReached = true;
-                // JSON Parsing error
-                e.printStackTrace();
-            }
+        if (question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")) {
+            NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
+            question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
         }
 
-        QuestionObject leafQuestion = new QuestionObject("Leaf Node Reached", nodeInformation, "No Code", true);
-        return leafQuestion;
+        Log.i(TAG, "Leaf node reach is set to "+leafNodeReached);
+        question.setLeafNode(leafNodeReached);
+
+        return question;
     }
 
 
-    public static String getNextQuestion(String userInput){
+    public String getNextQuestionCode(String userAnswer) {
         String nextQuestion = "";
         try {
             for (int i = 0; i < rows.length(); i++) { // Loop over each each row
                 JSONObject row = rows.getJSONObject(i); // Get row object
-                JSONArray answer = row.getJSONArray(userInput);
-                JSONObject child = answer.getJSONObject(0);
+                JSONArray result = row.getJSONArray(userAnswer);
+                JSONObject child = result.getJSONObject(0);
                 Iterator<String> iterator = child.keys();
                 while (iterator.hasNext()) {
                     nextQuestion = iterator.next();
-
-                    System.out.println("Next Q: " + nextQuestion);
-
                 }
+
+                if (!nextQuestion.contains("pOfHR")) {
+                    rows = rows.getJSONObject(0).getJSONArray(userAnswer).getJSONObject(0).getJSONArray(nextQuestion);
+                } else {
+                    Log.i(TAG, "Leaf node contains " + nextQuestion);
+                    leafNodeReached = true;
+                    break;
+                }
+
+
             }
         } catch (JSONException e) {
             // JSON Parsing error
             e.printStackTrace();
         }
+
         return nextQuestion;
     }
 
     //method to call xml parser
-    public String getQuestionText(String quetionCode){
+    public String getQuestionText(String quetionCode) {
         String questionText = new String();
 
         return questionText;
@@ -131,18 +141,10 @@ public class JSON_parser{
                 line = br.readLine();
             }
             result = sb.toString();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    /*public void sendJsonFile(String jsonStr){
-        try {
-            rootObject = new JSONObject(jsonStr); // Parse the JSON to a JSONObject
-        }catch (JSONException e) {
-            // JSON Parsing error
-            e.printStackTrace();
-        }
-    }*/
 }
