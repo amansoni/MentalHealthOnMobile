@@ -15,7 +15,7 @@ import com.example.theom.mmha.R;
  * Created by theom on 03/04/2017.
  */
 
-public class SetupQuizFragment extends Fragment{
+public class SetupAssessmentFragment extends Fragment{
 
     private AnsweredQuestionsDBHelper answersDB;
     private EditText assessmentTitle;

@@ -40,8 +40,8 @@ public class XML_parser extends FragmentActivity{
 
 
            /*
-            //File fXmlFile = new File("lib/src/main/java/files/staff.xml");
-            File question_tree = new File("app/src/main/res/raw/qt.xml");
+            //File fXmlFile = new File("lib/src/fragment_question_scale/java/files/staff.xml");
+            File question_tree = new File("app/src/fragment_question_scale/res/raw/qt.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(question_tree);

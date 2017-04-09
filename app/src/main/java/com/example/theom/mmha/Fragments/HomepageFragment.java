@@ -12,8 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
-import com.example.theom.mmha.MySafety_Quiz.SetupQuizFragment;
+import com.example.theom.mmha.MySafety_Quiz.SetupAssessmentFragment;
 import com.example.theom.mmha.R;
 
 
@@ -37,7 +36,7 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
         mStartQuizButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new SetupQuizFragment();
+                Fragment fragment = new SetupAssessmentFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.relativeLayout, fragment);
                 transaction.addToBackStack(null);

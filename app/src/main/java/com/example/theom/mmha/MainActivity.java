@@ -108,6 +108,8 @@ public class MainActivity extends AppCompatActivity
             fragment = new QuestionFragment();
         } else if (id == R.id.nav_hospital) {
             fragment = new SearchDoctorFragment();
+        } else if (id == R.id.nav_prev_assessment){
+            fragment = new Test();
         }
 
         fragmentManager.beginTransaction().replace(R.id.relativeLayout, fragment).commit();

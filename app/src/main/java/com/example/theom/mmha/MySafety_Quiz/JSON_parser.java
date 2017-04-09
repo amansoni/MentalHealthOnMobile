@@ -85,8 +85,6 @@ public class JSON_parser {
             NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
             question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
         }
-
-        Log.i(TAG, "Leaf node reach is set to "+leafNodeReached);
         question.setLeafNode(leafNodeReached);
 
         return question;
