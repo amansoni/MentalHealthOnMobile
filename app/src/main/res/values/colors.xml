@@ -3,6 +3,8 @@
     <color name="colorPrimary">#3E71B7</color>
     <color name="colorPrimaryDark">#2B509E</color>
     <color name="colorAccent">#FF841F</color>
-    <color name="textColour">#FFFFFF</color>
+    <color name="textColour">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="grey">#DBDBDB</color>
+    <color name="darkGrey">#858585</color>
 </resources>

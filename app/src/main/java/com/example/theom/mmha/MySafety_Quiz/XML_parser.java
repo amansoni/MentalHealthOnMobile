@@ -7,6 +7,7 @@ package com.example.theom.mmha.MySafety_Quiz;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,6 +20,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 public class XML_parser extends FragmentActivity{
+
+    String TAG = "XML_Parser";
 
     public static void main(String argv[]) {
 
@@ -65,16 +68,20 @@ public class XML_parser extends FragmentActivity{
     public QuestionObject getQuestionText(NodeList nList, String questionID) {
         String questionText = "Couldn't find the question";
         String values = "Question type not found";
+        String helpText= "No help info found";
+        String scaleInformation = "No Information found";
         for (int i = 0; i < nList.getLength(); i++) {
             Element e = (Element) nList.item(i);
             String search_attribute = questionID;
             if (e.getAttribute("code").equals(search_attribute)) {
                 questionText =  e.getAttribute("question");
                 values = e.getAttribute("values");
+                helpText = e.getAttribute("help");
+                scaleInformation = e.getAttribute("scale-type");
                 System.out.println("Question: " + questionText);
             }
         }
-        QuestionObject question = new QuestionObject(questionText, values, questionID, false);
+        QuestionObject question = new QuestionObject(questionText, values, questionID, false, helpText, scaleInformation);
         return question;
     }
 

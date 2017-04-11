@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:textSize="20dp"
-        android:text="Please select from below" />
+        android:text="Please select from below"
+        android:textColor="@color/textColour"/>
 
     <!--Layer for padding-->
     <LinearLayout
@@ -43,6 +44,7 @@
             android:background="@drawable/grace_logo_button"/>
         <TextView
             android:layout_width="wrap_content"
+            android:textColor="@color/textColour"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:text="MySafety Assessment"
@@ -72,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:textColor="@color/textColour"
             android:text="Other GRiST services"
             android:textSize="15dp"/>
     </LinearLayout>

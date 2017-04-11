@@ -27,6 +27,7 @@
 	<node code="suic-p-trig-mtch" layer="0" question="Do the person's current feelings or circumstances match those that are known to have triggered any previous suicide attempts?" values="scale" scale-type="((left &quot;no previous attempts&quot;) (right &quot;current feelings/circumstances identical to those in a previous attempt&quot;))"/>
 	<node code="suic-fam-hist" persistent="hard" values="nominal" question="Has there been any history of suicide attempts in the person's family?"/>
 	<node code="suic-ideation" layer="0" question="Is the person having suicidal thoughts or fantasies?" values="filter-q"/>
+	<node code="gen-depression" layer="0" question="THIS HAS NO QUESTION TEXT" values="filter-q"/>
 	<node code="suic-id-control" layer="0" question="Does the person lack ability to control suicidal thoughts or fantasies?" values="scale" scale-type="((left &quot;easily controlled thoughts&quot;) (right &quot;no control over thoughts&quot;))"/>
 	<node code="suic-id-hi-risk" layer="0" question="Does the content of the suicidal thoughts or fantasies make it more likely the person will attempt suicide?" help="What are the thoughts or fantasies about and how does the content raise alarm bells about suicide risk?" values="scale" scale-type="((left &quot;no change to the likelihood&quot;) (right &quot;greatly increased likelihood&quot;))"/>
 	<node code="suic-id-freq" values="nominal" question="How often do the suicidal thoughts or fantasies occur?"/>

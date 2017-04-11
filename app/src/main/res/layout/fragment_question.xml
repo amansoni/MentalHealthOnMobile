@@ -15,44 +15,15 @@
             android:layout_height="400dp"
             android:orientation="vertical">
                 <TextView
+                    android:textColor="@color/textColour"
                     android:id="@+id/questionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="15dp"
                     android:paddingEnd="30dp"
                     android:paddingStart="30dp"
-                    android:textSize="25dp"/>
-
-                <TextView
-                    android:id="@+id/questionCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="30dp"
-                    android:paddingStart="30dp"
-                    android:textSize="15dp"/>
-
-                <TextView
-                    android:id="@+id/questionAction"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="30dp"
-                    android:paddingStart="30dp"
-                    android:textSize="15dp"/>
-
-                <TextView
-                    android:id="@+id/questionType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="30dp"
-                    android:paddingStart="30dp"
-                    android:textSize="15dp"/>
-
-                <TextView
-                    android:id="@+id/questionMG"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingEnd="30dp"
-                    android:paddingStart="30dp"
-                    android:textSize="15dp"/>
+                    android:textSize="27sp"/>
         </LinearLayout>
 
         <LinearLayout

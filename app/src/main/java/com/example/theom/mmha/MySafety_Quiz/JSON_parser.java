@@ -28,6 +28,7 @@ public class JSON_parser {
     String TAG = "JSON_Parser";
     NodeList nList;
     QuestionObject firstQuestion;
+    QuestionObject currentQuestion;
     Boolean isFirstQuestion = true;
     Boolean leafNodeReached = false;
 
@@ -41,7 +42,7 @@ public class JSON_parser {
             try {
 
                 String jsonStr;
-                InputStream JSONin = ctx.getResources().openRawResource(R.raw.finalresults);
+                InputStream JSONin = ctx.getResources().openRawResource(R.raw.question_tree_wscale);
                 int count = 0;
                 byte[] bytes = new byte[32768];
                 StringBuilder builder = new StringBuilder();
@@ -61,12 +62,12 @@ public class JSON_parser {
                 firstQuestion = xml_parser.getQuestionText(nList, firstQuestionText);
 
             } catch (IOException e) {
-                firstQuestion = new QuestionObject("Couldn't setup assessment", "", "", false);
+                firstQuestion = new QuestionObject("Couldn't setup assessment", "", "", false, "", "");
                 e.printStackTrace();
             }
         } catch (JSONException e) {
             // JSON Parsing error
-            firstQuestion = new QuestionObject("Couldn't setup assessment", "", "", false);
+            firstQuestion = new QuestionObject("Couldn't setup assessment", "", "", false, "", "");
             e.printStackTrace();
         }
 

@@ -22,11 +22,10 @@ import android.widget.ImageView;
 
 import static android.app.Activity.RESULT_OK;
 
-public class Test extends Fragment implements OnClickListener {
+public class Test extends Fragment {
     ImageView chosenImageView;
-    Button choosePicture;
-    ImageView likertScaleImageView;
     String TAG = "Test";
+    Integer likertScaleInput;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,32 +33,13 @@ public class Test extends Fragment implements OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_question_scale, container, false);
 
-
         chosenImageView = (ImageView) v.findViewById(R.id.ChosenImageView);
-        likertScaleImageView = (ImageView) v.findViewById(R.id.likert_scale_svg);
-
 
         setLikertScaleDisplay(v, R.drawable.ic_likert_scale);
 
         return v;
     }
 
-    public void onClick(View v) {
-        Intent choosePictureIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(choosePictureIntent, 0);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode,
-                                    Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        if (resultCode == RESULT_OK) {
-            Uri imageFileUri = intent.getData();
-
-
-        }
-    }
 
     private final View.OnTouchListener changeColorListener = new View.OnTouchListener() {
 
@@ -81,6 +61,7 @@ public class Test extends Fragment implements OnClickListener {
                 Log.i("TEST", "True and the colour is "+color);
                 if(color==-339893){
                     setLikertScaleDisplay(v, R.drawable.ic_likert_scale_4_pressed);
+                    likertScaleInput=4;
                 }else if(color==-3679941){
                     setLikertScaleDisplay(v, R.drawable.ic_likert_scale_3_pressed);
                 }else if(color==-8012472){
@@ -111,13 +92,8 @@ public class Test extends Fragment implements OnClickListener {
 
     private void setLikertScaleDisplay(View v, int displayButtonPressed){
 
-        likertScaleImageView.setBackgroundResource(displayButtonPressed);
-        Drawable drawable = likertScaleImageView.getBackground();
-
-
-        Log.i("TEST", "THe values is "+drawable);
         DbBitmapUtility db = new DbBitmapUtility();
-        Bitmap bmp = db.drawableToBitmap(drawable);
+        Bitmap bmp = db.drawableToBitmap(getResources().getDrawable(displayButtonPressed));
 
         // Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.likert_scale);
         chosenImageView.setDrawingCacheEnabled(true);

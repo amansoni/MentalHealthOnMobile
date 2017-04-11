@@ -12,110 +12,104 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="250dp"
+        android:background="@color/white"
+        android:elevation="5dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/questionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
             android:paddingEnd="30dp"
             android:paddingStart="30dp"
-            android:textSize="25dp" />
+            android:textColor="@color/textColour"
+            android:textSize="27sp" />
 
-        <TextView
-            android:id="@+id/questionCode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp"
-            android:textSize="15dp" />
-
-        <TextView
-            android:id="@+id/questionAction"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp"
-            android:textSize="15dp" />
-
-        <TextView
-            android:id="@+id/questionType"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp"
-            android:textSize="15dp" />
-
-        <TextView
-            android:id="@+id/questionMG"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp"
-            android:textSize="15dp" />
     </LinearLayout>
 
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        android:paddingStart="30dp"
+        android:paddingEnd="43dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="60dp"
+            android:text="Select from \nthe following: "
+            android:textColor="@color/textColour"
+            android:textSize="20sp"
+            android:gravity="left"/>
 
         <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:id="@+id/nominal_radio_buttons"
+            android:orientation="vertical">
 
             <RadioButton
                 android:id="@+id/nominal1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tag="@string/nominalValue1"
                 android:text="Value 1"
-                android:tag="@string/nominalValue1"/>
+                android:textColor="@color/textColour" />
 
             <RadioButton
                 android:id="@+id/nominal2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tag="@string/nominalValue2"
                 android:text="Value 2"
-                android:tag="@string/nominalValue2"/>
+                android:textColor="@color/textColour" />
 
             <RadioButton
                 android:id="@+id/nominal3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tag="@string/nominalValue3"
                 android:text="Value 3"
-                android:tag="@string/nominalValue3"/>
+                android:textColor="@color/textColour" />
 
             <RadioButton
                 android:id="@+id/nominal4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tag="@string/nominalValue4"
                 android:text="Value 4"
-                android:tag="@string/nominalValue4"/>
+                android:textColor="@color/textColour" />
 
             <RadioButton
                 android:id="@+id/nominal5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tag="@string/nominalValue4"
                 android:text="Don't know"
-                android:tag="@string/nominalValue4"/>
+                android:textColor="@color/textColour" />
         </RadioGroup>
 
-        <Button
-            android:id="@+id/next_question"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:paddingLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:background="@drawable/custom_button"
-            android:drawableRight="@drawable/ic_navigate_next_black_24px"
-            android:text="Next Question"
-            android:textColor="@color/white" />
     </LinearLayout>
 
+
+    <Button
+        android:id="@+id/next_question"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/custom_button"
+        android:drawableRight="@drawable/ic_navigate_next_black_24px"
+        android:paddingLeft="10dp"
+        android:text="Next Question"
+        android:textColor="@color/white" />
 </LinearLayout>

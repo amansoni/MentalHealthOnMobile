@@ -9,14 +9,18 @@ public class QuestionObject {
     String questionType;
     String questionAction;
     String questionMG;
+    String helpText;
     String questionCode;
     Boolean isLeafNode;
+    String scaleInformation;
 
-    public QuestionObject(String questionText, String questionType, String questionCode, Boolean isLeafNode){
+    public QuestionObject(String questionText, String questionType, String questionCode, Boolean isLeafNode, String helpText, String scaleInformation){
         this.questionCode=questionCode;
         this.questionText=questionText;
         this.questionType=questionType;
         this.isLeafNode=isLeafNode;
+        this.helpText=helpText;
+        this.scaleInformation=scaleInformation;
     }
 
     public String getQuestionText(){
@@ -50,4 +54,8 @@ public class QuestionObject {
     }
 
     public void setLeafNode(Boolean isLeafNode){this.isLeafNode = isLeafNode;}
+
+    public String getQuestionHelp(){return helpText;}
+
+    public String getScaleInformation(){return scaleInformation;}
 }

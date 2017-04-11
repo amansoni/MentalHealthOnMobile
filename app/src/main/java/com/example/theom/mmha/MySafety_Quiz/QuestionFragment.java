@@ -2,22 +2,32 @@ package com.example.theom.mmha.MySafety_Quiz;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.theom.mmha.DbBitmapUtility;
 import com.example.theom.mmha.R;
+import com.google.android.gms.vision.text.Text;
 
 import org.json.JSONException;
 
@@ -34,16 +44,15 @@ import java.util.HashMap;
 public class QuestionFragment extends Fragment {
 
     TextView questionTextView;
-    TextView questionActionTextView;
-    TextView questionTypeTextView;
-    TextView questionMGTextView;
-    TextView questionCodeTextView;
+    ImageView chosenImageView;
     private AnsweredQuestionsDBHelper answersDB;
     String TAG = "QuestionFragment";
     Boolean leafNodeReached = false;
     QuestionObject currentQuestion;
     FrameLayout frameLayout;
     View view;
+    Menu mOptionsMenu;
+    Integer likertScaleInput;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,9 +84,9 @@ public class QuestionFragment extends Fragment {
         //View v = inflater.inflate(R.layout.fragment_question, container, false);
 
         frameLayout = new FrameLayout(getActivity());
-        inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.fragment_question, null);
-        frameLayout .addView(view);
+        frameLayout.addView(view);
 
 
         //Parsing the JSON
@@ -88,21 +97,12 @@ public class QuestionFragment extends Fragment {
         answersDB = new AnsweredQuestionsDBHelper(getActivity());
 
         questionTextView = (TextView) frameLayout.findViewById(R.id.questionTextView);
-        questionActionTextView = (TextView) frameLayout.findViewById(R.id.questionAction);
-        questionTypeTextView = (TextView) frameLayout.findViewById(R.id.questionType);
-        questionMGTextView = (TextView) frameLayout.findViewById(R.id.questionMG);
-        questionCodeTextView = (TextView) frameLayout.findViewById(R.id.questionCode);
+        questionTextView.setText(firstQuestion.getQuestionText());
 
-        questionTextView.setText("Question: "+firstQuestion.getQuestionText());
-        questionActionTextView.setText("Action: "+firstQuestion.getQuestionAction());
-        questionTypeTextView.setText("Type: "+firstQuestion.getQuestionType());
-        questionMGTextView.setText("MG: "+firstQuestion.getQuestionMG());
-        questionCodeTextView.setText("Code: "+firstQuestion.getQuestionCode());
+        Button mYesButton = (Button) frameLayout.findViewById(R.id.yesButton);
+        Button mNoButton = (Button) frameLayout.findViewById(R.id.noButton);
 
-        Button mYesButton = (Button)frameLayout.findViewById(R.id.yesButton);
-        Button mNoButton = (Button)frameLayout.findViewById(R.id.noButton);
-
-        if(leafNodeReached == false) {
+        if (leafNodeReached == false) {
             mYesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -117,15 +117,6 @@ public class QuestionFragment extends Fragment {
             });
         }
         return frameLayout;
-    }
-
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-
-        }
     }
 
     @Override
@@ -145,39 +136,12 @@ public class QuestionFragment extends Fragment {
         mListener = null;
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.action_bar_items, menu);
-    }*/
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        /*if(id == R.id.action_favorite){
-            //Do whatever you want to do
-            return true;
-        }*/
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    public Boolean GetFragmentText(String answer, JSON_parser senorJSON_parser){
+    public Boolean GetFragmentText(String answer, JSON_parser senorJSON_parser) {
 
         Context ctx = getActivity();
         QuestionObject question = null;
@@ -189,8 +153,8 @@ public class QuestionFragment extends Fragment {
 
                 changeView(question, senorJSON_parser);
 
-                currentQuestion=question;
-            }else{
+                currentQuestion = question;
+            } else {
                 Log.i(TAG, "Houston, we reached the leaf node.");
                 questionTextView.setText("Leaf node reached");
             }
@@ -202,9 +166,9 @@ public class QuestionFragment extends Fragment {
         return leafNodeReached;
     }
 
-    public void ChangeButtonStatus(){
-        Button mYesButton = (Button)getActivity().findViewById(R.id.yesButton);
-        Button mNoButton = (Button)getActivity().findViewById(R.id.noButton);
+    public void ChangeButtonStatus() {
+        Button mYesButton = (Button) getActivity().findViewById(R.id.yesButton);
+        Button mNoButton = (Button) getActivity().findViewById(R.id.noButton);
         mYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,39 +183,37 @@ public class QuestionFragment extends Fragment {
 
     public void changeView(QuestionObject question, final JSON_parser senorJSON_parser) {
 
-
         int optionId = R.layout.fragment_question;
 
-        if (question.getQuestionType().equals("layer")){
+        if (question.getQuestionType().equals("layer")) {
             optionId = R.layout.fragment_question;
-        }else if (question.getQuestionType().equals("nominal")){
+        } else if (question.getQuestionType().equals("nominal")) {
             optionId = R.layout.fragment_question_nominal;
-        }else if (question.getQuestionType().equals("scale")){
+        } else if (question.getQuestionType().equals("scale")) {
             optionId = R.layout.fragment_question_scale;
         }
 
-        frameLayout. removeAllViews();
-        LayoutInflater inflater = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        frameLayout.removeAllViews();
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(optionId, null);
-        frameLayout .addView(view);
+        frameLayout.addView(view);
 
         questionTextView = (TextView) view.findViewById(R.id.questionTextView);
-        questionActionTextView = (TextView) view.findViewById(R.id.questionAction);
-        questionTypeTextView = (TextView) view.findViewById(R.id.questionType);
-        questionMGTextView = (TextView) view.findViewById(R.id.questionMG);
-        questionCodeTextView = (TextView) view.findViewById(R.id.questionCode);
 
-        questionTextView.setText("Question: "+question.getQuestionText());
-        questionActionTextView.setText("Action: "+question.getQuestionAction());
-        questionTypeTextView.setText("Type: "+question.getQuestionType());
-        questionMGTextView.setText("MG: "+question.getQuestionMG());
-        questionCodeTextView.setText("Code: "+question.getQuestionCode());
+        questionTextView.setText(question.getQuestionText());
+
+        MenuItem helpMenu = mOptionsMenu.findItem(R.id.menu_show_help);
+        if (question.getQuestionHelp() != "") {
+            helpMenu.setVisible(true);
+        } else {
+            helpMenu.setVisible(false);
+        }
 
         //Check that layout contains yes/no buttons
-        if(leafNodeReached == false && optionId == R.layout.fragment_question) {
+        if (leafNodeReached == false && optionId == R.layout.fragment_question) {
 
-            Button mYesButton = (Button)frameLayout.findViewById(R.id.yesButton);
-            Button mNoButton = (Button)frameLayout.findViewById(R.id.noButton);
+            Button mYesButton = (Button) frameLayout.findViewById(R.id.yesButton);
+            Button mNoButton = (Button) frameLayout.findViewById(R.id.noButton);
 
             mYesButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -265,19 +227,19 @@ public class QuestionFragment extends Fragment {
                     GetFragmentText("No", senorJSON_parser);
                 }
             });
-        }else if (leafNodeReached == false && optionId == R.layout.fragment_question_nominal){
+        } else if (leafNodeReached == false && optionId == R.layout.fragment_question_nominal) {
             String radioButtonValues = question.getQuestionMG();
-            radioButtonValues = radioButtonValues.substring(2, radioButtonValues.length() -2 );
-            String [] radioButtonValuesArray = radioButtonValues.split("\\)\\(");
+            radioButtonValues = radioButtonValues.substring(2, radioButtonValues.length() - 2);
+            String[] radioButtonValuesArray = radioButtonValues.split("\\)\\(");
             HashMap<String, Float> nominalScaleValues = new HashMap<>();
             HashMap<String, String> nominalScaleTitles = new HashMap<>();
 
             Integer i = 0;
-            for (String value : radioButtonValuesArray){
+            for (String value : radioButtonValuesArray) {
                 String text = value.split(" ")[0];
 
                 //Capitalise text
-                String nominalText = text.substring(0,1).toUpperCase() + text.substring(1);
+                String nominalText = text.substring(0, 1).toUpperCase() + text.substring(1);
 
                 //Extract nominal value from mg string
                 Float nominalValue = Float.parseFloat(value.split(" ")[1]);
@@ -288,10 +250,12 @@ public class QuestionFragment extends Fragment {
 
                 i++;
             }
-            RadioButton r1 = (RadioButton)frameLayout.findViewById(R.id.nominal1);
-            RadioButton r2 = (RadioButton)frameLayout.findViewById(R.id.nominal2);
-            RadioButton r3 = (RadioButton)frameLayout.findViewById(R.id.nominal3);
-            RadioButton r4 = (RadioButton)frameLayout.findViewById(R.id.nominal4);
+            final RadioGroup nominalRadioButtons = (RadioGroup) frameLayout.findViewById(R.id.nominal_radio_buttons);
+
+            RadioButton r1 = (RadioButton) frameLayout.findViewById(R.id.nominal1);
+            RadioButton r2 = (RadioButton) frameLayout.findViewById(R.id.nominal2);
+            RadioButton r3 = (RadioButton) frameLayout.findViewById(R.id.nominal3);
+            RadioButton r4 = (RadioButton) frameLayout.findViewById(R.id.nominal4);
 
             r1.setTag(nominalScaleValues.get("0"));
             r1.setText(nominalScaleTitles.get("0"));
@@ -304,31 +268,150 @@ public class QuestionFragment extends Fragment {
 
             r4.setTag(nominalScaleValues.get("3"));
             r4.setText(nominalScaleTitles.get("3"));
+
+            Button nextQuestion = (Button) frameLayout.findViewById(R.id.next_question);
+            nextQuestion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Integer selectedId = nominalRadioButtons.getCheckedRadioButtonId();
+                    RadioButton selectedRadButton = (RadioButton) frameLayout.findViewById(selectedId);
+
+                    String nominalValue = "0";
+                    if (selectedRadButton != null) {
+                        nominalValue = selectedRadButton.getTag().toString();
+                    }
+                    Snackbar snackbar = Snackbar
+                            .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
+                    GetFragmentText("Yes", senorJSON_parser);
+
+                    snackbar.show();
+                }
+            });
+        } else if (leafNodeReached == false && optionId == R.layout.fragment_question_scale) {
+            chosenImageView = (ImageView) frameLayout.findViewById(R.id.ChosenImageView);
+            setLikertScaleDisplay(frameLayout, R.drawable.ic_likert_scale);
+
+            TextView scaleInformation = (TextView) frameLayout.findViewById(R.id.scale_information);
+            scaleInformation.setText(question.getScaleInformation());
+            Log.i(TAG, "Scale Information " + question.getQuestionText());
+
+            Button nextQuestion = (Button) frameLayout.findViewById(R.id.next_question);
+            nextQuestion.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar snackbar = Snackbar
+                            .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
+                    GetFragmentText("Yes", senorJSON_parser);
+
+                    snackbar.show();
+                }
+            });
+
         }
     }
 
-    public void onRadioButtonClicked(View view) {
-        // Is the button now checked?
-        boolean checked = ((RadioButton) view).isChecked();
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.question_fragment_info_menu, menu);
+        mOptionsMenu = menu;
+        super.onCreateOptionsMenu(menu, inflater);
 
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.nominal1:
-                if (checked)
-                    // Pirates are the best
-                    break;
-            case R.id.nominal2:
-                if (checked)
-                    // Ninjas rule
-                    break;
-            case R.id.nominal3:
-                if (checked)
-                    // Ninjas rule
-                    break;
-            case R.id.nominal4:
-                if (checked)
-                    // Ninjas rule
-                    break;
+        MenuItem helpMenu = menu.findItem(R.id.menu_show_help);
+        if (currentQuestion.getQuestionHelp() != "") {
+            helpMenu.setVisible(true);
+        } else {
+            helpMenu.setVisible(false);
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menu_show_extra_info:
+                InfoDialog extraInfoDialog = InfoDialog.newInstance("Question Information", currentQuestion);
+                extraInfoDialog.setTargetFragment(this, 0);
+                extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+                return true;
+            case R.id.menu_show_help:
+                InfoDialog helpDialog = InfoDialog.newInstance("Help", currentQuestion);
+                helpDialog.setTargetFragment(this, 0);
+                helpDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void setLikertScaleDisplay(View v, int displayButtonPressed) {
+        DbBitmapUtility db = new DbBitmapUtility();
+        Bitmap bmp = db.drawableToBitmap(getResources().getDrawable(displayButtonPressed));
+
+        // Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.likert_scale);
+        chosenImageView.setDrawingCacheEnabled(true);
+        chosenImageView.setOnTouchListener(changeColorListener);
+        chosenImageView.setImageBitmap(bmp);
+
+    }
+
+    private final View.OnTouchListener changeColorListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            Bitmap bmp = Bitmap.createBitmap(v.getDrawingCache());
+            int color = 0;
+            if (event.getX() <= 0 || event.getY() <= 0 || event.getY() > bmp.getHeight() || event.getX() > bmp.getWidth()) {
+                Log.i(TAG, "X or Y == 0");
+            } else {
+                color = bmp.getPixel((int) event.getX(), (int) event.getY());
+            }
+            if (color == Color.TRANSPARENT) {
+                Log.i("TEST", "False");
+                return false;
+            } else {
+                //code to execute
+
+                Log.i("TEST", "True and the colour is " + color);
+                if (color == -339893) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_4_pressed);
+                    likertScaleInput = 4;
+                } else if (color == -3679941) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_3_pressed);
+                    likertScaleInput = 3;
+                } else if (color == -8012472) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_2_pressed);
+                    likertScaleInput = 2;
+                } else if (color == -11491252) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_1_pressed);
+                    likertScaleInput = 1;
+                } else if (color == -12877256) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_0_pressed);
+                    likertScaleInput = 0;
+                } else if (color == -10460816) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_no_answer_pressed);
+                    likertScaleInput = 11;
+                } else if (color == -65536) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_10_pressed);
+                    likertScaleInput = 10;
+                } else if (color == -50928) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_9_pressed);
+                    likertScaleInput = 9;
+                } else if (color == -1161191) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_8_pressed);
+                    likertScaleInput = 8;
+                } else if (color == -1478654) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_7_pressed);
+                    likertScaleInput = 7;
+                } else if (color == -616953) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_6_pressed);
+                    likertScaleInput = 6;
+                } else if (color == -739027) {
+                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_5_pressed);
+                    likertScaleInput = 5;
+                }
+                return true;
+            }
+        }
+    };
+
 }
