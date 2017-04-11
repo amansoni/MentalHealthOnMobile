@@ -5,9 +5,15 @@
     android:gravity="center">
 
     <TextView
-        android:text="Assessment Title"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+    <TextView
+        android:text="Date of Birth"
         android:textStyle="bold"
-        android:gravity="center"
+        android:textColor="@color/textColour"
+        android:textSize="30dp"
+        android:paddingStart="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -15,58 +21,112 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Name of assessment session"
+        android:hint="What's the person's date of birth?"
         android:ems="10"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:id="@+id/assessmentTitle"
         android:gravity="center"/>
 
 
     <TextView
-        android:text="Patient Name"
+        android:text="Gender"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:paddingStart="25dp"
+        android:textColor="@color/textColour"
+        android:textSize="30dp" />
 
-    <EditText
-        android:layout_width="match_parent"
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Name of patient"
-        android:ems="10"
-        android:id="@+id/patientName"
-        android:gravity="center"/>
+        android:id="@+id/gender_radio_buttons"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp">
 
+        <RadioButton
+            android:id="@+id/radio_male"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="@string/nominalValue1"
+            android:text="Male"
+            android:textColor="@color/textColour" />
+
+        <RadioButton
+            android:id="@+id/radio_female"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="@string/nominalValue2"
+            android:text="Female"
+            android:textColor="@color/textColour" />
+
+        <RadioButton
+            android:id="@+id/radio_dontknow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tag="@string/nominalValue3"
+            android:text="Don't know"
+            android:textColor="@color/textColour" />
+    </RadioGroup>
 
     <TextView
-        android:text="Interviewer Name"
+        android:text="Relationships"
         android:textStyle="bold"
+        android:textColor="@color/textColour"
+        android:textSize="30dp"
+        android:paddingStart="25dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center" />
+        android:layout_height="wrap_content" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Name of interviewer"
+        android:hint="Living and relationship status"
         android:ems="10"
-        android:id="@+id/interviewerName"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:id="@+id/relationshipStatus"
         android:gravity="center"/>
 
     <TextView
-        android:text="Notes"
+        android:text="Ethnicity"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"/>
+        android:paddingStart="25dp"
+        android:textColor="@color/textColour"
+        android:textSize="30dp"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Notes about the session before you begin"
+        android:hint="What's the person's ethnic group?"
         android:ems="10"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:id="@+id/ethnicity"
+        android:gravity="center"/>
+
+    <TextView
+        android:text="MAPPA"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="25dp"
+        android:textColor="@color/textColour"
+        android:textSize="30dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Does the person have any MAPPA?"
+        android:ems="10"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
         android:id="@+id/preSessionNotes"
         android:gravity="center"/>
 
@@ -74,9 +134,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="Start Quiz"
+        android:text="Begin Assessment"
         android:textColor="@color/white"
         android:gravity="center"
+        android:drawableRight="@drawable/ic_navigate_next_black_24px"
+        android:paddingLeft="10dp"
         android:background="@drawable/custom_button"
         android:id="@+id/startQuiz"/>
 

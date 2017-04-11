@@ -1,15 +1,15 @@
-package com.example.theom.mmha.MySafety_Quiz;
+package com.example.theom.mmha.MySafety_Quiz.Dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.theom.mmha.MySafety_Quiz.QuestionObject;
 import com.example.theom.mmha.R;
 
 /**

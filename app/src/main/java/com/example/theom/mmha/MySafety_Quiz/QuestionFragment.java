@@ -1,11 +1,9 @@
 package com.example.theom.mmha.MySafety_Quiz;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -22,12 +20,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.theom.mmha.DbBitmapUtility;
+import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
 import com.example.theom.mmha.R;
-import com.google.android.gms.vision.text.Text;
 
 import org.json.JSONException;
 
