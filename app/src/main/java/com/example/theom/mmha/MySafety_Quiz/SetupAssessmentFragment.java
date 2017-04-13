@@ -1,6 +1,9 @@
 package com.example.theom.mmha.MySafety_Quiz;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -11,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.theom.mmha.MySafety_Quiz.Dialogs.DatePickerFragment;
+import com.example.theom.mmha.MySafety_Quiz.Dialogs.EthnicityPickerDialog;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.SetupDialog;
 import com.example.theom.mmha.R;
@@ -19,14 +24,19 @@ import com.example.theom.mmha.R;
  * Created by theom on 03/04/2017.
  */
 
-public class SetupAssessmentFragment extends Fragment implements View.OnClickListener, SetupDialog.OnSetRelationshipStatusListener{
+public class SetupAssessmentFragment extends Fragment implements
+        View.OnClickListener,
+        SetupDialog.OnSetRelationshipStatusListener,
+        DatePickerFragment.OnSetDateListener,
+        EthnicityPickerDialog.OnSetEthnicityListener{
 
     private AnsweredQuestionsDBHelper answersDB;
-    private EditText assessmentTitle;
-    private EditText patientName;
-    private EditText interviewerName;
-    private EditText preSessionNotes;
     String TAG = "Assessment setup";
+    private EditText datePickerEditText;
+    private EditText relationshipStatusEditText;
+    private EditText racesEditText;
+
+    private String relationshipStatus = "Null";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,14 +47,35 @@ public class SetupAssessmentFragment extends Fragment implements View.OnClickLis
         //Create database to store assessment answers
         answersDB = new AnsweredQuestionsDBHelper(getActivity());
 
-        EditText assessmentTitle = (EditText) v.findViewById(R.id.relationshipStatus);
-        assessmentTitle.setOnTouchListener(new View.OnTouchListener() {
+        relationshipStatusEditText = (EditText) v.findViewById(R.id.relationshipStatus);
+        relationshipStatusEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(MotionEvent.ACTION_UP == event.getAction()) {
-                    SetupDialog relationshipsDialog = SetupDialog.newInstance("Relationships");
-                    relationshipsDialog.setTargetFragment(getParentFragment(), 0);
-                    relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+                if (MotionEvent.ACTION_UP == event.getAction()) {
+                    showRelationshipsDialog();
+                }
+                return true;
+            }
+        });
+
+
+        datePickerEditText = (EditText) v.findViewById(R.id.birthDate);
+        datePickerEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEvent.ACTION_UP == event.getAction()) {
+                    showDatePickerDialog();
+                }
+                return true;
+            }
+        });
+
+        racesEditText = (EditText) v.findViewById(R.id.ethnicity);
+        racesEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEvent.ACTION_UP == event.getAction()) {
+                    showEthnicityPickerDialog();
                 }
                 return true;
             }
@@ -54,7 +85,7 @@ public class SetupAssessmentFragment extends Fragment implements View.OnClickLis
         startQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  answersDB.insertData(assessmentTitle.getText().toString(), patientName.getText().toString(), interviewerName.getText().toString(), "", preSessionNotes.getText().toString());
+                //  answersDB.insertData(assessmentTitle.getText().toString(), patientName.getText().toString(), interviewerName.getText().toString(), "", preSessionNotes.getText().toString());
                 Fragment fragment = new QuestionFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.relativeLayout, fragment);
@@ -66,13 +97,45 @@ public class SetupAssessmentFragment extends Fragment implements View.OnClickLis
         return v;
     }
 
-    @Override
-    public void setSearchLocationType(String relationshipStatus) {
+    public void showDatePickerDialog(){
+        DialogFragment picker = new DatePickerFragment();
+        picker.setTargetFragment(this, 0);
+        picker.show(getActivity().getSupportFragmentManager(), "datePicker");
+    }
 
+    @Override
+    public void setDate(String dateOfBirth) {
+        Log.i(TAG, "Date of birth"+ dateOfBirth);
+        datePickerEditText.setText(dateOfBirth);
+    }
+
+
+    @Override
+    public void setRelationshipStatus(String relationshipStatus) {
+        this.relationshipStatus=relationshipStatus;
+        Log.i(TAG, "Relationships: "+relationshipStatus);
+        relationshipStatusEditText.setText(relationshipStatus);
+    }
+
+    public void showRelationshipsDialog(){
+        SetupDialog relationshipsDialog = SetupDialog.newInstance("Relationships");
+        relationshipsDialog.setTargetFragment(this, 0);
+        relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+    }
+
+    public void showEthnicityPickerDialog(){
+        EthnicityPickerDialog relationshipsDialog = EthnicityPickerDialog.newInstance("Ethnicity");
+        relationshipsDialog.setTargetFragment(this, 0);
+        relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
     }
 
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public void setEthnicity(String ethnicity) {
+        racesEditText.setText(ethnicity);
     }
 }
