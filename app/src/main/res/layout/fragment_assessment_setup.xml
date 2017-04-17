@@ -127,7 +127,7 @@
         android:ems="10"
         android:paddingStart="25dp"
         android:paddingEnd="25dp"
-        android:id="@+id/preSessionNotes"
+        android:id="@+id/mappa_status"
         android:gravity="center"/>
 
     <Button

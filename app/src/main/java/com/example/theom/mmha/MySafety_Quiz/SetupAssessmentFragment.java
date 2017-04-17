@@ -27,6 +27,7 @@ import com.example.theom.mmha.R;
 public class SetupAssessmentFragment extends Fragment implements
         View.OnClickListener,
         SetupDialog.OnSetRelationshipStatusListener,
+        SetupDialog.OnSetMAPPAListener,
         DatePickerFragment.OnSetDateListener,
         EthnicityPickerDialog.OnSetEthnicityListener{
 
@@ -34,7 +35,8 @@ public class SetupAssessmentFragment extends Fragment implements
     String TAG = "Assessment setup";
     private EditText datePickerEditText;
     private EditText relationshipStatusEditText;
-    private EditText racesEditText;
+    private EditText ethnicityEditText;
+    private EditText mappaStatusEditText;
 
     private String relationshipStatus = "Null";
 
@@ -70,12 +72,23 @@ public class SetupAssessmentFragment extends Fragment implements
             }
         });
 
-        racesEditText = (EditText) v.findViewById(R.id.ethnicity);
-        racesEditText.setOnTouchListener(new View.OnTouchListener() {
+        ethnicityEditText = (EditText) v.findViewById(R.id.ethnicity);
+        ethnicityEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEvent.ACTION_UP == event.getAction()) {
                     showEthnicityPickerDialog();
+                }
+                return true;
+            }
+        });
+
+        mappaStatusEditText = (EditText) v.findViewById(R.id.mappa_status);
+        mappaStatusEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEvent.ACTION_UP == event.getAction()){
+                    showMappaDialog();
                 }
                 return true;
             }
@@ -129,6 +142,12 @@ public class SetupAssessmentFragment extends Fragment implements
         relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
     }
 
+    public void showMappaDialog(){
+        SetupDialog mappaDialog = SetupDialog.newInstance("MAPPA");
+        mappaDialog.setTargetFragment(this, 0);
+        mappaDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+    }
+
     @Override
     public void onClick(View v) {
 
@@ -136,6 +155,11 @@ public class SetupAssessmentFragment extends Fragment implements
 
     @Override
     public void setEthnicity(String ethnicity) {
-        racesEditText.setText(ethnicity);
+        ethnicityEditText.setText(ethnicity);
+    }
+
+    @Override
+    public void setMAPPA(String mappaStatus) {
+        mappaStatusEditText.setText(mappaStatus);
     }
 }
