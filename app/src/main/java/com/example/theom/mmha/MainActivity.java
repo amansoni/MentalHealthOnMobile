@@ -2,6 +2,7 @@ package com.example.theom.mmha;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,10 +20,21 @@ import android.widget.TextView;
 import com.example.theom.mmha.Fragments.HomepageFragment;
 import com.example.theom.mmha.Fragments.Places.PlacePins;
 import com.example.theom.mmha.Fragments.Places.SearchDoctorFragment;
+import com.example.theom.mmha.Fragments.SeeSightsFragment;
+import com.example.theom.mmha.MySafety_Quiz.AssessmentFinishFragment;
 import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
+import com.example.theom.mmha.MySafety_Quiz.SetupAssessmentFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomepageFragment.OnFragmentInteractionListener, QuestionFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        HomepageFragment.OnFragmentInteractionListener,
+        HomepageFragment.OnSetToolbarTitleListener,
+        QuestionFragment.OnFragmentInteractionListener,
+        QuestionFragment.OnSetToolbarTitleListener,
+        SetupAssessmentFragment.OnSetToolbarTitleListener,
+        AssessmentFinishFragment.OnSetToolbarTitleListener,
+        SeeSightsFragment.OnFragmentInteractionListener,
+        SeeSightsFragment.OnSetToolbarTitleListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +42,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -57,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = new HomepageFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.relativeLayout, fragment).commit();
+
 
     }
 
@@ -86,8 +98,8 @@ public class MainActivity extends AppCompatActivity
             fragment = new QuestionFragment();
         } else if (id == R.id.nav_hospital) {
             fragment = new SearchDoctorFragment();
-        } else if (id == R.id.nav_prev_assessment){
-            fragment = new Test();
+        } else if (id == R.id.nav_prev_assessment) {
+            fragment = new SeeSightsFragment();
         }
 
         fragmentManager.beginTransaction().replace(R.id.relativeLayout, fragment).commit();
@@ -97,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public static PlacePins returnPlacePins(){
+    public static PlacePins returnPlacePins() {
         PlacePins placePins = new PlacePins();
         return placePins;
     }
@@ -106,5 +118,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void setTitle(String title) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
     }
 }

@@ -28,8 +28,6 @@ public class JSON_parser {
     String TAG = "JSON_Parser";
     NodeList nList;
     QuestionObject firstQuestion;
-    QuestionObject currentQuestion;
-    Boolean isFirstQuestion = true;
     Boolean leafNodeReached = false;
 
     public static void main(String[] args) throws FileNotFoundException, JSONException {
@@ -74,7 +72,7 @@ public class JSON_parser {
         return firstQuestion;
     }
 
-    public QuestionObject runQuiz(String answer, Context ctx, QuestionObject currentQuestion) throws JSONException {
+    public QuestionObject runAssessment(String answer, Context ctx) throws JSONException {
         QuestionObject question;
         String nextQuestion;
         String nodeInformation = "No node information";
@@ -86,8 +84,11 @@ public class JSON_parser {
             NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
             question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
         }
-        question.setLeafNode(leafNodeReached);
 
+        if (leafNodeReached == true) {
+            question.setLeadNodeResult(nextQuestion);
+            question.setLeafNode(leafNodeReached);
+        }
         return question;
     }
 
@@ -108,6 +109,7 @@ public class JSON_parser {
                     rows = rows.getJSONObject(0).getJSONArray(userAnswer).getJSONObject(0).getJSONArray(nextQuestion);
                 } else {
                     Log.i(TAG, "Leaf node contains " + nextQuestion);
+                    nextQuestion = rows.getJSONObject(0).getJSONArray(userAnswer).getJSONObject(0).toString();
                     leafNodeReached = true;
                     break;
                 }

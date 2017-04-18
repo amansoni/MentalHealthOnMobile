@@ -20,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.theom.mmha.Fragments.MapLocation.MapLocationFragment;
+import com.example.theom.mmha.Fragments.ServiceDetailsFragment;
 import com.example.theom.mmha.Fragments.Places.GooglePlace;
 import com.example.theom.mmha.MainActivity;
 import com.example.theom.mmha.R;
@@ -388,7 +388,10 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Cluste
 
         Bundle bundle = new Bundle();
         if (mapItem.getPlaceArrayPosition() >= placePhotoReferences.size()) {
-            bundle.putString("photoReference", placePhotoReferences.get(placePhotoReferences.size() - 1));
+            bundle.putString("photoReference", "No_photo");
+            for (String ref : placePhotoReferences){
+                Log.i(TAG, "The ref is "+ref);
+            }
         }else{
             bundle.putString("photoReference", placePhotoReferences.get(mapItem.getPlaceArrayPosition()));
         }
@@ -400,7 +403,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Cluste
         bundle.putDouble("lat", mapItem.getPosition().latitude);
         bundle.putDouble("long", mapItem.getPosition().longitude);
         bundle.putString("launchedFrom", "Map_fragment");
-        Fragment fragment = new MapLocationFragment();
+        Fragment fragment = new ServiceDetailsFragment();
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.relativeLayout, fragment);

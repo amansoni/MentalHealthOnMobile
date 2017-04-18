@@ -1,11 +1,11 @@
 package com.example.theom.mmha.MySafety_Quiz;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,8 +16,8 @@ import android.widget.EditText;
 
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.DatePickerFragment;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.EthnicityPickerDialog;
-import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
-import com.example.theom.mmha.MySafety_Quiz.Dialogs.SetupDialog;
+import com.example.theom.mmha.MySafety_Quiz.Dialogs.MappaDialog;
+import com.example.theom.mmha.MySafety_Quiz.Dialogs.RelationshipsDialog;
 import com.example.theom.mmha.R;
 
 /**
@@ -26,8 +26,8 @@ import com.example.theom.mmha.R;
 
 public class SetupAssessmentFragment extends Fragment implements
         View.OnClickListener,
-        SetupDialog.OnSetRelationshipStatusListener,
-        SetupDialog.OnSetMAPPAListener,
+        RelationshipsDialog.OnSetRelationshipStatusListener,
+        MappaDialog.OnSetMAPPAListener,
         DatePickerFragment.OnSetDateListener,
         EthnicityPickerDialog.OnSetEthnicityListener{
 
@@ -37,6 +37,7 @@ public class SetupAssessmentFragment extends Fragment implements
     private EditText relationshipStatusEditText;
     private EditText ethnicityEditText;
     private EditText mappaStatusEditText;
+
 
     private String relationshipStatus = "Null";
 
@@ -131,7 +132,7 @@ public class SetupAssessmentFragment extends Fragment implements
     }
 
     public void showRelationshipsDialog(){
-        SetupDialog relationshipsDialog = SetupDialog.newInstance("Relationships");
+        RelationshipsDialog relationshipsDialog = RelationshipsDialog.newInstance("Relationships");
         relationshipsDialog.setTargetFragment(this, 0);
         relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
     }
@@ -143,7 +144,7 @@ public class SetupAssessmentFragment extends Fragment implements
     }
 
     public void showMappaDialog(){
-        SetupDialog mappaDialog = SetupDialog.newInstance("MAPPA");
+        MappaDialog mappaDialog = MappaDialog.newInstance("MAPPA");
         mappaDialog.setTargetFragment(this, 0);
         mappaDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
     }
@@ -161,5 +162,25 @@ public class SetupAssessmentFragment extends Fragment implements
     @Override
     public void setMAPPA(String mappaStatus) {
         mappaStatusEditText.setText(mappaStatus);
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        OnSetToolbarTitleListener callback;
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnSetToolbarTitleListener) activity;
+            callback.setTitle("Setup Assessment");
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    public interface OnSetToolbarTitleListener {
+        public void setTitle(String title);
     }
 }

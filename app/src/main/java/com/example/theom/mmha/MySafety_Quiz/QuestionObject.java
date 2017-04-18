@@ -13,6 +13,7 @@ public class QuestionObject {
     String questionCode;
     Boolean isLeafNode;
     String scaleInformation;
+    String leadNodeResult;
 
     public QuestionObject(String questionText, String questionType, String questionCode, Boolean isLeafNode, String helpText, String scaleInformation){
         this.questionCode=questionCode;
@@ -54,6 +55,10 @@ public class QuestionObject {
     }
 
     public void setLeafNode(Boolean isLeafNode){this.isLeafNode = isLeafNode;}
+
+    public void setLeadNodeResult(String leadNodeResult){this.leadNodeResult = leadNodeResult;}
+
+    public String getLeafNodeResult(){return leadNodeResult;}
 
     public String getQuestionHelp(){return helpText;}
 

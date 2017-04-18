@@ -1,5 +1,6 @@
 package com.example.theom.mmha.MySafety_Quiz;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -7,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,7 +30,10 @@ import com.example.theom.mmha.R;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,6 +45,8 @@ import java.util.HashMap;
  */
 public class QuestionFragment extends Fragment {
 
+    //Parsing the JSON
+    final JSON_parser senorJSON_parser = new JSON_parser();
     TextView questionTextView;
     ImageView chosenImageView;
     private AnsweredQuestionsDBHelper answersDB;
@@ -76,18 +83,13 @@ public class QuestionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
-        //View v = inflater.inflate(R.layout.fragment_question, container, false);
-
         frameLayout = new FrameLayout(getActivity());
         inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(R.layout.fragment_question, null);
         frameLayout.addView(view);
 
 
-        //Parsing the JSON
-        final JSON_parser senorJSON_parser = new JSON_parser();
         QuestionObject firstQuestion = senorJSON_parser.setupQuiz(getActivity());
         currentQuestion = firstQuestion;
         //Create database to store assessment answers
@@ -96,23 +98,26 @@ public class QuestionFragment extends Fragment {
         questionTextView = (TextView) frameLayout.findViewById(R.id.questionTextView);
         questionTextView.setText(firstQuestion.getQuestionText());
 
+        //Yes and no buttons in layout
         Button mYesButton = (Button) frameLayout.findViewById(R.id.yesButton);
         Button mNoButton = (Button) frameLayout.findViewById(R.id.noButton);
 
-        if (leafNodeReached == false) {
-            mYesButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GetFragmentText("Yes", senorJSON_parser);
-                }
-            });
-            mNoButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GetFragmentText("No", senorJSON_parser);
-                }
-            });
-        }
+        //Get question text for when yes button is clicked
+        mYesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetNextQuestion("Yes");
+            }
+        });
+
+        //Get question text for when no button is clicked
+        mNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetNextQuestion("No");
+            }
+        });
+
         return frameLayout;
     }
 
@@ -138,50 +143,26 @@ public class QuestionFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public Boolean GetFragmentText(String answer, JSON_parser senorJSON_parser) {
-
-        Context ctx = getActivity();
-        QuestionObject question = null;
-
+    public void GetNextQuestion(String answer) {
         try {
-            if (leafNodeReached == false) {
-                question = senorJSON_parser.runQuiz(answer, ctx, currentQuestion);
-                leafNodeReached = question.isLeafNode();
-
-                changeView(question, senorJSON_parser);
-
-                currentQuestion = question;
-            } else {
-                Log.i(TAG, "Houston, we reached the leaf node.");
-                questionTextView.setText("Leaf node reached");
-            }
-
+            //take users input, ask JSON_Parser for next question
+            QuestionObject question = senorJSON_parser.runAssessment(answer, getActivity());
+            //Check if this question is a leaf node
+            leafNodeReached = question.isLeafNode();
+            //update the question fragment to new question's layout
+            changeView(question);
+            //update current question global var
+            currentQuestion = question;
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        return leafNodeReached;
     }
 
-    public void ChangeButtonStatus() {
-        Button mYesButton = (Button) getActivity().findViewById(R.id.yesButton);
-        Button mNoButton = (Button) getActivity().findViewById(R.id.noButton);
-        mYesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-        mNoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
-    }
-
-    public void changeView(QuestionObject question, final JSON_parser senorJSON_parser) {
-
+    public void changeView(QuestionObject question) {
+        //default layout for question fragment
         int optionId = R.layout.fragment_question;
 
+        //depending on question type, choose appropriate question layout
         if (question.getQuestionType().equals("layer")) {
             optionId = R.layout.fragment_question;
         } else if (question.getQuestionType().equals("nominal")) {
@@ -189,16 +170,17 @@ public class QuestionFragment extends Fragment {
         } else if (question.getQuestionType().equals("scale")) {
             optionId = R.layout.fragment_question_scale;
         }
-
+        //swap in new layouts from old one (even if there is an already inflated layout)
         frameLayout.removeAllViews();
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflater.inflate(optionId, null);
         frameLayout.addView(view);
 
+        //set question text in the layout
         questionTextView = (TextView) view.findViewById(R.id.questionTextView);
-
         questionTextView.setText(question.getQuestionText());
 
+        //if extra help information is available for a question, display 'i' menu icon, else display nothing
         MenuItem helpMenu = mOptionsMenu.findItem(R.id.menu_show_help);
         if (question.getQuestionHelp() != "") {
             helpMenu.setVisible(true);
@@ -208,101 +190,22 @@ public class QuestionFragment extends Fragment {
 
         //Check that layout contains yes/no buttons
         if (leafNodeReached == false && optionId == R.layout.fragment_question) {
-
-            Button mYesButton = (Button) frameLayout.findViewById(R.id.yesButton);
-            Button mNoButton = (Button) frameLayout.findViewById(R.id.noButton);
-
-            mYesButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GetFragmentText("Yes", senorJSON_parser);
-                }
-            });
-            mNoButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    GetFragmentText("No", senorJSON_parser);
-                }
-            });
+            setupLayerQuestionDisplay(question);
         } else if (leafNodeReached == false && optionId == R.layout.fragment_question_nominal) {
-            String radioButtonValues = question.getQuestionMG();
-            radioButtonValues = radioButtonValues.substring(2, radioButtonValues.length() - 2);
-            String[] radioButtonValuesArray = radioButtonValues.split("\\)\\(");
-            HashMap<String, Float> nominalScaleValues = new HashMap<>();
-            HashMap<String, String> nominalScaleTitles = new HashMap<>();
-
-            Integer i = 0;
-            for (String value : radioButtonValuesArray) {
-                String text = value.split(" ")[0];
-
-                //Capitalise text
-                String nominalText = text.substring(0, 1).toUpperCase() + text.substring(1);
-
-                //Extract nominal value from mg string
-                Float nominalValue = Float.parseFloat(value.split(" ")[1]);
-
-                //Insert extracted values into respected hashmaps
-                nominalScaleValues.put(i.toString(), nominalValue);
-                nominalScaleTitles.put(i.toString(), nominalText);
-
-                i++;
-            }
-            final RadioGroup nominalRadioButtons = (RadioGroup) frameLayout.findViewById(R.id.nominal_radio_buttons);
-
-            RadioButton r1 = (RadioButton) frameLayout.findViewById(R.id.nominal1);
-            RadioButton r2 = (RadioButton) frameLayout.findViewById(R.id.nominal2);
-            RadioButton r3 = (RadioButton) frameLayout.findViewById(R.id.nominal3);
-            RadioButton r4 = (RadioButton) frameLayout.findViewById(R.id.nominal4);
-
-            r1.setTag(nominalScaleValues.get("0"));
-            r1.setText(nominalScaleTitles.get("0"));
-
-            r2.setTag(nominalScaleValues.get("1"));
-            r2.setText(nominalScaleTitles.get("1"));
-
-            r3.setTag(nominalScaleValues.get("2"));
-            r3.setText(nominalScaleTitles.get("2"));
-
-            r4.setTag(nominalScaleValues.get("3"));
-            r4.setText(nominalScaleTitles.get("3"));
-
-            Button nextQuestion = (Button) frameLayout.findViewById(R.id.next_question);
-            nextQuestion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Integer selectedId = nominalRadioButtons.getCheckedRadioButtonId();
-                    RadioButton selectedRadButton = (RadioButton) frameLayout.findViewById(selectedId);
-
-                    String nominalValue = "0";
-                    if (selectedRadButton != null) {
-                        nominalValue = selectedRadButton.getTag().toString();
-                    }
-                    Snackbar snackbar = Snackbar
-                            .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
-                    GetFragmentText("Yes", senorJSON_parser);
-
-                    snackbar.show();
-                }
-            });
+            setupNominalScaleDisplay(question);
         } else if (leafNodeReached == false && optionId == R.layout.fragment_question_scale) {
-            chosenImageView = (ImageView) frameLayout.findViewById(R.id.ChosenImageView);
-            setLikertScaleDisplay(frameLayout, R.drawable.ic_likert_scale);
-
-            TextView scaleInformation = (TextView) frameLayout.findViewById(R.id.scale_information);
-            scaleInformation.setText(question.getScaleInformation());
-            Log.i(TAG, "Scale Information " + question.getQuestionText());
-
-            Button nextQuestion = (Button) frameLayout.findViewById(R.id.next_question);
-            nextQuestion.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Snackbar snackbar = Snackbar
-                            .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
-                    GetFragmentText("Yes", senorJSON_parser);
-
-                    snackbar.show();
-                }
-            });
+            setupLikertScaleDisplay(question);
+        } else if (leafNodeReached == true) {
+            String leafNodeResult = question.getLeafNodeResult();
+            Log.i(TAG, "Houston, we reached the leaf node. "+leafNodeResult);
+            Bundle bundle = new Bundle();
+            bundle.putString("resultsOfAssessment", leafNodeResult);
+            Fragment fragment = new AssessmentFinishFragment();
+            fragment.setArguments(bundle);
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.relativeLayout, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
 
         }
     }
@@ -340,7 +243,64 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    private void setLikertScaleDisplay(View v, int displayButtonPressed) {
+    private void setupLayerQuestionDisplay(QuestionObject question){
+        Button mYesButton = (Button) frameLayout.findViewById(R.id.yesButton);
+        Button mNoButton = (Button) frameLayout.findViewById(R.id.noButton);
+
+        mYesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetNextQuestion("Yes");
+            }
+        });
+        mNoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GetNextQuestion("No");
+            }
+        });
+    }
+
+    private void setupLikertScaleDisplay(QuestionObject question) {
+        chosenImageView = (ImageView) frameLayout.findViewById(R.id.ChosenImageView);
+        updateLikertScaleDisplay(frameLayout, R.drawable.ic_likert_scale);
+
+        String scaleInformationRaw = question.getScaleInformation();
+        String scaleInformation = "";
+        Pattern p = Pattern.compile("\"([^\"]*)\"");
+        Matcher m = p.matcher(scaleInformationRaw);
+        int i = 0;
+        while (m.find()) {
+            String text = m.group(1);
+            String textCap = text.substring(0, 1).toUpperCase() + text.substring(1);
+            if (i == 0) {
+                textCap = "0 = " + textCap + "\n";
+            } else {
+                textCap = "10 = " + textCap;
+            }
+            //Capitalise text
+            scaleInformation = scaleInformation + textCap;
+            Log.i(TAG, scaleInformation);
+            i++;
+        }
+
+        TextView scaleInformationTxtView = (TextView) frameLayout.findViewById(R.id.scale_information);
+        scaleInformationTxtView.setText(scaleInformation);
+
+        Button nextQuestion = (Button) frameLayout.findViewById(R.id.next_question);
+        nextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar snackbar = Snackbar
+                        .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
+                GetNextQuestion("Yes");
+
+                snackbar.show();
+            }
+        });
+    }
+
+    private void updateLikertScaleDisplay(View v, int displayButtonPressed) {
         DbBitmapUtility db = new DbBitmapUtility();
         Bitmap bmp = db.drawableToBitmap(getResources().getDrawable(displayButtonPressed));
 
@@ -370,45 +330,126 @@ public class QuestionFragment extends Fragment {
 
                 Log.i("TEST", "True and the colour is " + color);
                 if (color == -339893) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_4_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_4_pressed);
                     likertScaleInput = 4;
                 } else if (color == -3679941) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_3_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_3_pressed);
                     likertScaleInput = 3;
                 } else if (color == -8012472) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_2_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_2_pressed);
                     likertScaleInput = 2;
                 } else if (color == -11491252) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_1_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_1_pressed);
                     likertScaleInput = 1;
                 } else if (color == -12877256) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_0_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_0_pressed);
                     likertScaleInput = 0;
                 } else if (color == -10460816) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_no_answer_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_no_answer_pressed);
                     likertScaleInput = 11;
                 } else if (color == -65536) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_10_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_10_pressed);
                     likertScaleInput = 10;
                 } else if (color == -50928) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_9_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_9_pressed);
                     likertScaleInput = 9;
                 } else if (color == -1161191) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_8_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_8_pressed);
                     likertScaleInput = 8;
                 } else if (color == -1478654) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_7_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_7_pressed);
                     likertScaleInput = 7;
                 } else if (color == -616953) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_6_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_6_pressed);
                     likertScaleInput = 6;
                 } else if (color == -739027) {
-                    setLikertScaleDisplay(v, R.drawable.ic_likert_scale_5_pressed);
+                    updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_5_pressed);
                     likertScaleInput = 5;
                 }
                 return true;
             }
         }
     };
+
+    private void setupNominalScaleDisplay(QuestionObject question) {
+        String radioButtonValues = question.getQuestionMG();
+        radioButtonValues = radioButtonValues.substring(2, radioButtonValues.length() - 2);
+        String[] radioButtonValuesArray = radioButtonValues.split("\\)\\(");
+        HashMap<String, Float> nominalScaleValues = new HashMap<>();
+        HashMap<String, String> nominalScaleTitles = new HashMap<>();
+
+        Integer i = 0;
+        for (String value : radioButtonValuesArray) {
+            String text = value.split(" ")[0];
+
+            //Capitalise text
+            String nominalText = text.substring(0, 1).toUpperCase() + text.substring(1);
+
+            //Extract nominal value from mg string
+            Float nominalValue = Float.parseFloat(value.split(" ")[1]);
+
+            //Insert extracted values into respected hashmaps
+            nominalScaleValues.put(i.toString(), nominalValue);
+            nominalScaleTitles.put(i.toString(), nominalText);
+
+            i++;
+        }
+        final RadioGroup nominalRadioButtons = (RadioGroup) frameLayout.findViewById(R.id.nominal_radio_buttons);
+
+        RadioButton r1 = (RadioButton) frameLayout.findViewById(R.id.nominal1);
+        RadioButton r2 = (RadioButton) frameLayout.findViewById(R.id.nominal2);
+        RadioButton r3 = (RadioButton) frameLayout.findViewById(R.id.nominal3);
+        RadioButton r4 = (RadioButton) frameLayout.findViewById(R.id.nominal4);
+
+        r1.setTag(nominalScaleValues.get("0"));
+        r1.setText(nominalScaleTitles.get("0"));
+
+        r2.setTag(nominalScaleValues.get("1"));
+        r2.setText(nominalScaleTitles.get("1"));
+
+        r3.setTag(nominalScaleValues.get("2"));
+        r3.setText(nominalScaleTitles.get("2"));
+
+        r4.setTag(nominalScaleValues.get("3"));
+        r4.setText(nominalScaleTitles.get("3"));
+
+        Button nextQuestion = (Button) frameLayout.findViewById(R.id.next_question);
+        nextQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Integer selectedId = nominalRadioButtons.getCheckedRadioButtonId();
+                RadioButton selectedRadButton = (RadioButton) frameLayout.findViewById(selectedId);
+
+                String nominalValue = "0";
+                if (selectedRadButton != null) {
+                    nominalValue = selectedRadButton.getTag().toString();
+                }
+                Snackbar snackbar = Snackbar
+                        .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
+                GetNextQuestion("Yes");
+
+                snackbar.show();
+            }
+        });
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        OnSetToolbarTitleListener callback;
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnSetToolbarTitleListener) activity;
+            callback.setTitle("Assessment");
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    public interface OnSetToolbarTitleListener {
+        public void setTitle(String title);
+    }
 
 }

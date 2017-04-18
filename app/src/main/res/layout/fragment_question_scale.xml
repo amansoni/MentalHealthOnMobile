@@ -12,62 +12,62 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="190dp"
         android:orientation="vertical">
 
         <TextView
-            android:textColor="@color/textColour"
             android:id="@+id/questionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_marginTop="15dp"
+            android:gravity="center"
             android:paddingEnd="30dp"
             android:paddingStart="30dp"
             android:text="Has the person ever made a suicide attempt? If yes, the questions about them should be answered with reference to the attempts in general rather than any specific one, unless otherwise stated."
-            android:textSize="23sp"/>
-
-        <TextView
-            android:id="@+id/scale_information"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Scale Information"/>
+            android:textColor="@color/textColour"
+            android:textSize="23sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
-
 
         <ImageView
             android:id="@+id/likert_scale_svg"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
-            android:background="@drawable/ic_likert_scale_2_pressed"></ImageView>
+            android:background="@drawable/ic_likert_scale_2_pressed" />
 
         <ImageView
             android:id="@+id/ChosenImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"></ImageView>
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/scale_information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-25dp"
+            android:paddingLeft="25dp"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/next_question"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_gravity="center"
+            android:layout_marginTop="5dp"
             android:background="@drawable/custom_button"
             android:drawableRight="@drawable/ic_navigate_next_black_24px"
-            android:layout_marginTop="-20dp"
             android:paddingLeft="10dp"
             android:text="Next Question"
             android:textColor="@color/white" />
+
     </LinearLayout>
 
 </LinearLayout>

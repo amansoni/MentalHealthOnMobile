@@ -1,11 +1,10 @@
-package com.example.theom.mmha.Fragments.MapLocation;
+package com.example.theom.mmha.Fragments;
 
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,7 +36,7 @@ import com.google.gson.Gson;
  * Created by theom on 13/03/2017.
  */
 
-public class MapLocationFragment extends Fragment {
+public class ServiceDetailsFragment extends Fragment {
 
     private GooglePlace place;
     private String placeTitle = "";
@@ -50,11 +48,11 @@ public class MapLocationFragment extends Fragment {
     private Drawable locationPhoto;
     private ArrayList<GooglePlace> places;
     String photoReference;
-    private String TAG = "MapLocationFragment";
+    private String TAG = "ServiceDetailsFragment";
 
     // TODO: Rename and change types and number of parameters
-    public static MapLocationFragment newInstance() {
-        MapLocationFragment fragment = new MapLocationFragment();
+    public static ServiceDetailsFragment newInstance() {
+        ServiceDetailsFragment fragment = new ServiceDetailsFragment();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
@@ -85,7 +83,13 @@ public class MapLocationFragment extends Fragment {
         places = (ArrayList<GooglePlace>) getArguments().getSerializable("resultsFromMap");
         photoReference = getArguments().getString("photoReference");
         Log.i(TAG, "phootoreference is "+photoReference);
-        locationPhoto = getLocationPhoto(photoReference);
+
+        if (photoReference.equals("No_photo")){
+            locationPhoto = getResources().getDrawable(R.drawable.local_services);
+        } else {
+            locationPhoto = getLocationPhoto(photoReference);
+        }
+
         //Reference used to query google places for more location information
         placeReference = getArguments().getString("placeReference");
 
@@ -141,7 +145,7 @@ public class MapLocationFragment extends Fragment {
     }
 
 
-    //Create menu buttons at the top of display
+/*    //Create menu buttons at the top of display
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.favourite_item_menu, menu);
@@ -160,20 +164,20 @@ public class MapLocationFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.favourite_menu_button:
-               /* isFavourited=!isFavourited;
-                changeIcon(item);*/
+               *//* isFavourited=!isFavourited;
+                changeIcon(item);*//*
                 return true;
             case R.id.create_postcard:
 
                 return true;
             case R.id.visited:
-               /* isVisited=!isVisited;
-                changeIcon(item);*/
+               *//* isVisited=!isVisited;
+                changeIcon(item);*//*
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
 
 

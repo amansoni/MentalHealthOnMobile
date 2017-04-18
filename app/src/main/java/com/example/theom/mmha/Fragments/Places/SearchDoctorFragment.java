@@ -79,7 +79,6 @@ public class SearchDoctorFragment extends Fragment {
         });
 
 
-
         return v;
     }
 

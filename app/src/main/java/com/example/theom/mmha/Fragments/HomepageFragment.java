@@ -1,5 +1,6 @@
 package com.example.theom.mmha.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -97,5 +98,24 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        OnSetToolbarTitleListener callback;
+        super.onAttach(activity);
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callback = (OnSetToolbarTitleListener) activity;
+            callback.setTitle("Homepage");
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
+    public interface OnSetToolbarTitleListener {
+        public void setTitle(String title);
     }
 }

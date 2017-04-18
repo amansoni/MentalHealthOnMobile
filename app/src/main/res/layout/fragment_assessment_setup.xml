@@ -1,145 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
 
-    <TextView
-        android:text="Date of Birth"
-        android:textStyle="bold"
-        android:textColor="@color/textColour"
-        android:textSize="30dp"
-        android:paddingStart="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="What's the person's date of birth?"
-        android:ems="10"
-        android:paddingStart="25dp"
-        android:paddingEnd="25dp"
-        android:id="@+id/birthDate"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth"
+            android:textColor="@color/textColour"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/birthDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="What's the person's date of birth?"
+            android:inputType="textPersonName" />
+    </LinearLayout>
 
 
-    <TextView
-        android:text="Gender"
-        android:textStyle="bold"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="25dp"
-        android:textColor="@color/textColour"
-        android:textSize="30dp" />
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
 
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/gender_radio_buttons"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender"
+            android:textColor="@color/textColour"
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
-        <RadioButton
-            android:id="@+id/radio_male"
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/gender_radio_buttons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tag="@string/nominalValue1"
-            android:text="Male"
-            android:textColor="@color/textColour" />
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
 
-        <RadioButton
-            android:id="@+id/radio_female"
-            android:layout_width="wrap_content"
+            <RadioButton
+                android:id="@+id/radio_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="@string/nominalValue1"
+                android:text="Male"
+                android:textColor="@color/textColour" />
+
+            <RadioButton
+                android:id="@+id/radio_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="@string/nominalValue2"
+                android:text="Female"
+                android:textColor="@color/textColour" />
+
+            <RadioButton
+                android:id="@+id/radio_dontknow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tag="@string/nominalValue3"
+                android:text="Don't know"
+                android:textColor="@color/textColour" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="@string/nominalValue2"
-            android:text="Female"
-            android:textColor="@color/textColour" />
+            android:text="Relationships"
+            android:textColor="@color/textColour"
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
-        <RadioButton
-            android:id="@+id/radio_dontknow"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/relationshipStatus"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="@string/nominalValue3"
-            android:text="Don't know"
-            android:textColor="@color/textColour" />
-    </RadioGroup>
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Living and relationship status"
+            android:inputType="textPersonName"/>
+    </LinearLayout>
 
-    <TextView
-        android:text="Relationships"
-        android:textStyle="bold"
-        android:textColor="@color/textColour"
-        android:textSize="30dp"
-        android:paddingStart="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Living and relationship status"
-        android:ems="10"
-        android:paddingStart="25dp"
-        android:paddingEnd="25dp"
-        android:id="@+id/relationshipStatus"
-        android:gravity="center"/>
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
 
-    <TextView
-        android:text="Ethnicity"
-        android:textStyle="bold"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ethnicity"
+            android:textColor="@color/textColour"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/ethnicity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="What's the person's ethnic group?"
+            android:inputType="textPersonName" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="25dp"
-        android:textColor="@color/textColour"
-        android:textSize="30dp"/>
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="What's the person's ethnic group?"
-        android:ems="10"
-        android:paddingStart="25dp"
-        android:paddingEnd="25dp"
-        android:id="@+id/ethnicity"
-        android:gravity="center"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="MAPPA"
+            android:textColor="@color/textColour"
+            android:textSize="30dp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:text="MAPPA"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="25dp"
-        android:textColor="@color/textColour"
-        android:textSize="30dp"/>
+        <EditText
+            android:id="@+id/mappa_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Does the person have any MAPPA?"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="Does the person have any MAPPA?"
-        android:ems="10"
-        android:paddingStart="25dp"
-        android:paddingEnd="25dp"
-        android:id="@+id/mappa_status"
-        android:gravity="center"/>
+    </LinearLayout>
 
     <Button
+        android:id="@+id/startQuiz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="Begin Assessment"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:drawableRight="@drawable/ic_navigate_next_black_24px"
-        android:paddingLeft="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/custom_button"
-        android:id="@+id/startQuiz"/>
+        android:drawableRight="@drawable/ic_navigate_next_black_24px"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:text="Begin Assessment"
+        android:textColor="@color/white" />
 
 </LinearLayout>

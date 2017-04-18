@@ -41,24 +41,6 @@ public class XML_parser extends FragmentActivity{
                 System.out.println("XML Pasing Excpetion = " + e);
             }
 
-
-           /*
-            //File fXmlFile = new File("lib/src/fragment_question_scale/java/files/staff.xml");
-            File question_tree = new File("app/src/fragment_question_scale/res/raw/qt.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(question_tree);
-
-            //optional, but recommended
-            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-            doc.getDocumentElement().normalize();
-            nList = doc.getElementsByTagName("node");
-*/
-        /*Scanner reader = new Scanner(System.in);  // Reading from System.in
-        System.out.println("What's the question code? ");
-        String question = reader.next();
-        getQuestionText(question);*/
-
         } catch (Exception e) {
             e.printStackTrace();
         }
