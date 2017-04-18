@@ -6,6 +6,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity
         AssessmentFinishFragment.OnSetToolbarTitleListener,
         SeeSightsFragment.OnFragmentInteractionListener,
         SeeSightsFragment.OnSetToolbarTitleListener {
+
+    String TAG ="Main Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +81,8 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //Not allowed to press back
+            //super.onBackPressed();
         }
     }
 
@@ -126,4 +130,6 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(title);
         }
     }
+
+
 }
