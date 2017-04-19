@@ -1,22 +1,16 @@
 package com.example.theom.mmha.PreviousAssessments;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.theom.mmha.DbBitmapUtility;
 import com.example.theom.mmha.R;
 
 import java.util.ArrayList;
@@ -45,7 +39,7 @@ public class PrevAssessmentListAdapter extends RecyclerView.Adapter<PrevAssessme
 
         View v;
 
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.prev_assessment_item, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_prev_assessment_item, parent, false);
 
         MyViewHolder holder = new MyViewHolder(v,clickListener);
         return holder;
@@ -110,29 +104,15 @@ public class PrevAssessmentListAdapter extends RecyclerView.Adapter<PrevAssessme
         //Launch favourite detailed info fragment when card is clicked
         @Override
         public void onClick(View v) {
-              /*  AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                AppCompatActivity activity = (AppCompatActivity) v.getContext();
                 Bundle bundle = new Bundle();
-                bundle.putString("placeReference", reference);
-                Log.i(TAG, "place ref on creation of fragment = " + reference);
-                bundle.putString("title", title.getText().toString());
-                bundle.putDouble("lat", latitude);
-                bundle.putDouble("long", longitude);
-                bundle.putBoolean("isFavourited", true);
-                bundle.putString("launchedFrom", "Favourite_list");
-
-                //Get icon from ImageView and convert it to a bitmap, then to a byte array
-                BitmapDrawable drawable = (BitmapDrawable) locationPhoto.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-                DbBitmapUtility bitmapUtility = new DbBitmapUtility();
-                byte[] placeImage = bitmapUtility.getBytes(bitmap);
-                bundle.putByteArray("placeImage", placeImage);
-                Fragment fragment = new PrevAssessItemFragment();
+                bundle.putString("id", id.getText().toString());
+                Fragment fragment = new AssessmentDetailsFragment();
                 fragment.setArguments(bundle);
                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.relativeLayout, fragment);
                 transaction.addToBackStack(null);
-                transaction.commit();*/
-
+                transaction.commit();
         }
 
         //Start itinerary selection mode

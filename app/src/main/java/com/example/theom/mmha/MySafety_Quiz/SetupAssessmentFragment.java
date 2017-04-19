@@ -110,7 +110,7 @@ public class SetupAssessmentFragment extends Fragment implements
                 fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.relativeLayout, fragment);
-                transaction.addToBackStack(null);
+                transaction.addToBackStack("question_fragment");
                 transaction.commit();
             }
         });

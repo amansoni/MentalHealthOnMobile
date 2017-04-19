@@ -10,4 +10,5 @@
     <color name="transparent1">#80FF841F</color>
     <color name="transparent2">#803E71B7</color>
     <color name="buttonTextColour">#FFFFFF</color>
+    <color name="deleteButtonColour">#D14427</color>
 </resources>

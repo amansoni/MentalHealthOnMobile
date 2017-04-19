@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,23 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Cluste
         SupportMapFragment fragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         fragment.getMapAsync(this);
         ViewGroup.LayoutParams params = fragment.getView().getLayoutParams();
+
+        //Disable back button
+        fragment.getView().setFocusableInTouchMode(true);
+        fragment.getView().requestFocus();
+        fragment.getView().setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    Toast.makeText(getActivity(), "Can't press back from map", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        } );
 
     }
 

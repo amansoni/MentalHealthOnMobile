@@ -35,6 +35,7 @@ public class PrevAssessmentListItem implements Serializable
     public void setTimeOfAssessment(String dateOfAssessment){
         String[] times = dateOfAssessment.split("\\s+");
         this.dateOfAssessment=times[0];
-        timeOfAssessment=times[1];
+        String[] timesOfAssessment=times[1].split("\\:");
+        timeOfAssessment = timesOfAssessment[0]+":"+timesOfAssessment[1];
     }
 }

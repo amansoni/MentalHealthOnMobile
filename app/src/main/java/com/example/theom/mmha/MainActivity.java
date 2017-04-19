@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.example.theom.mmha.Fragments.HomepageFragment;
 import com.example.theom.mmha.Fragments.Places.PlacePins;
-import com.example.theom.mmha.Fragments.Places.SearchDoctorFragment;
 import com.example.theom.mmha.Fragments.SearchLocalServicesFragment;
 import com.example.theom.mmha.MySafety_Quiz.AssessmentFinishFragment;
 import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
@@ -40,8 +39,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             //Not allowed to press back
-            //super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -129,6 +130,5 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(title);
         }
     }
-
 
 }

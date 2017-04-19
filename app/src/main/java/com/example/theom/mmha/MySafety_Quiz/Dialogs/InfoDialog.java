@@ -3,13 +3,18 @@ package com.example.theom.mmha.MySafety_Quiz.Dialogs;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.theom.mmha.MySafety_Quiz.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.MySafety_Quiz.QuestionObject;
+import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListFragment;
 import com.example.theom.mmha.R;
 
 /**
@@ -19,13 +24,15 @@ import com.example.theom.mmha.R;
 //Dialog to tell the user about the itinerary function
 public class InfoDialog extends DialogFragment {
 
+    private AnsweredQuestionsDBHelper answersDB;
+
     public InfoDialog() {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
     }
 
-    public static InfoDialog newInstance(String title, QuestionObject questionObject) {
+    public static InfoDialog newInstance(String title, QuestionObject questionObject, String id) {
         InfoDialog dialog = new InfoDialog();
         Bundle args = new Bundle();
         //Fetch all arguments needed for inserting into the dialog
@@ -36,6 +43,7 @@ public class InfoDialog extends DialogFragment {
         args.putString("questionMG", questionObject.getQuestionMG());
         args.putString("questionType", questionObject.getQuestionType());
         args.putString("questionHelp", questionObject.getQuestionHelp());
+        args.putString("id", id);
         dialog.setArguments(args);
         return dialog;
     }
@@ -67,6 +75,30 @@ public class InfoDialog extends DialogFragment {
             questionAction.setText("Action: " + getArguments().getString("questionAction"));
             questionMG.setText("MG: " + getArguments().getString("questionMG"));
             questionType.setText("Type: " + getArguments().getString("questionType"));
+        }else if (title.equals("Delete Assessment")) {
+            v = getActivity().getLayoutInflater().inflate(R.layout.delete_assessment_dialog, null);
+            //Set title of dialog
+            builder.setTitle(title).setView(v);
+            Button deleteButton = (Button) v.findViewById(R.id.deleteButton);
+            //Create database to store favourite locations
+            answersDB = new AnsweredQuestionsDBHelper(getActivity());
+            //ID for assessment to delete
+            final String assessmentID = getArguments().getString("id");
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    answersDB.deleteValue(assessmentID);
+                    Snackbar snackbar = Snackbar
+                            .make(v, "Undo delete ", Snackbar.LENGTH_SHORT);
+                    snackbar.show();
+                    Fragment fragment = new PrevAssessmentListFragment();
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.relativeLayout, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    dismiss();
+                }
+            });
         }else{
             //Set view to the help dialog fragment
             v = getActivity().getLayoutInflater().inflate(R.layout.help_dialog_fragment, null);

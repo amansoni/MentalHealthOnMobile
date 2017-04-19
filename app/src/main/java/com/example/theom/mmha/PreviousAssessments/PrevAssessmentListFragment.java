@@ -28,6 +28,7 @@ public class PrevAssessmentListFragment extends Fragment implements PrevAssessme
     private RecyclerView recyclerView;
     private PrevAssessmentListAdapter adapter;
     private AnsweredQuestionsDBHelper answersDB;
+    private String TAG = "PrevAssessment";
 
     @Nullable
     @Override
@@ -79,13 +80,15 @@ public class PrevAssessmentListFragment extends Fragment implements PrevAssessme
 
     @Override
     public void onItemClicked(int position) {
-
+        Log.i(TAG, "Clicked");
     }
 
     @Override
     public boolean onItemLongClicked(int position) {
         return false;
-    }  @Override
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         OnSetToolbarTitleListener callback;
         super.onAttach(activity);

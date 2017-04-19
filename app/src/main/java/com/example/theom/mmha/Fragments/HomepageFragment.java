@@ -12,8 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.theom.mmha.MySafety_Quiz.SetupAssessmentFragment;
+import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListFragment;
 import com.example.theom.mmha.R;
 
 
@@ -33,8 +35,8 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_homepage,container,false);
-        Button mStartQuizButton = (Button)v.findViewById(R.id.startQuizButton);
-        mStartQuizButton.setOnClickListener(new View.OnClickListener() {
+        Button mStartAssessment = (Button)v.findViewById(R.id.startAssessmentButton);
+        mStartAssessment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new SetupAssessmentFragment();
@@ -42,6 +44,40 @@ public class HomepageFragment extends Fragment implements View.OnClickListener{
                 transaction.replace(R.id.relativeLayout, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+            }
+        });
+
+        Button previousAssessments = (Button) v.findViewById(R.id.previousAssessmentsButton);
+        previousAssessments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new PrevAssessmentListFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.relativeLayout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
+
+        Button localServicesButton = (Button) v.findViewById(R.id.localServices);
+        localServicesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment fragment = new SearchLocalServicesFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.relativeLayout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+            }
+        });
+
+        Button otherServicesButton = (Button) v.findViewById(R.id.otherFeaturesButton);
+        otherServicesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Not yet ready", Toast.LENGTH_SHORT).show();
             }
         });
         return v;

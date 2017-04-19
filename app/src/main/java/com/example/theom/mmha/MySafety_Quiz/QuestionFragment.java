@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.theom.mmha.DbBitmapUtility;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
@@ -124,6 +126,23 @@ public class QuestionFragment extends Fragment {
                 GetNextQuestion("No");
             }
         });
+
+        //Disable back button
+        frameLayout.setFocusableInTouchMode(true);
+        frameLayout.requestFocus();
+        frameLayout.setOnKeyListener( new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey( View v, int keyCode, KeyEvent event )
+            {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    Toast.makeText(getActivity(), "Can't press back during assessment", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        } );
 
         return frameLayout;
     }
@@ -229,12 +248,11 @@ public class QuestionFragment extends Fragment {
         String id_string = Long.toString(id);
         answersDB.insertAssessmentAnswers(id_string, strObject);
         //nswersDB.
-       /*
-        //To decode JSON for user answers
+       /* //To decode JSON for user answers
         Gson gson = new Gson();
         Type type = new TypeToken<HashMap<String, String>>() {}.getType();
-        HashMap<String, String> newUserAnswersHashMap = gson.fromJson(bundle.getString("key"), type);*/
-
+        HashMap<String, String> newUserAnswersHashMap = gson.fromJson(bundle.getString("key"), type);
+*/
     }
 
     @Override
@@ -256,12 +274,12 @@ public class QuestionFragment extends Fragment {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menu_show_extra_info:
-                InfoDialog extraInfoDialog = InfoDialog.newInstance("Question Information", currentQuestion);
+                InfoDialog extraInfoDialog = InfoDialog.newInstance("Question Information", currentQuestion, "");
                 extraInfoDialog.setTargetFragment(this, 0);
                 extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
                 return true;
             case R.id.menu_show_help:
-                InfoDialog helpDialog = InfoDialog.newInstance("Help", currentQuestion);
+                InfoDialog helpDialog = InfoDialog.newInstance("Help", currentQuestion, "");
                 helpDialog.setTargetFragment(this, 0);
                 helpDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
                 return true;
