@@ -46,7 +46,7 @@ public class SearchAreaDialogFragment extends DialogFragment
     SearchAreaListAdapter listAdapter;
     ListView listView;
 
-    //Callback method to return data to SeeSightsFragment
+    //Callback method to return data to SearchLocalServicesFragment
     public interface OnSetSearchLocationAreaFromListener {
         public void setSearchLocationArea(SearchAreaItem searchLocationArea);
     }
@@ -98,15 +98,6 @@ public class SearchAreaDialogFragment extends DialogFragment
                         break;
                 }}
         });
-
-        TextView myLocation = (TextView) v.findViewById(R.id.myLocation);
-        myLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                autocompleteFragment.setText("My Location");
-            }
-        });
-
 
         //Seekbar for sliding input of radius
         seekbarDistance = (SeekBar) v.findViewById(R.id.seekbarDistance);

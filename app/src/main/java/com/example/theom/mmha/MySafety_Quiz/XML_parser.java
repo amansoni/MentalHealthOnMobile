@@ -60,7 +60,7 @@ public class XML_parser extends FragmentActivity{
                 values = e.getAttribute("values");
                 helpText = e.getAttribute("help");
                 scaleInformation = e.getAttribute("scale-type");
-                System.out.println("Question: " + questionText);
+                //System.out.println("Question: " + questionText);
             }
         }
         QuestionObject question = new QuestionObject(questionText, values, questionID, false, helpText, scaleInformation);

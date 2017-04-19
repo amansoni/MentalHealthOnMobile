@@ -17,22 +17,16 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/myLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="My Location"
-        android:clickable="true"
-        android:paddingBottom="15dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:paddingLeft="25dp"
         android:text="Recent Locations"
         android:textStyle="bold"/>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
+        android:elevation="2dp"
         android:background="@android:color/darker_gray"/>
 
     <LinearLayout
@@ -47,13 +41,13 @@
             android:id="@+id/empty_list_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="List view is empty"
+            android:text="No recent searches"
             android:visibility="gone" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="2dp"
         android:background="@android:color/darker_gray"/>
 
     <LinearLayout
@@ -65,6 +59,7 @@
 
     <TextView
         android:id="@+id/textViewDistance"
+        android:paddingLeft="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -87,6 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Done"
+            android:textColor="@color/buttonTextColour"
             android:id="@+id/doneButton"
             android:background="@drawable/custom_button"
             />

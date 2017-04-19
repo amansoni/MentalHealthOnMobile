@@ -2,11 +2,9 @@ package com.example.theom.mmha;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,14 +12,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.theom.mmha.Fragments.HomepageFragment;
 import com.example.theom.mmha.Fragments.Places.PlacePins;
 import com.example.theom.mmha.Fragments.Places.SearchDoctorFragment;
-import com.example.theom.mmha.Fragments.SeeSightsFragment;
+import com.example.theom.mmha.Fragments.SearchLocalServicesFragment;
 import com.example.theom.mmha.MySafety_Quiz.AssessmentFinishFragment;
 import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
 import com.example.theom.mmha.MySafety_Quiz.SetupAssessmentFragment;
@@ -34,8 +31,8 @@ public class MainActivity extends AppCompatActivity
         QuestionFragment.OnSetToolbarTitleListener,
         SetupAssessmentFragment.OnSetToolbarTitleListener,
         AssessmentFinishFragment.OnSetToolbarTitleListener,
-        SeeSightsFragment.OnFragmentInteractionListener,
-        SeeSightsFragment.OnSetToolbarTitleListener {
+        SearchLocalServicesFragment.OnFragmentInteractionListener,
+        SearchLocalServicesFragment.OnSetToolbarTitleListener {
 
     String TAG ="Main Activity";
 
@@ -99,11 +96,11 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             fragment = new HomepageFragment();
         } else if (id == R.id.nav_assessment) {
-            fragment = new QuestionFragment();
+            fragment = new SetupAssessmentFragment();
         } else if (id == R.id.nav_hospital) {
-            fragment = new SearchDoctorFragment();
+            fragment = new SearchLocalServicesFragment();
         } else if (id == R.id.nav_prev_assessment) {
-            fragment = new SeeSightsFragment();
+            fragment = new SearchLocalServicesFragment();
         }
 
         fragmentManager.beginTransaction().replace(R.id.relativeLayout, fragment).commit();

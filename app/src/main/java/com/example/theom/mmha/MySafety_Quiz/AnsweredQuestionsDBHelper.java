@@ -19,12 +19,14 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "answered_questions.db";
     public static final String TABLE_NAME = "user_answers";
     public static final String COL_1 = "ID";
-    public static final String COL_2 = "QUESTION_SESSION";
-    public static final String COL_3 = "PATIENT_NAME";
-    public static final String COL_4 = "INTERVIEWER_NAME";
-    public static final String COL_5 = "ASSESSMENT_ANSWERS";
-    public static final String COL_6 = "NOTES";
-    public static final String COL_7 = "DATETIME";
+    public static final String COL_2 = "DATE_OF_BIRTH";
+    public static final String COL_3 = "GENDER";
+    public static final String COL_4 = "RELATIONSHIP";
+    public static final String COL_5 = "ETHNICITY";
+    public static final String COL_6 = "MAPPA";
+    public static final String COL_7 = "NOTES";
+    public static final String COL_8 = "DATETIME";
+    public static final String COL_9 = "ANSWERS";
     String TAG = "DBHelper";
 
     public AnsweredQuestionsDBHelper(Context context) {
@@ -35,7 +37,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         //Create table with appropriate column headers
         db.execSQL("create table "+ TABLE_NAME + "("+COL_1+" INTEGER PRIMARY KEY AUTOINCREMENT,"+COL_2+" STRING,"+COL_3+" STRING,"+COL_4
-                +" STRING,"+COL_5+" STRING,"+COL_6+" STRING,"+COL_7+" DATETIME DEFAULT CURRENT_TIMESTAMP)");
+                +" STRING,"+COL_5+" STRING,"+COL_6+" STRING,"+COL_7+" STRING,"+COL_8+" DATETIME DEFAULT CURRENT_TIMESTAMP,"+COL_9+" STRING)");
 
     }
 
@@ -47,28 +49,28 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     }
 
     //Function to insert data into the DB
-    public boolean insertData(String question_session, String patient_name, String interviewer_name, String answered_questions, String notes){
+    public long insertData(String date_of_birth, String gender, String relationship, String ethnicity, String mappa){
         SQLiteDatabase db = this.getWritableDatabase();
 
         try{
             //Take user paramas and insert into DB
             ContentValues contentValues = new ContentValues();
-            contentValues.put(COL_2, question_session);
-            contentValues.put(COL_3, patient_name);
-            contentValues.put(COL_4, interviewer_name);
-            contentValues.put(COL_5, answered_questions);
-            contentValues.put(COL_6, notes);
+            contentValues.put(COL_2, date_of_birth);
+            contentValues.put(COL_3, gender);
+            contentValues.put(COL_4, relationship);
+            contentValues.put(COL_5, ethnicity);
+            contentValues.put(COL_6, mappa);
 
             //If insert failed, return false, else true
             long result = db.insertOrThrow(TABLE_NAME, null, contentValues);
             if (result == -1) {
-                return false;
+                return result;
             }else {
-                Log.i(TAG, "Inserted the values: "+question_session + ", "+ patient_name);
-                return true;
+                Log.i(TAG, "Inserted the values: "+date_of_birth + ", "+ relationship + " with an ID "+result);
+                return result;
             }
         }catch (SQLiteConstraintException e){
-            return false;
+            return 0;
         }
     }
 
@@ -78,6 +80,11 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
         Cursor res = db.rawQuery("select * from "+TABLE_NAME, null);
         return res;
     }
+
+   /* public String getLastInsertID(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //last_insert_rowid()
+    }*/
 
     //Return all data from the DB
     public Cursor getLocationData(String locationTitle){
@@ -93,15 +100,17 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
         return deletedNum;
     }
 
-    //Update user notes
-    public Integer updateAssessmentAnswers(String locationTitle, String userNotes){
+    //Insert Assessment Answers
+    public Integer insertAssessmentAnswers(String id, String userAnswers){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_1, locationTitle);
-        cv.put(COL_6, userNotes);
+        cv.put(COL_9, userAnswers);
 
-        Log.i("DB_Helper", "Update query: "+locationTitle+ " notes "+userNotes);
-        Integer result = db.update(TABLE_NAME, cv, "NAME = ?", new String[]{locationTitle});
+        //userAnswers = userAnswers.substring(1, userAnswers.length()-1);
+        Log.i("DB_Helper", "Update query: user answers "+userAnswers + "on id "+id);
+        Integer result = db.update(TABLE_NAME, cv, "ID = ?",new String[]{id});
+
+
         return result;
     }
 

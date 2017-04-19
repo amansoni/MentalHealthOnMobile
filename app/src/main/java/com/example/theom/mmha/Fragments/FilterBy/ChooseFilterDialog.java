@@ -26,7 +26,7 @@ public class ChooseFilterDialog extends DialogFragment {
     ListHashmapAdapter listAdapter;
     ListView listView;
 
-    //Interfaces to send data back to SeeSightsFragment
+    //Interfaces to send data back to SearchLocalServicesFragment
     public interface OnSetFiltersListener {
         public void setFilters(String filterBy, String filterTitle);
     }

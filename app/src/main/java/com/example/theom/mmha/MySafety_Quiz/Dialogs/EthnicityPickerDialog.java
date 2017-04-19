@@ -26,7 +26,7 @@ public class EthnicityPickerDialog extends DialogFragment {
     ListHashmapAdapter listAdapter;
     ListView listView;
 
-    //Interfaces to send data back to SeeSightsFragment
+    //Interfaces to send data back to SearchLocalServicesFragment
     public interface OnSetEthnicityListener {
         public void setEthnicity(String ethnicity);
     }

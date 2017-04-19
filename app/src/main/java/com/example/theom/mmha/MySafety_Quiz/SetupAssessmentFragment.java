@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.DatePickerFragment;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.EthnicityPickerDialog;
@@ -37,6 +39,7 @@ public class SetupAssessmentFragment extends Fragment implements
     private EditText relationshipStatusEditText;
     private EditText ethnicityEditText;
     private EditText mappaStatusEditText;
+    private String gender;
 
 
     private String relationshipStatus = "Null";
@@ -50,24 +53,25 @@ public class SetupAssessmentFragment extends Fragment implements
         //Create database to store assessment answers
         answersDB = new AnsweredQuestionsDBHelper(getActivity());
 
-        relationshipStatusEditText = (EditText) v.findViewById(R.id.relationshipStatus);
-        relationshipStatusEditText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEvent.ACTION_UP == event.getAction()) {
-                    showRelationshipsDialog();
-                }
-                return true;
-            }
-        });
-
-
         datePickerEditText = (EditText) v.findViewById(R.id.birthDate);
         datePickerEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (MotionEvent.ACTION_UP == event.getAction()) {
                     showDatePickerDialog();
+                }
+                return true;
+            }
+        });
+
+        setupGenderRadioButtons(v);
+
+        relationshipStatusEditText = (EditText) v.findViewById(R.id.relationshipStatus);
+        relationshipStatusEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEvent.ACTION_UP == event.getAction()) {
+                    showRelationshipsDialog();
                 }
                 return true;
             }
@@ -99,8 +103,11 @@ public class SetupAssessmentFragment extends Fragment implements
         startQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //  answersDB.insertData(assessmentTitle.getText().toString(), patientName.getText().toString(), interviewerName.getText().toString(), "", preSessionNotes.getText().toString());
+                Long id = answersDB.insertData(datePickerEditText.getText().toString(), gender, relationshipStatusEditText.getText().toString(), ethnicityEditText.getText().toString(), mappaStatusEditText.getText().toString());
+                Bundle bundle = new Bundle();
+                bundle.putLong("id", id);
                 Fragment fragment = new QuestionFragment();
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.relativeLayout, fragment);
                 transaction.addToBackStack(null);
@@ -182,5 +189,28 @@ public class SetupAssessmentFragment extends Fragment implements
 
     public interface OnSetToolbarTitleListener {
         public void setTitle(String title);
+    }
+
+    public void setupGenderRadioButtons(View v) {
+        RadioButton r1 = (RadioButton) v.findViewById(R.id.radio_male);
+        RadioButton r2 = (RadioButton) v.findViewById(R.id.radio_female);
+        RadioButton r3 = (RadioButton) v.findViewById(R.id.radio_dontknow);
+
+        r1.setTag("They're male.");
+        r2.setTag("They're female.");
+        r3.setTag("Gender not disclosed.");
+
+        RadioGroup genderRadioButtons = (RadioGroup) v.findViewById(R.id.gender_radio_buttons);
+
+        genderRadioButtons.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton mappaRadioButton = (RadioButton) group.findViewById(checkedId);
+                if (mappaRadioButton != null) {
+                    gender = mappaRadioButton.getTag().toString();
+                    Log.i(TAG, gender);
+                }
+            }
+        });
     }
 }

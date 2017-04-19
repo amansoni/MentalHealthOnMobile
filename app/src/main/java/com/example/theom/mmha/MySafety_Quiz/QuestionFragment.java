@@ -27,11 +27,15 @@ import android.widget.TextView;
 import com.example.theom.mmha.DbBitmapUtility;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
 import com.example.theom.mmha.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,6 +61,8 @@ public class QuestionFragment extends Fragment {
     View view;
     Menu mOptionsMenu;
     Integer likertScaleInput;
+    Long id;
+    HashMap<String, String> userAnswersHashMap = new HashMap<String, String>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -89,11 +95,12 @@ public class QuestionFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_question, null);
         frameLayout.addView(view);
 
-
         QuestionObject firstQuestion = senorJSON_parser.setupQuiz(getActivity());
         currentQuestion = firstQuestion;
         //Create database to store assessment answers
         answersDB = new AnsweredQuestionsDBHelper(getActivity());
+        //id of current assessment session in database
+        id = getArguments().getLong("id");
 
         questionTextView = (TextView) frameLayout.findViewById(R.id.questionTextView);
         questionTextView.setText(firstQuestion.getQuestionText());
@@ -144,6 +151,9 @@ public class QuestionFragment extends Fragment {
     }
 
     public void GetNextQuestion(String answer) {
+        //Enter answer into hashmap for storing
+        Log.i(TAG, "Putting "+currentQuestion.getQuestionText()+" into Hashmap and the answer was "+answer);
+        userAnswersHashMap.put(currentQuestion.getQuestionText(), answer);
         try {
             //take users input, ask JSON_Parser for next question
             QuestionObject question = senorJSON_parser.runAssessment(answer, getActivity());
@@ -196,6 +206,7 @@ public class QuestionFragment extends Fragment {
         } else if (leafNodeReached == false && optionId == R.layout.fragment_question_scale) {
             setupLikertScaleDisplay(question);
         } else if (leafNodeReached == true) {
+            submitUserAnswers();
             String leafNodeResult = question.getLeafNodeResult();
             Log.i(TAG, "Houston, we reached the leaf node. "+leafNodeResult);
             Bundle bundle = new Bundle();
@@ -208,6 +219,22 @@ public class QuestionFragment extends Fragment {
             transaction.commit();
 
         }
+    }
+
+    private void submitUserAnswers(){
+        Gson objGson= new Gson();
+        String strObject = objGson.toJson(userAnswersHashMap);
+        Bundle bundle = new Bundle();
+        bundle.putString("key", strObject);
+        String id_string = Long.toString(id);
+        answersDB.insertAssessmentAnswers(id_string, strObject);
+        //nswersDB.
+       /*
+        //To decode JSON for user answers
+        Gson gson = new Gson();
+        Type type = new TypeToken<HashMap<String, String>>() {}.getType();
+        HashMap<String, String> newUserAnswersHashMap = gson.fromJson(bundle.getString("key"), type);*/
+
     }
 
     @Override
@@ -301,8 +328,8 @@ public class QuestionFragment extends Fragment {
     }
 
     private void updateLikertScaleDisplay(View v, int displayButtonPressed) {
-        DbBitmapUtility db = new DbBitmapUtility();
-        Bitmap bmp = db.drawableToBitmap(getResources().getDrawable(displayButtonPressed));
+        DbBitmapUtility dbUtil = new DbBitmapUtility();
+        Bitmap bmp = dbUtil.drawableToBitmap(getResources().getDrawable(displayButtonPressed));
 
         // Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.likert_scale);
         chosenImageView.setDrawingCacheEnabled(true);

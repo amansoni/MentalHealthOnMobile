@@ -72,14 +72,11 @@ public class SearchTypeDialogFragment extends DialogFragment {
     public ListView createLocationTypeListView(View v){
         ListView lv;
         lv = (ListView) v.findViewById(R.id.listView1);
-        searchTypeItems.add(new SearchTypeItem("Museum", "museum", 0));
-        searchTypeItems.add(new SearchTypeItem("Restaurant", "restaurant", 1));
-        searchTypeItems.add(new SearchTypeItem("Cafe", "cafe", 1));
-        searchTypeItems.add(new SearchTypeItem("Library", "library", 0));
-        searchTypeItems.add(new SearchTypeItem("Aquarium", "aquarium", 1));
-        searchTypeItems.add(new SearchTypeItem("Shopping", "shopping_mall", 1));
-        searchTypeItems.add(new SearchTypeItem("Hotels", "lodging", 0));
-        searchTypeItems.add(new SearchTypeItem("Bars", "bar", 0));
+        searchTypeItems.add(new SearchTypeItem("Hospital", "hospital", 0));
+        searchTypeItems.add(new SearchTypeItem("Doctor", "doctor", 1));
+        searchTypeItems.add(new SearchTypeItem("Pharmacy", "pharmacy", 1));
+        searchTypeItems.add(new SearchTypeItem("Physiotherapist", "physiotherapist", 0));
+        searchTypeItems.add(new SearchTypeItem("Police", "police", 0));
 
         listAdapter = new SearchTypeListAdapter(getActivity(), searchTypeItems);
         lv.setAdapter(listAdapter);

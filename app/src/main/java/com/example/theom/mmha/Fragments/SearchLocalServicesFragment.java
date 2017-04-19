@@ -1,21 +1,13 @@
 package com.example.theom.mmha.Fragments;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
-public class SeeSightsFragment extends Fragment implements View.OnClickListener,
+public class SearchLocalServicesFragment extends Fragment implements View.OnClickListener,
         SearchTypeDialogFragment.OnSetSearchLocationTypeFromListener,
         SearchAreaDialogFragment.OnSetSearchLocationAreaFromListener,
         ChooseFilterDialog.OnSetFiltersListener,
@@ -52,21 +44,16 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
     private double searchLong;
     private String searchRadius;
     private String filterBy="";
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private double userLocationLat;
-    private double userLocationLong;
-    private static final String TAG = "SeeSights";
+    private static final String TAG = "SearchServices";
 
-    boolean toastGPSShown = false;
 
     // TODO: Rename and change types and number of parameters
-    public static SeeSightsFragment newInstance() {
-        SeeSightsFragment fragment = new SeeSightsFragment();
+    public static SearchLocalServicesFragment newInstance() {
+        SearchLocalServicesFragment fragment = new SearchLocalServicesFragment();
         return fragment;
     }
 
-    public SeeSightsFragment() {
+    public SearchLocalServicesFragment() {
         // Required empty public constructor
     }
 
@@ -82,21 +69,17 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_see_sights, container, false);
 
-        setUpLocation();
-
         //TextViews that are changed to display user's search inputs
         whatAreaTextView = (TextView) v.findViewById(R.id.whatAreaTextView);
         whatTypeTextView = (TextView) v.findViewById(R.id.what_type_search_textview);
         filterByTextView = (TextView) v.findViewById(R.id.filter_by_textview);
+
 
         // Configure what area is search
         Button mWhatArea = (Button) v.findViewById(R.id.what_area_button);
         mWhatArea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (toastGPSShown == false) {
-                    Toast.makeText(getActivity(), "GPS is currently not functioning", Toast.LENGTH_SHORT).show();
-                }
                 showLocationAreaDialog();
             }
         });
@@ -123,22 +106,21 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
+                if (searchLong == 0.0 && searchLat == 0.0){
+                    Toast.makeText(getActivity(), "Please enter a search location", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String locationType = searchLocationType;
                 if (locationType != null)
                     bundle.putString("locationType", locationType);
                 else {
                     Toast.makeText(getActivity(), "You've not entered a location type", Toast.LENGTH_SHORT).show();
-                    bundle.putString("locationType", "");
-                }
-                if (searchLong == 0.0 && searchLat == 0.0){
-                    Log.i(TAG, "Entered");
-                    searchLat = userLocationLat;
-                    searchLong = userLocationLong;
-                    searchRadius = "2000";
+                    searchLocationType = "hospital";
                 }
                 bundle.putDouble("searchAreaLong", searchLong);
                 bundle.putDouble("searchAreaLat", searchLat);
                 bundle.putString("searchRadius",searchRadius);
+                bundle.putString("searchType", searchLocationType);
                 bundle.putString("filterBy", filterBy);
                 Fragment fragment = new PlacesList();
                 fragment.setArguments(bundle);
@@ -208,8 +190,8 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
         String searchAreaName = searchAreaItem.getName();
 
         if (searchAreaName == null || searchAreaName.equals("My Location")){
-            searchLat = userLocationLat;
-            searchLong = userLocationLong;
+            searchLat = 0.0;
+            searchLong = 0.0;
         }
         else {
             searchLat = searchAreaItem.getSearchCoordinates().latitude;
@@ -223,6 +205,7 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
             whatAreaTextView.setTextSize(35);
         } else {
             whatAreaTextView.setText(searchAreaName);
+            shrinkTextToFit(whatAreaTextView.getMaxWidth(),whatAreaTextView,35,10);
         }
 
     }
@@ -269,74 +252,7 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
         this.filterBy = filterBy;
     }
 
-    private void setUpLocation(){
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                //Log.i(TAG, "Your location is "+location.getLatitude()+", "+location.getLongitude());
-                while (toastGPSShown == false) {
-                    toastGPSShown = true;
-                }
-                userLocationLat = location.getLatitude();
-                userLocationLong = location.getLongitude();
-            }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        };
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.INTERNET
-                }, 10);
-            } else {
-                locationManager.requestLocationUpdates("gps", 500, 0, locationListener);
-            }
-        }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode){
-            case 10:
-                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    getUserLocation();
-                return;
-        }
-    }
-
-    private void getUserLocation(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.INTERNET
-                }, 10);
-            }
-        locationManager.requestLocationUpdates("gps", 500, 0, locationListener);
-
-        }
-    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -366,5 +282,22 @@ public class SeeSightsFragment extends Fragment implements View.OnClickListener,
 
     public interface OnSetToolbarTitleListener {
         public void setTitle(String title);
+    }
+
+    public static void shrinkTextToFit(float availableWidth, TextView textView,
+                                       float startingTextSize, float minimumTextSize) {
+
+        CharSequence text = textView.getText();
+        float textSize = startingTextSize;
+        textView.setTextSize(startingTextSize);
+        while (text != (TextUtils.ellipsize(text, textView.getPaint(),
+                availableWidth, TextUtils.TruncateAt.END))) {
+            textSize -= 1;
+            if (textSize < minimumTextSize) {
+                break;
+            } else {
+                textView.setTextSize(textSize);
+            }
+        }
     }
 }

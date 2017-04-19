@@ -18,6 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Done"
+        android:textColor="@color/buttonTextColour"
         android:id="@+id/doneButton"
         android:background="@drawable/custom_button"
         />

@@ -353,6 +353,18 @@ public class GooglePlace implements Serializable{
             return width;
         }
     }
+
+    private Opening_hours opening_hours;
+
+    public static class Opening_hours implements Serializable{
+        private List<String> weekday_text;
+        private boolean open_now;
+
+        public List<String> getWeekday_text(){return weekday_text;}
+        public boolean getOpenStatus(){return open_now;}
+    }
+
+    public Opening_hours getOpeningHours(){return opening_hours;}
  /*  public String setOpening_hours(S){
 
    }

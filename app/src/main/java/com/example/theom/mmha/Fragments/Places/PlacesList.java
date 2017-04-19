@@ -36,17 +36,12 @@ public class PlacesList extends Fragment {
         if (placesKey.equals("PUT YOUR KEY HERE")) {
             Toast.makeText(getActivity(), "You haven't entered your Google Places Key into the strings file.  Dont forget to set a referer too.", Toast.LENGTH_LONG).show();
         } else {
-            //Get users inputted data from SeeSightsFragment to create Google Places API Request
-
-
-           /* String type = URLEncoder.encode(getArguments().getString("locationType"));
-            String filterBy = URLEncoder.encode(getArguments().getString("filterBy"));*/
+            //Get users inputted data from SearchLocalServicesFragment to create Google Places API Request
             searchAreaLong = getArguments().getDouble("searchAreaLong");
             searchAreaLat = getArguments().getDouble("searchAreaLat");
-            //String searchRadius = getArguments().getString("searchRadius");
-            String searchRadius = "2000";
-            String type = "hospital";
-            String filterBy = "";
+            String searchRadius = getArguments().getString("searchRadius");
+            String type = getArguments().getString("searchType");
+            String filterBy = getArguments().getString("filterBy");
 
             if(searchAreaLat == 0.0 && searchAreaLong == 0.0){
                 searchAreaLong = -1.89028791;
@@ -56,7 +51,7 @@ public class PlacesList extends Fragment {
 
 
 
-            //Insert retrieved data from SeeSightsFragment into places API request
+            //Insert retrieved data from SearchLocalServicesFragment into places API request
             String placesRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" +
                     searchAreaLat + "," + searchAreaLong +"&"+filterBy+"&type="+type+"&radius="+searchRadius+"&key=" + placesKey;
             PlacesReadFeed process = new PlacesReadFeed();

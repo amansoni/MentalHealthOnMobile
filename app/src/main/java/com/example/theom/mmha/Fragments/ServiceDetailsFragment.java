@@ -1,6 +1,8 @@
 package com.example.theom.mmha.Fragments;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -44,11 +46,10 @@ public class ServiceDetailsFragment extends Fragment {
     private Double locationLat;
     private Double locationLong;
     private String locationTitle;
-    byte [] placeImage;
-    private Drawable locationPhoto;
     private ArrayList<GooglePlace> places;
-    String photoReference;
     private String TAG = "ServiceDetailsFragment";
+    private String phone_number = "No phone";
+    private Menu mOptionsMenu;
 
     // TODO: Rename and change types and number of parameters
     public static ServiceDetailsFragment newInstance() {
@@ -81,14 +82,7 @@ public class ServiceDetailsFragment extends Fragment {
         locationLong = getArguments().getDouble("long");
         locationTitle = getArguments().getString("title");
         places = (ArrayList<GooglePlace>) getArguments().getSerializable("resultsFromMap");
-        photoReference = getArguments().getString("photoReference");
-        Log.i(TAG, "phootoreference is "+photoReference);
 
-        if (photoReference.equals("No_photo")){
-            locationPhoto = getResources().getDrawable(R.drawable.local_services);
-        } else {
-            locationPhoto = getLocationPhoto(photoReference);
-        }
 
         //Reference used to query google places for more location information
         placeReference = getArguments().getString("placeReference");
@@ -106,18 +100,6 @@ public class ServiceDetailsFragment extends Fragment {
                     "key=" + placesKey + "&reference=" + placeReference;
             process.execute(new String[] {placeDetailRequest});
         }
-
-        String launchedFrom = getArguments().getString("launchedFrom");
-
-        if (launchedFrom.equals("Map_fragment")){
-            photoReference = getArguments().getString("photoReference");
-            Log.i(TAG, "photoreference is "+photoReference);
-            //locationPhoto = getLocationPhoto(photoReference);
-        } else if (launchedFrom.equals("Favourite_list")){
-            //the bytearray image sent from the favouritelist
-            placeImage = getArguments().getByteArray("placeImage");
-        }
-
 
         FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -145,15 +127,13 @@ public class ServiceDetailsFragment extends Fragment {
     }
 
 
-/*    //Create menu buttons at the top of display
+    //Create menu buttons at the top of display
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.favourite_item_menu, menu);
-        MenuItem favouriteMenu = menu.findItem(R.id.favourite_menu_button);
-        MenuItem visitedMenu = menu.findItem(R.id.visited);
-
-        favouriteMenu.expandActionView();
-        visitedMenu.expandActionView();
+        inflater.inflate(R.menu.services_item_menu, menu);
+        MenuItem phoneMenu = menu.findItem(R.id.phone_service);
+        mOptionsMenu = menu;
+        phoneMenu.expandActionView();
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -163,21 +143,15 @@ public class ServiceDetailsFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.favourite_menu_button:
-               *//* isFavourited=!isFavourited;
-                changeIcon(item);*//*
-                return true;
-            case R.id.create_postcard:
-
-                return true;
-            case R.id.visited:
-               *//* isVisited=!isVisited;
-                changeIcon(item);*//*
+            case R.id.phone_service:
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+phone_number));
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }*/
+    }
 
 
 
@@ -209,7 +183,6 @@ public class ServiceDetailsFragment extends Fragment {
         @Override
         protected void onPreExecute() {
 
-
         }
 
         @Override
@@ -217,8 +190,6 @@ public class ServiceDetailsFragment extends Fragment {
             place = placeDetail.getResult();
 
             fillInLayout(place);
-            ImageView iv = (ImageView) getView().findViewById(R.id.location_image);
-            iv.setBackground(locationPhoto);
         }
     }
 
@@ -230,10 +201,37 @@ public class ServiceDetailsFragment extends Fragment {
         title.setText(placeTitle);
         Log.i("PLACES EXAMPLE", "Setting title to: " + title.getText());
         TextView address = (TextView) getView().findViewById(R.id.address_text_view);
-        address.setText(place.getFormatted_address() + " " + place.getFormatted_phone_number());
+        address.setText(place.getFormatted_address());
         Log.i("PLACES EXAMPLE", "Setting address to: " + address.getText());
         TextView reviews = (TextView) getView().findViewById(R.id.reviews);
-        Log.i("PLACES", "INfo"+place.getIcon());
+
+        String photoReference = "No_photo";
+        if (place.getPhotos() != null) {
+            Log.i("PLACES", "Photos ref " + place.getPhotos().get(0).getPhoto_reference());
+            photoReference = place.getPhotos().get(0).getPhoto_reference();
+        }
+
+        String opening_hours = "";
+        if (place.getOpeningHours() != null) {
+            List<String> openingHoursList = place.getOpeningHours().getWeekday_text();
+            for (String day : openingHoursList){
+                opening_hours = opening_hours + day + "\n";
+            }
+            Log.i(TAG, "Hours are " + opening_hours);
+        }else{
+            opening_hours = "No opening hours found";
+        }
+        TextView openingHours = (TextView) getView().findViewById(R.id.opening_hours);
+        openingHours.setText(opening_hours);
+
+        if (place.getFormatted_phone_number() != null) {
+            phone_number = place.getInternational_phone_number();
+            Log.i(TAG, "Phone number " + phone_number);
+        }else{
+            MenuItem phoneService = mOptionsMenu.findItem(R.id.phone_service);
+            phoneService.setVisible(false);
+        }
+
         List<GooglePlace.Review> reviewsData = place.getReviews();
         if (reviewsData != null) {
             StringBuffer sb = new StringBuffer();
@@ -249,6 +247,13 @@ public class ServiceDetailsFragment extends Fragment {
         } else {
             reviews.setText("There have not been any reviews!");
         }
+
+        Drawable locationPhoto = getResources().getDrawable(R.drawable.local_services);
+        if (!photoReference.equals("No_photo")){
+            locationPhoto = getLocationPhoto(photoReference);
+        }
+        ImageView iv = (ImageView) getView().findViewById(R.id.location_image);
+        iv.setBackground(locationPhoto);
     }
 
     //Query Google places for the locations photo using the photo_reference
@@ -265,6 +270,7 @@ public class ServiceDetailsFragment extends Fragment {
 
         try {
             url = new URL("https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&maxheight=400&photoreference="+photoReference+"&key="+placesKey);
+            Log.i(TAG, "URL is "+url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
