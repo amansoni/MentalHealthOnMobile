@@ -22,6 +22,7 @@ import com.example.theom.mmha.Fragments.SearchLocalServicesFragment;
 import com.example.theom.mmha.MySafety_Quiz.AssessmentFinishFragment;
 import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
 import com.example.theom.mmha.MySafety_Quiz.SetupAssessmentFragment;
+import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -32,7 +33,8 @@ public class MainActivity extends AppCompatActivity
         SetupAssessmentFragment.OnSetToolbarTitleListener,
         AssessmentFinishFragment.OnSetToolbarTitleListener,
         SearchLocalServicesFragment.OnFragmentInteractionListener,
-        SearchLocalServicesFragment.OnSetToolbarTitleListener {
+        SearchLocalServicesFragment.OnSetToolbarTitleListener,
+        PrevAssessmentListFragment.OnSetToolbarTitleListener{
 
     String TAG ="Main Activity";
 
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_hospital) {
             fragment = new SearchLocalServicesFragment();
         } else if (id == R.id.nav_prev_assessment) {
-            fragment = new SearchLocalServicesFragment();
+            fragment = new PrevAssessmentListFragment();
         }
 
         fragmentManager.beginTransaction().replace(R.id.relativeLayout, fragment).commit();

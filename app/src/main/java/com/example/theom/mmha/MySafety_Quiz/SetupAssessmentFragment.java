@@ -196,9 +196,9 @@ public class SetupAssessmentFragment extends Fragment implements
         RadioButton r2 = (RadioButton) v.findViewById(R.id.radio_female);
         RadioButton r3 = (RadioButton) v.findViewById(R.id.radio_dontknow);
 
-        r1.setTag("They're male.");
-        r2.setTag("They're female.");
-        r3.setTag("Gender not disclosed.");
+        r1.setTag("Male");
+        r2.setTag("Female");
+        r3.setTag("NS");
 
         RadioGroup genderRadioButtons = (RadioGroup) v.findViewById(R.id.gender_radio_buttons);
 
