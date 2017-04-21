@@ -1,12 +1,21 @@
 package com.example.theom.mmha.Fragments.Map;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -76,6 +85,7 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Cluste
         fragment.getMapAsync(this);
         ViewGroup.LayoutParams params = fragment.getView().getLayoutParams();
 
+
         //Disable back button
         fragment.getView().setFocusableInTouchMode(true);
         fragment.getView().requestFocus();
@@ -114,7 +124,6 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Cluste
 
 
         String polyline = (String) getArguments().getString("polyline");
-
 
         setUpClusterer();
 
@@ -429,6 +438,22 @@ public class GmapFragment extends Fragment implements OnMapReadyCallback, Cluste
         transaction.commit();
 
     }
+
+
+ /*   private void getUserLocation(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET
+                }, 10);
+            }
+            locationManager.requestLocationUpdates("gps", 500, 0, locationListener);
+
+        }
+    }*/
 
 
 

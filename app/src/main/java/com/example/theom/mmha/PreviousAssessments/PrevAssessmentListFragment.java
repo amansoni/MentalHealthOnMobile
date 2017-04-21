@@ -67,9 +67,9 @@ public class PrevAssessmentListFragment extends Fragment implements PrevAssessme
                 //titles.add(res.getString(0));
                 String id = res.getString(0);
                 String dateOfAssessment= res.getString(7);
-                String gender = res.getString(2);
+                String location = res.getString(5);
 
-                PrevAssessmentListItem current = new PrevAssessmentListItem(id, dateOfAssessment, gender);
+                PrevAssessmentListItem current = new PrevAssessmentListItem(id, dateOfAssessment, location);
 
                 data.add(current);
             }

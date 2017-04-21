@@ -1,7 +1,18 @@
 package com.example.theom.mmha.Fragments.Places;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -26,11 +37,14 @@ public class PlacesList extends Fragment {
     private Double searchAreaLat;
     private String placesKey;
     private GooglePlaceList placeResults;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //request location permissions
+        setUpLocation();
 
         placesKey = getResources().getString(R.string.google_maps_key);
         if (placesKey.equals("PUT YOUR KEY HERE")) {
@@ -53,7 +67,7 @@ public class PlacesList extends Fragment {
 
             //Insert retrieved data from SearchLocalServicesFragment into places API request
             String placesRequest = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" +
-                    searchAreaLat + "," + searchAreaLong +"&"+filterBy+"&type="+type+"&radius="+searchRadius+"&key=" + placesKey;
+                    searchAreaLat + "," + searchAreaLong +"&"+filterBy+"&type="+type+"&radius="+searchRadius+"&key=" + placesKey+"&keyword=" + type;
             PlacesReadFeed process = new PlacesReadFeed();
 
             //Execute API request
@@ -120,4 +134,57 @@ public class PlacesList extends Fragment {
         transaction.commit();
     }
 
+    private void setUpLocation(){
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                //Log.i(TAG, "Your location is "+location.getLatitude()+", "+location.getLongitude());
+              /*  while (toastGPSShown == false) {
+                    toastGPSShown = true;
+                }
+                userLocationLat = location.getLatitude();
+                userLocationLong = location.getLongitude();*/
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET
+                }, 10);
+            } else {
+                locationManager.requestLocationUpdates("gps", 500, 0, locationListener);
+            }
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case 10:
+                if (grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    // getUserLocation();
+                    return;
+        }
+    }
 }

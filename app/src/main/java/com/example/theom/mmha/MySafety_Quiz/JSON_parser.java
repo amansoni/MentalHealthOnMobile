@@ -40,7 +40,7 @@ public class JSON_parser {
             try {
 
                 String jsonStr;
-                InputStream JSONin = ctx.getResources().openRawResource(R.raw.question_tree_wscale);
+                InputStream JSONin = ctx.getResources().openRawResource(R.raw.question_tree_wscale_nd_leafs);
                 int count = 0;
                 byte[] bytes = new byte[32768];
                 StringBuilder builder = new StringBuilder();
@@ -105,7 +105,7 @@ public class JSON_parser {
                     nextQuestion = iterator.next();
                 }
 
-                if (!nextQuestion.contains("pOfHR")) {
+                if (!nextQuestion.contains("prob")) {
                     rows = rows.getJSONObject(0).getJSONArray(userAnswer).getJSONObject(0).getJSONArray(nextQuestion);
                 } else {
                     Log.i(TAG, "Leaf node contains " + nextQuestion);

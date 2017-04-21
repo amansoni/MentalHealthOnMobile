@@ -9,33 +9,39 @@ import java.io.Serializable;
  */
 
 //Object to store all the details for a given favourite, used in cardview
-public class PrevAssessmentListItem implements Serializable
-{
+public class PrevAssessmentListItem implements Serializable {
     String id;
     String dateOfAssessment;
     String timeOfAssessment;
-    String gender;
+    String location;
 
-    public PrevAssessmentListItem(String id, String dateOfAssessment, String gender){
-        this.id=id;
+    public PrevAssessmentListItem(String id, String dateOfAssessment, String location) {
+        this.id = id;
         setTimeOfAssessment(dateOfAssessment);
-        this.gender=gender;
+        this.location = location;
     }
 
-    public String getID(){
+    public String getID() {
         return id;
     }
 
-    public String getDateOfAssessment(){
+    public String getDateOfAssessment() {
         return dateOfAssessment;
     }
 
-    public String getGender(){return gender;}
+    public String getGender() {
+        return location;
+    }
 
-    public void setTimeOfAssessment(String dateOfAssessment){
+    public void setTimeOfAssessment(String dateOfAssessment) {
         String[] times = dateOfAssessment.split("\\s+");
-        this.dateOfAssessment=times[0];
-        String[] timesOfAssessment=times[1].split("\\:");
-        timeOfAssessment = timesOfAssessment[0]+":"+timesOfAssessment[1];
+        this.dateOfAssessment = times[0];
+        String[] timesOfAssessment = times[1].split("\\:");
+        timeOfAssessment = timesOfAssessment[0] + ":" + timesOfAssessment[1];
+    }
+
+    public String getLocation() {
+        String[] returnLocation = location.split("\\:");
+        return returnLocation[0];
     }
 }

@@ -40,7 +40,7 @@ public class AssessmentDetailsFragment extends Fragment {
     private TextView genderTextView;
     private TextView relationshipTextView;
     private TextView ethnicityTextView;
-    private TextView mappaTextView;
+    private TextView locationTextView;
     private TextView answersTextView;
     private TextView dateOfAssessmentTextView;
     private String TAG = "AssessDetails";
@@ -64,7 +64,7 @@ public class AssessmentDetailsFragment extends Fragment {
         genderTextView = (TextView) v.findViewById(R.id.gender);
         relationshipTextView = (TextView) v.findViewById(R.id.relationship);
         ethnicityTextView = (TextView) v.findViewById(R.id.ethnicity);
-        mappaTextView = (TextView) v.findViewById(R.id.mappa);
+        locationTextView = (TextView) v.findViewById(R.id.location);
         answersTextView = (TextView) v.findViewById(R.id.answers);
         dateOfAssessmentTextView = (TextView) v.findViewById(R.id.date_of_assessment);
         getDB();
@@ -90,7 +90,7 @@ public class AssessmentDetailsFragment extends Fragment {
                 String gender = res.getString(2);
                 String relationship = res.getString(3);
                 String ethnicity = res.getString(4);
-                String mappa = res.getString(5);
+                String location = res.getString(5).split("\\:")[0];
                 String dateOfAssessment = res.getString(7);
                 String answers = res.getString(8);
 
@@ -98,7 +98,7 @@ public class AssessmentDetailsFragment extends Fragment {
                 genderTextView.setText(gender);
                 relationshipTextView.setText(relationship);
                 ethnicityTextView.setText(ethnicity);
-                mappaTextView.setText(mappa);
+                locationTextView.setText(location);
                 dateOfAssessmentTextView.setText(dateOfAssessment);
                 answersTextView.setText(formatAnswer(answers));
                 PrevAssessmentListItem current = new PrevAssessmentListItem(id, dateOfAssessment, gender);

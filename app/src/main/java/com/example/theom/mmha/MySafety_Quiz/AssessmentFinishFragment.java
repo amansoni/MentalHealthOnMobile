@@ -1,24 +1,51 @@
 package com.example.theom.mmha.MySafety_Quiz;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.theom.mmha.DbBitmapUtility;
+import com.example.theom.mmha.Fragments.Places.PlacesList;
 import com.example.theom.mmha.Fragments.SearchLocalServicesFragment;
+import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListItem;
 import com.example.theom.mmha.R;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by theom on 17/04/2017.
  */
 
 public class AssessmentFinishFragment extends Fragment {
+
+    private AnsweredQuestionsDBHelper answersDB;
+    private LatLng location;
+    private String id;
+    private String TAG = "AssessmentFinish";
+    private Boolean severeRiskSet = false;
+    private Boolean highRiskSet = false;
+    private Boolean mediumRiskSet = false;
+    private Boolean lowRiskSet = false;
+
+    private Button actionButton1;
+    private TextView adviceAction1;
+    private Button actionButton2;
+    private TextView adviceAction2;
 
     public static AssessmentFinishFragment newInstance(){
         AssessmentFinishFragment fragment = new AssessmentFinishFragment();
@@ -31,20 +58,36 @@ public class AssessmentFinishFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_assessment_finish, container, false);
 
+        //assessment session ID
+        id = Long.toString(getArguments().getLong("id"));
+        Float scaleInput = getArguments().getFloat("scaleValue");
+
+        //Create database to store assessment answers
+        answersDB = new AnsweredQuestionsDBHelper(getActivity());
+        getDB();
+
         String leafNodeResult = (String) getArguments().getString("resultsOfAssessment");
         TextView leafNodeResultTxtView = (TextView) v.findViewById(R.id.leaf_node_result);
-        leafNodeResultTxtView.setText(leafNodeResult);
+        String leafNodeResultRaw =  leafNodeResult.split("\\:")[1];
+        String leafNodeResultPercent = leafNodeResultRaw.substring(1,leafNodeResultRaw.length()-2);
+        Float risk = Float.valueOf(leafNodeResultPercent)*100;
+        DecimalFormat df = new DecimalFormat("#");
+        df.setRoundingMode(RoundingMode.CEILING);
+        Double d = risk.doubleValue();
+        leafNodeResultTxtView.setText(df.format(d)+"%");
 
-        Button localServicesButton = (Button) v.findViewById(R.id.find_local_services);
-        localServicesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment fragment = new SearchLocalServicesFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.relativeLayout, fragment);
-                transaction.commit();
-            }
-        });
+
+        actionButton1 = (Button) v.findViewById(R.id.find_local_services1);
+        adviceAction1 = (TextView) v.findViewById(R.id.action_advice1);
+        actionButton2 = (Button) v.findViewById(R.id.find_local_services2);
+        adviceAction2 = (TextView) v.findViewById(R.id.action_advice2);
+        actionButton2.setVisibility(View.INVISIBLE);
+        adviceAction2.setVisibility(View.INVISIBLE);
+
+        calculateAction(leafNodeResult, actionButton1, adviceAction1, true);
+        if (scaleInput != 0) {
+            calculateAction(Float.toString(scaleInput), actionButton2, adviceAction2, false);
+        }
 
         return v;
     }
@@ -67,4 +110,145 @@ public class AssessmentFinishFragment extends Fragment {
     public interface OnSetToolbarTitleListener {
         public void setTitle(String title);
     }
+
+    private void calculateAction(String result, Button actionButton, TextView adviceActionTV, Boolean action_origin){
+       Float riskValue;
+        if (action_origin) {
+            String riskValueRaw = result.split("\\:")[1];
+            String riskValueString = riskValueRaw.substring(1, riskValueRaw.length() - 2);
+            riskValue = Float.valueOf(riskValueString);
+        }else{
+            riskValue = Float.valueOf(result);
+        }
+        if (riskValue >= 0.75 && !severeRiskSet){
+            Log.i(TAG, "Go to A&E");
+            if (action_origin) {
+                adviceActionTV.setText("Based on your results, you should go visit your nearest A&E");
+            }else{
+                adviceActionTV.setText("One of your answers indicates that you should go visit your nearest A&E");
+            }
+            actionButton.setText("Find A&E");
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = new PlacesList();
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("searchAreaLong", location.longitude);
+                    bundle.putDouble("searchAreaLat", location.latitude);
+                    bundle.putString("searchRadius","10000");
+                    bundle.putString("searchType", "hospital");
+                    bundle.putString("filterBy", "");
+                    fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.relativeLayout, fragment);
+                    transaction.commit();
+                }
+            });
+            severeRiskSet = true;
+        }else if (riskValue >= 0.5 && riskValue < 0.75 && !highRiskSet ){
+            if (action_origin) {
+                adviceActionTV.setText("Based on your results, you should call 111 for further advice");
+            }else{
+                adviceActionTV.setText("One of your answers indicates that you call 111 for further advice");
+                showSecondaryActions();
+            }
+            Log.i(TAG, "Call 111");
+            actionButton.setText("Call 111");
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:"+111));
+                    startActivity(intent);
+                }
+            });
+            highRiskSet = true;
+        }else if (riskValue >= 0.3 && riskValue < 0.5 && !mediumRiskSet){
+            Log.i(TAG, "See you GP");
+            if (action_origin) {
+                adviceActionTV.setText("Based on your results, you should go visit your GP");
+            }else{
+                adviceActionTV.setText("One of your answers indicates that you should go visit your GP");
+                showSecondaryActions();
+            }
+            actionButton.setText("Find GP");
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = new PlacesList();
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("searchAreaLong", location.longitude);
+                    bundle.putDouble("searchAreaLat", location.latitude);
+                    bundle.putString("searchRadius","2000");
+                    bundle.putString("searchType", "gp");
+                    bundle.putString("filterBy", "");
+                    fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.relativeLayout, fragment);
+                    transaction.commit();
+                }
+            });
+            mediumRiskSet = true;
+        }else if (riskValue >= 0.1 && riskValue < 0.3 && !lowRiskSet){
+            if(action_origin) {
+                adviceActionTV.setText("We advise that you text a friend to ask for some support");
+            }else{
+                adviceActionTV.setText("One of your answers indicates that you should text a friend to ask for some support");
+                showSecondaryActions();
+            }
+            Log.i(TAG, "Text friend");
+            actionButton.setText("Text Friend");
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                    sendIntent.setData(Uri.parse("sms:"));
+                    sendIntent.putExtra("sms_body", "Hello, I need to talk to someone. Are you free?");
+                    startActivity(sendIntent);
+                }
+            });
+            lowRiskSet = true;
+        }else if (riskValue < 0.1){
+            adviceActionTV.setText("You're all good. If you want to find some local services, click the button");
+            Log.i(TAG, "No action");
+        }
+        Log.i(TAG, "Risk value is "+riskValue);
+    }
+
+    private ArrayList<PrevAssessmentListItem> getDB() {
+        ArrayList<PrevAssessmentListItem> data = new ArrayList<>();
+        Cursor res = answersDB.getAssessmentDetails(id);
+        StringBuffer dbContents = new StringBuffer();
+
+        setHasOptionsMenu(true);
+
+        if (res.getCount() == 0) {
+            DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();
+            String titleText = "There are no previous assessments to display";
+            PrevAssessmentListItem current = new PrevAssessmentListItem("0", "No Assessments Found", "");
+            data.add(current);
+        } else {
+            while (res.moveToNext()) {
+                String[] locationStrings = res.getString(5).split("\\:")[2].split(",");
+                Double lat = Double.parseDouble(locationStrings[0].substring(2));
+                Double longitude = Double.parseDouble(locationStrings[1].substring(0,locationStrings[1].length()-1));
+                location = new LatLng(lat, longitude);
+                Log.i(TAG, "Location string is "+location);
+
+                String gender = res.getString(2);
+                String dateOfAssessment = res.getString(7);
+
+                PrevAssessmentListItem current = new PrevAssessmentListItem(id, dateOfAssessment, gender);
+                data.add(current);
+            }
+            Log.i("Assessment_list", dbContents.toString());
+        }
+        return data;
+    }
+
+    private void showSecondaryActions(){
+        actionButton2.setVisibility(View.VISIBLE);
+        adviceAction2.setVisibility(View.VISIBLE);
+    }
+
 }

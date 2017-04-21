@@ -65,6 +65,7 @@ public class QuestionFragment extends Fragment {
     Integer likertScaleInput;
     Long id;
     HashMap<String, String> userAnswersHashMap = new HashMap<String, String>();
+    Float scaleValue = Float.valueOf(0);
 
     private OnFragmentInteractionListener mListener;
 
@@ -230,6 +231,8 @@ public class QuestionFragment extends Fragment {
             Log.i(TAG, "Houston, we reached the leaf node. "+leafNodeResult);
             Bundle bundle = new Bundle();
             bundle.putString("resultsOfAssessment", leafNodeResult);
+            bundle.putLong("id", id);
+            bundle.putFloat("scaleValue",scaleValue);
             Fragment fragment = new AssessmentFinishFragment();
             fragment.setArguments(bundle);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -247,12 +250,6 @@ public class QuestionFragment extends Fragment {
         bundle.putString("key", strObject);
         String id_string = Long.toString(id);
         answersDB.insertAssessmentAnswers(id_string, strObject);
-        //nswersDB.
-       /* //To decode JSON for user answers
-        Gson gson = new Gson();
-        Type type = new TypeToken<HashMap<String, String>>() {}.getType();
-        HashMap<String, String> newUserAnswersHashMap = gson.fromJson(bundle.getString("key"), type);
-*/
     }
 
     @Override
@@ -339,7 +336,8 @@ public class QuestionFragment extends Fragment {
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
                 GetNextQuestion("Yes");
-
+                scaleValue = Float.valueOf(likertScaleInput)/10;
+                Log.i(TAG, "Scale input value is "+scaleValue);
                 snackbar.show();
             }
         });
@@ -472,7 +470,7 @@ public class QuestionFragment extends Fragment {
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
                 GetNextQuestion("Yes");
-
+                scaleValue = Float.valueOf(nominalValue);
                 snackbar.show();
             }
         });

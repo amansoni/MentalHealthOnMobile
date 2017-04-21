@@ -144,18 +144,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="MAPPA"
+            android:text="Location"
             android:textColor="@color/textColour"
             android:textSize="30dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/mappa_status"
+            android:id="@+id/location_edittext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:gravity="center"
-            android:hint="Does the person have any MAPPA?"
+            android:hint="What area does the person live in?"
             android:inputType="textPersonName" />
 
     </LinearLayout>

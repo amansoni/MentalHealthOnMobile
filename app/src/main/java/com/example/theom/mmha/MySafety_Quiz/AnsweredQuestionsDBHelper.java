@@ -23,7 +23,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     public static final String COL_3 = "GENDER";
     public static final String COL_4 = "RELATIONSHIP";
     public static final String COL_5 = "ETHNICITY";
-    public static final String COL_6 = "MAPPA";
+    public static final String COL_6 = "LOCATION";
     public static final String COL_7 = "NOTES";
     public static final String COL_8 = "DATETIME";
     public static final String COL_9 = "ANSWERS";
@@ -49,7 +49,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     }
 
     //Function to insert data into the DB
-    public long insertData(String date_of_birth, String gender, String relationship, String ethnicity, String mappa){
+    public long insertData(String date_of_birth, String gender, String relationship, String ethnicity, String location){
         SQLiteDatabase db = this.getWritableDatabase();
 
         try{
@@ -59,7 +59,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
             contentValues.put(COL_3, gender);
             contentValues.put(COL_4, relationship);
             contentValues.put(COL_5, ethnicity);
-            contentValues.put(COL_6, mappa);
+            contentValues.put(COL_6, location);
 
             //If insert failed, return false, else true
             long result = db.insertOrThrow(TABLE_NAME, null, contentValues);
@@ -112,6 +112,12 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
 
 
         return result;
+    }
+
+    public void deleteDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        Log.i(TAG, "delete run");
     }
 
 }

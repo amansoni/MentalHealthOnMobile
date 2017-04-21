@@ -2,16 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="We've calculate your risk evaluation percentage is"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:id="@+id/leaf_node_result"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:text="Completed"
-        android:textSize="20sp" />
+        android:textSize="90sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/action_advice1"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -19,8 +44,33 @@
         android:layout_gravity="center"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:layout_marginTop="50dp"
-        android:id="@+id/find_local_services"
+        android:layout_marginTop="10dp"
+        android:drawableRight="@drawable/ic_navigate_next_black_24px"
+        android:id="@+id/find_local_services1"
+        android:text="Find Local Services"
+        android:textColor="@color/buttonTextColour"
+        android:background="@drawable/custom_button"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/action_advice2"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginTop="30dp"
+        android:textSize="20sp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginTop="10dp"
+        android:drawableRight="@drawable/ic_navigate_next_black_24px"
+        android:id="@+id/find_local_services2"
         android:text="Find Local Services"
         android:textColor="@color/buttonTextColour"
         android:background="@drawable/custom_button"/>

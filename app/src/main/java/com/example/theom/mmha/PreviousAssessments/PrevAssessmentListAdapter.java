@@ -54,7 +54,7 @@ public class PrevAssessmentListAdapter extends RecyclerView.Adapter<PrevAssessme
         holder.id.setText(current.id);
         holder.dateOfAssessment.setText(current.dateOfAssessment);
         holder.timeOfAssessment.setText(current.timeOfAssessment);
-        holder.gender.setText(current.gender);
+        holder.location.setText(current.getLocation());
     }
 
 
@@ -84,7 +84,7 @@ public class PrevAssessmentListAdapter extends RecyclerView.Adapter<PrevAssessme
         TextView id;
         TextView dateOfAssessment;
         TextView timeOfAssessment;
-        TextView gender;
+        TextView location;
 
         public OnItemClickListener listener;
 
@@ -94,7 +94,7 @@ public class PrevAssessmentListAdapter extends RecyclerView.Adapter<PrevAssessme
             id = (TextView) itemView.findViewById(R.id.assessment_id);
             dateOfAssessment = (TextView) itemView.findViewById(R.id.date_of_assessment);
             timeOfAssessment = (TextView) itemView.findViewById(R.id.time_of_assessment);
-            gender = (TextView) itemView.findViewById(R.id.gender);
+            location = (TextView) itemView.findViewById(R.id.location);
 
             this.listener = listener;
             itemView.setOnClickListener(this);
