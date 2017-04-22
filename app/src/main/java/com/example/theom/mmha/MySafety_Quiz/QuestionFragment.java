@@ -397,7 +397,7 @@ public class QuestionFragment extends Fragment {
                     likertScaleInput = 0;
                 } else if (color == -10460816) {
                     updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_no_answer_pressed);
-                    likertScaleInput = 11;
+                    likertScaleInput = 0;
                 } else if (color == -65536) {
                     updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_10_pressed);
                     likertScaleInput = 10;
