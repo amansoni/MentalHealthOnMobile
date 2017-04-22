@@ -127,10 +127,10 @@ public class AssessmentFinishFragment extends Fragment {
                 leafNodeResultTxtView.setText("Your answers suggest that you have a very high risk of hurting yourself.");
                 adviceActionTV.setText("Based on your results, you should go visit your nearest A&E:");
                 riskString = "Very high risk";
-            }/*else{
+            }else{
                 adviceActionTV.setText("We also suggested during the assessment that you should go visit your nearest A&E");
                 showSecondaryActions();
-            }*/
+            }
             actionButton.setText("Find A&E");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 @Override

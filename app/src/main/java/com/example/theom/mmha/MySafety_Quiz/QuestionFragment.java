@@ -229,13 +229,16 @@ public class QuestionFragment extends Fragment {
         } else if (leafNodeReached == false && optionId == R.layout.fragment_question_scale) {
             setupLikertScaleDisplay(question);
         } else if (leafNodeReached == true) {
+            //submit answers to database
             submitUserAnswers();
             String leafNodeResult = question.getLeafNodeResult();
             Log.i(TAG, "Houston, we reached the leaf node. " + leafNodeResult);
+            //launch finish screen fragment to complete quiz
             Bundle bundle = new Bundle();
             bundle.putString("resultsOfAssessment", leafNodeResult);
             bundle.putLong("id", id);
             bundle.putFloat("scaleValue", scaleValue);
+            Log.i(TAG, "scaleValue value is "+scaleValue);
             Fragment fragment = new AssessmentFinishFragment();
             fragment.setArguments(bundle);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -307,6 +310,7 @@ public class QuestionFragment extends Fragment {
     }
 
     private void setupLikertScaleDisplay(QuestionObject question) {
+        likertScaleInput = 0;
         chosenImageView = (ImageView) frameLayout.findViewById(R.id.ChosenImageView);
         updateLikertScaleDisplay(frameLayout, R.drawable.ic_likert_scale);
 
@@ -338,15 +342,22 @@ public class QuestionFragment extends Fragment {
             public void onClick(View v) {
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
-                GetNextQuestion("Yes");
+                //to retain highest risk mid assessment action
+                Float tempScaleValue = scaleValue;
+                scaleValue = 0f;
                 if (likertScaleInput != null) {
                     scaleValue = Float.valueOf(likertScaleInput) / 10;
                     calculateAction(scaleValue.toString());
+                    //highest risk scale action is shown at the end
+                    if (tempScaleValue > scaleValue){
+                        scaleValue=tempScaleValue;
+                    }
                 }else{
                     likertScaleInput = 0;
                 }
-                Log.i(TAG, "Scale input value is " + scaleValue);
                 snackbar.show();
+
+                GetNextQuestion("Yes");
             }
         });
     }
@@ -377,9 +388,7 @@ public class QuestionFragment extends Fragment {
                 Log.i("TEST", "False");
                 return false;
             } else {
-                //code to execute
-
-                Log.i("TEST", "True and the colour is " + color);
+                //if statements to select appropriate likert scale to display
                 if (color == -339893) {
                     updateLikertScaleDisplay(v, R.drawable.ic_likert_scale_4_pressed);
                     likertScaleInput = 4;
@@ -475,10 +484,15 @@ public class QuestionFragment extends Fragment {
                 if (selectedRadButton != null) {
                     nominalValue = selectedRadButton.getTag().toString();
                 }
-
+                Float tempScaleValue = scaleValue;
+                scaleValue = 0f;
                 scaleValue = Float.valueOf(nominalValue);
                 calculateAction(nominalValue);
-
+                //highest risk scale action is shown at the end
+                if (tempScaleValue > scaleValue){
+                    scaleValue=tempScaleValue;
+                }
+                Log.i(TAG, "Float value is "+scaleValue);
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
                 GetNextQuestion("Yes");
