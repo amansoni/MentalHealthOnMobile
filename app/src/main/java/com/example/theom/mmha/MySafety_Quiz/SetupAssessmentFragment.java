@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,12 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.theom.mmha.Fragments.SearchArea.SearchAreaDialogFragment;
 import com.example.theom.mmha.Fragments.SearchArea.SearchAreaItem;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.DatePickerFragment;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.EthnicityPickerDialog;
-import com.example.theom.mmha.MySafety_Quiz.Dialogs.MappaDialog;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.RelationshipsDialog;
 import com.example.theom.mmha.R;
 
@@ -33,7 +32,7 @@ public class SetupAssessmentFragment extends Fragment implements
         RelationshipsDialog.OnSetRelationshipStatusListener,
         DatePickerFragment.OnSetDateListener,
         EthnicityPickerDialog.OnSetEthnicityListener,
-        SearchAreaDialogFragment.OnSetSearchLocationAreaFromListener{
+        SearchAreaDialogFragment.OnSetSearchLocationAreaFromListener {
 
     private AnsweredQuestionsDBHelper answersDB;
     String TAG = "Assessment setup";
@@ -94,7 +93,7 @@ public class SetupAssessmentFragment extends Fragment implements
         locationEditText.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEvent.ACTION_UP == event.getAction()){
+                if (MotionEvent.ACTION_UP == event.getAction()) {
                     showLocationDialog();
                 }
                 return true;
@@ -105,25 +104,32 @@ public class SetupAssessmentFragment extends Fragment implements
         startQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Long id = answersDB.insertData(datePickerEditText.getText().toString(), gender,
-                        relationshipStatusEditText.getText().toString(),
-                        ethnicityEditText.getText().toString(),
-                        locationEditText.getTag().toString());
-                Bundle bundle = new Bundle();
-                bundle.putLong("id", id);
-                Fragment fragment = new QuestionFragment();
-                fragment.setArguments(bundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.relativeLayout, fragment);
-                transaction.addToBackStack("question_fragment");
-                transaction.commit();
+                if (datePickerEditText.getText().toString().equals("") || gender == null ||
+                        relationshipStatusEditText.getText().toString().equals("") ||
+                        ethnicityEditText.getText().toString().equals("") ||
+                        locationEditText.getTag() == null) {
+                    Toast.makeText(getActivity(), "Please enter in values for all the fields", Toast.LENGTH_SHORT).show();
+                }else{
+                    Long id = answersDB.insertData(datePickerEditText.getText().toString(), gender,
+                            relationshipStatusEditText.getText().toString(),
+                            ethnicityEditText.getText().toString(),
+                            locationEditText.getTag().toString());
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("id", id);
+                    Fragment fragment = new QuestionFragment();
+                    fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.relativeLayout, fragment);
+                    transaction.addToBackStack("question_fragment");
+                    transaction.commit();
+                }
             }
         });
 
         return v;
     }
 
-    public void showDatePickerDialog(){
+    public void showDatePickerDialog() {
         DialogFragment picker = new DatePickerFragment();
         picker.setTargetFragment(this, 0);
         picker.show(getActivity().getSupportFragmentManager(), "datePicker");
@@ -131,31 +137,31 @@ public class SetupAssessmentFragment extends Fragment implements
 
     @Override
     public void setDate(String dateOfBirth) {
-        Log.i(TAG, "Date of birth"+ dateOfBirth);
+        Log.i(TAG, "Date of birth" + dateOfBirth);
         datePickerEditText.setText(dateOfBirth);
     }
 
 
     @Override
     public void setRelationshipStatus(String relationshipStatus) {
-        this.relationshipStatus=relationshipStatus;
-        Log.i(TAG, "Relationships: "+relationshipStatus);
+        this.relationshipStatus = relationshipStatus;
+        Log.i(TAG, "Relationships: " + relationshipStatus);
         relationshipStatusEditText.setText(relationshipStatus);
     }
 
-    public void showRelationshipsDialog(){
+    public void showRelationshipsDialog() {
         RelationshipsDialog relationshipsDialog = RelationshipsDialog.newInstance("Relationships");
         relationshipsDialog.setTargetFragment(this, 0);
         relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
     }
 
-    public void showEthnicityPickerDialog(){
+    public void showEthnicityPickerDialog() {
         EthnicityPickerDialog relationshipsDialog = EthnicityPickerDialog.newInstance("Ethnicity");
         relationshipsDialog.setTargetFragment(this, 0);
         relationshipsDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
     }
 
-    public void showLocationDialog(){
+    public void showLocationDialog() {
         SearchAreaDialogFragment locationDialog = SearchAreaDialogFragment.newInstance("Location");
         locationDialog.setTargetFragment(this, 0);
         locationDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
@@ -163,7 +169,7 @@ public class SetupAssessmentFragment extends Fragment implements
 
     @Override
     public void setSearchLocationArea(SearchAreaItem searchLocationArea) {
-        locationEditText.setTag(searchLocationArea.getName() + ": "+searchLocationArea.getSearchCoordinates());
+        locationEditText.setTag(searchLocationArea.getName() + ": " + searchLocationArea.getSearchCoordinates());
         locationEditText.setText(searchLocationArea.getName());
     }
 

@@ -2,6 +2,8 @@ package com.example.theom.mmha.MySafety_Quiz;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -27,8 +29,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.theom.mmha.DbBitmapUtility;
+import com.example.theom.mmha.Fragments.Places.PlacesList;
+import com.example.theom.mmha.MySafety_Quiz.Dialogs.ActionDialog;
 import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
+import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListItem;
 import com.example.theom.mmha.R;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -131,19 +137,16 @@ public class QuestionFragment extends Fragment {
         //Disable back button
         frameLayout.setFocusableInTouchMode(true);
         frameLayout.requestFocus();
-        frameLayout.setOnKeyListener( new View.OnKeyListener()
-        {
+        frameLayout.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey( View v, int keyCode, KeyEvent event )
-            {
-                if( keyCode == KeyEvent.KEYCODE_BACK )
-                {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     Toast.makeText(getActivity(), "Can't press back during assessment", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 return false;
             }
-        } );
+        });
 
         return frameLayout;
     }
@@ -172,7 +175,7 @@ public class QuestionFragment extends Fragment {
 
     public void GetNextQuestion(String answer) {
         //Enter answer into hashmap for storing
-        Log.i(TAG, "Putting "+currentQuestion.getQuestionText()+" into Hashmap and the answer was "+answer);
+        Log.i(TAG, "Putting " + currentQuestion.getQuestionText() + " into Hashmap and the answer was " + answer);
         userAnswersHashMap.put(currentQuestion.getQuestionText(), answer);
         try {
             //take users input, ask JSON_Parser for next question
@@ -228,11 +231,11 @@ public class QuestionFragment extends Fragment {
         } else if (leafNodeReached == true) {
             submitUserAnswers();
             String leafNodeResult = question.getLeafNodeResult();
-            Log.i(TAG, "Houston, we reached the leaf node. "+leafNodeResult);
+            Log.i(TAG, "Houston, we reached the leaf node. " + leafNodeResult);
             Bundle bundle = new Bundle();
             bundle.putString("resultsOfAssessment", leafNodeResult);
             bundle.putLong("id", id);
-            bundle.putFloat("scaleValue",scaleValue);
+            bundle.putFloat("scaleValue", scaleValue);
             Fragment fragment = new AssessmentFinishFragment();
             fragment.setArguments(bundle);
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -243,8 +246,8 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    private void submitUserAnswers(){
-        Gson objGson= new Gson();
+    private void submitUserAnswers() {
+        Gson objGson = new Gson();
         String strObject = objGson.toJson(userAnswersHashMap);
         Bundle bundle = new Bundle();
         bundle.putString("key", strObject);
@@ -285,7 +288,7 @@ public class QuestionFragment extends Fragment {
         }
     }
 
-    private void setupLayerQuestionDisplay(QuestionObject question){
+    private void setupLayerQuestionDisplay(QuestionObject question) {
         Button mYesButton = (Button) frameLayout.findViewById(R.id.yesButton);
         Button mNoButton = (Button) frameLayout.findViewById(R.id.noButton);
 
@@ -336,8 +339,13 @@ public class QuestionFragment extends Fragment {
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
                 GetNextQuestion("Yes");
-                scaleValue = Float.valueOf(likertScaleInput)/10;
-                Log.i(TAG, "Scale input value is "+scaleValue);
+                if (likertScaleInput != null) {
+                    scaleValue = Float.valueOf(likertScaleInput) / 10;
+                    calculateAction(scaleValue.toString());
+                }else{
+                    likertScaleInput = 0;
+                }
+                Log.i(TAG, "Scale input value is " + scaleValue);
                 snackbar.show();
             }
         });
@@ -467,10 +475,13 @@ public class QuestionFragment extends Fragment {
                 if (selectedRadButton != null) {
                     nominalValue = selectedRadButton.getTag().toString();
                 }
+
+                scaleValue = Float.valueOf(nominalValue);
+                calculateAction(nominalValue);
+
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
                 GetNextQuestion("Yes");
-                scaleValue = Float.valueOf(nominalValue);
                 snackbar.show();
             }
         });
@@ -495,4 +506,74 @@ public class QuestionFragment extends Fragment {
         public void setTitle(String title);
     }
 
+    private void calculateAction(String result) {
+        Float riskValue = Float.valueOf(result);
+        final LatLng location = getLocation();
+        String adviceActionText;
+        String actionButtonText;
+
+        if (riskValue >= 0.75) {
+
+            adviceActionText = "Based on your answer, you should go visit your nearest A&E";
+            actionButtonText = "Find A&E";
+
+            ActionDialog extraInfoDialog = ActionDialog.newInstance("Action", location.longitude, location.latitude, actionButtonText, adviceActionText);
+            extraInfoDialog.setTargetFragment(this, 0);
+            extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+
+        } else if (riskValue >= 0.5) {
+            adviceActionText = "Based on your answer, you should call 111 for further advice";
+            actionButtonText = "Call 111";
+
+            ActionDialog extraInfoDialog = ActionDialog.newInstance("Action", location.longitude, location.latitude, actionButtonText, adviceActionText);
+            extraInfoDialog.setTargetFragment(this, 0);
+            extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+        } else if (riskValue >= 0.3) {
+            adviceActionText = "Based on your results, you should go visit your GP";
+            actionButtonText = "Find GP";
+
+            ActionDialog extraInfoDialog = ActionDialog.newInstance("Action", location.longitude, location.latitude, actionButtonText, adviceActionText);
+            extraInfoDialog.setTargetFragment(this, 0);
+            extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+
+        } else if (riskValue >= 0.1) {
+            adviceActionText = "Would you like to text a friend for some support?";
+            actionButtonText = "Text friend";
+
+            ActionDialog extraInfoDialog = ActionDialog.newInstance("Action", location.longitude, location.latitude, actionButtonText, adviceActionText);
+            extraInfoDialog.setTargetFragment(this, 0);
+            extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
+        } else if (riskValue < 0.1) {
+        }
+    }
+    private LatLng getLocation() {
+        ArrayList<PrevAssessmentListItem> data = new ArrayList<>();
+        String id = Float.toString(this.id);
+        Cursor res = answersDB.getAssessmentDetails(id);
+        StringBuffer dbContents = new StringBuffer();
+        LatLng location = new LatLng(0.0,0.0);
+
+        if (res.getCount() == 0) {
+            DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();
+            String titleText = "There are no previous assessments to display";
+            PrevAssessmentListItem current = new PrevAssessmentListItem("0", "No Assessments Found", "");
+            data.add(current);
+        } else {
+            while (res.moveToNext()) {
+                String[] locationStrings = res.getString(5).split("\\:")[2].split(",");
+                Double lat = Double.parseDouble(locationStrings[0].substring(2));
+                Double longitude = Double.parseDouble(locationStrings[1].substring(0,locationStrings[1].length()-1));
+                location = new LatLng(lat, longitude);
+                Log.i(TAG, "Location string is "+location);
+
+                String gender = res.getString(2);
+                String dateOfAssessment = res.getString(7);
+
+                PrevAssessmentListItem current = new PrevAssessmentListItem(id, dateOfAssessment, gender);
+                data.add(current);
+            }
+            Log.i("Assessment_list", dbContents.toString());
+        }
+        return location;
+    }
 }

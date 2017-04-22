@@ -27,6 +27,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     public static final String COL_7 = "NOTES";
     public static final String COL_8 = "DATETIME";
     public static final String COL_9 = "ANSWERS";
+    public static final String COL_10 = "RISK";
     String TAG = "DBHelper";
 
     public AnsweredQuestionsDBHelper(Context context) {
@@ -37,7 +38,7 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         //Create table with appropriate column headers
         db.execSQL("create table "+ TABLE_NAME + "("+COL_1+" INTEGER PRIMARY KEY AUTOINCREMENT,"+COL_2+" STRING,"+COL_3+" STRING,"+COL_4
-                +" STRING,"+COL_5+" STRING,"+COL_6+" STRING,"+COL_7+" STRING,"+COL_8+" DATETIME DEFAULT CURRENT_TIMESTAMP,"+COL_9+" STRING)");
+                +" STRING,"+COL_5+" STRING,"+COL_6+" STRING,"+COL_7+" STRING,"+COL_8+" DATETIME DEFAULT CURRENT_TIMESTAMP,"+COL_9+" STRING,"+COL_10+" STRING)");
 
     }
 
@@ -108,6 +109,20 @@ public class AnsweredQuestionsDBHelper extends SQLiteOpenHelper{
 
         //userAnswers = userAnswers.substring(1, userAnswers.length()-1);
         Log.i("DB_Helper", "Update query: user answers "+userAnswers + "on id "+id);
+        Integer result = db.update(TABLE_NAME, cv, "ID = ?",new String[]{id});
+
+
+        return result;
+    }
+
+    //Insert Assessment Answers
+    public Integer insertAssessmentRisk(String id, String risk){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_10, risk);
+
+        //userAnswers = userAnswers.substring(1, userAnswers.length()-1);
+        Log.i("DB_Helper", "Update query: user answers "+risk + "on id "+id);
         Integer result = db.update(TABLE_NAME, cv, "ID = ?",new String[]{id});
 
 

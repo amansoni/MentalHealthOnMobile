@@ -37,11 +37,12 @@ public class AssessmentFinishFragment extends Fragment {
     private LatLng location;
     private String id;
     private String TAG = "AssessmentFinish";
-    private Boolean severeRiskSet = false;
+    private Boolean veryHighRiskSet = false;
     private Boolean highRiskSet = false;
     private Boolean mediumRiskSet = false;
     private Boolean lowRiskSet = false;
 
+    private TextView leafNodeResultTxtView;
     private Button actionButton1;
     private TextView adviceAction1;
     private Button actionButton2;
@@ -67,15 +68,15 @@ public class AssessmentFinishFragment extends Fragment {
         getDB();
 
         String leafNodeResult = (String) getArguments().getString("resultsOfAssessment");
-        TextView leafNodeResultTxtView = (TextView) v.findViewById(R.id.leaf_node_result);
-        String leafNodeResultRaw =  leafNodeResult.split("\\:")[1];
+        leafNodeResultTxtView = (TextView) v.findViewById(R.id.leaf_node_result);
+        /*String leafNodeResultRaw =  leafNodeResult.split("\\:")[1];
         String leafNodeResultPercent = leafNodeResultRaw.substring(1,leafNodeResultRaw.length()-2);
         Float risk = Float.valueOf(leafNodeResultPercent)*100;
         DecimalFormat df = new DecimalFormat("#");
         df.setRoundingMode(RoundingMode.CEILING);
         Double d = risk.doubleValue();
         leafNodeResultTxtView.setText(df.format(d)+"%");
-
+*/
 
         actionButton1 = (Button) v.findViewById(R.id.find_local_services1);
         adviceAction1 = (TextView) v.findViewById(R.id.action_advice1);
@@ -113,6 +114,7 @@ public class AssessmentFinishFragment extends Fragment {
 
     private void calculateAction(String result, Button actionButton, TextView adviceActionTV, Boolean action_origin){
        Float riskValue;
+        String riskString = "";
         if (action_origin) {
             String riskValueRaw = result.split("\\:")[1];
             String riskValueString = riskValueRaw.substring(1, riskValueRaw.length() - 2);
@@ -120,13 +122,15 @@ public class AssessmentFinishFragment extends Fragment {
         }else{
             riskValue = Float.valueOf(result);
         }
-        if (riskValue >= 0.75 && !severeRiskSet){
-            Log.i(TAG, "Go to A&E");
+        if (riskValue >= 0.75 && !veryHighRiskSet){
             if (action_origin) {
-                adviceActionTV.setText("Based on your results, you should go visit your nearest A&E");
-            }else{
-                adviceActionTV.setText("One of your answers indicates that you should go visit your nearest A&E");
-            }
+                leafNodeResultTxtView.setText("Your answers suggest that you have a very high risk of hurting yourself.");
+                adviceActionTV.setText("Based on your results, you should go visit your nearest A&E:");
+                riskString = "Very high risk";
+            }/*else{
+                adviceActionTV.setText("We also suggested during the assessment that you should go visit your nearest A&E");
+                showSecondaryActions();
+            }*/
             actionButton.setText("Find A&E");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -144,12 +148,14 @@ public class AssessmentFinishFragment extends Fragment {
                     transaction.commit();
                 }
             });
-            severeRiskSet = true;
+            veryHighRiskSet = true;
         }else if (riskValue >= 0.5 && riskValue < 0.75 && !highRiskSet ){
             if (action_origin) {
-                adviceActionTV.setText("Based on your results, you should call 111 for further advice");
+                leafNodeResultTxtView.setText("Your answers suggest that you have a high risk of hurting yourself.");
+                adviceActionTV.setText("Based on your results, you should call 111 for further advice:");
+                riskString = "High risk";
             }else{
-                adviceActionTV.setText("One of your answers indicates that you call 111 for further advice");
+                adviceActionTV.setText("We also suggested during the assessment that you call 111 for further advice:");
                 showSecondaryActions();
             }
             Log.i(TAG, "Call 111");
@@ -166,9 +172,11 @@ public class AssessmentFinishFragment extends Fragment {
         }else if (riskValue >= 0.3 && riskValue < 0.5 && !mediumRiskSet){
             Log.i(TAG, "See you GP");
             if (action_origin) {
-                adviceActionTV.setText("Based on your results, you should go visit your GP");
+                leafNodeResultTxtView.setText("Your answers suggest that you have a moderate risk of hurting yourself.");
+                adviceActionTV.setText("Based on your results, you should go visit your GP:");
+                riskString = "Moderate risk";
             }else{
-                adviceActionTV.setText("One of your answers indicates that you should go visit your GP");
+                adviceActionTV.setText("We also suggested during the assessment that you should go visit your GP:");
                 showSecondaryActions();
             }
             actionButton.setText("Find GP");
@@ -191,9 +199,11 @@ public class AssessmentFinishFragment extends Fragment {
             mediumRiskSet = true;
         }else if (riskValue >= 0.1 && riskValue < 0.3 && !lowRiskSet){
             if(action_origin) {
-                adviceActionTV.setText("We advise that you text a friend to ask for some support");
+                leafNodeResultTxtView.setText("Your answers suggest that you have a low risk of hurting yourself.");
+                adviceActionTV.setText("We advise that you text a friend to ask for some support:");
+                riskString = "Low risk";
             }else{
-                adviceActionTV.setText("One of your answers indicates that you should text a friend to ask for some support");
+                adviceActionTV.setText("We also suggested during the assessment that you should text a friend to ask for some support:");
                 showSecondaryActions();
             }
             Log.i(TAG, "Text friend");
@@ -209,18 +219,37 @@ public class AssessmentFinishFragment extends Fragment {
             });
             lowRiskSet = true;
         }else if (riskValue < 0.1){
-            adviceActionTV.setText("You're all good. If you want to find some local services, click the button");
+            leafNodeResultTxtView.setText("Your answers suggest that you have no risk of hurting yourself.");
+            adviceActionTV.setText("You're all good. If you want to find some local services, click the button:");
+            riskString = "No risk";
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment fragment = new PlacesList();
+                    Bundle bundle = new Bundle();
+                    bundle.putDouble("searchAreaLong", location.longitude);
+                    bundle.putDouble("searchAreaLat", location.latitude);
+                    bundle.putString("searchRadius","1500");
+                    bundle.putString("searchType", "doctor|hospital|pharmacy");
+                    bundle.putString("filterBy", "");
+                    fragment.setArguments(bundle);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.relativeLayout, fragment);
+                    transaction.commit();
+                }
+            });
             Log.i(TAG, "No action");
         }
-        Log.i(TAG, "Risk value is "+riskValue);
+        if (action_origin){
+            answersDB.insertAssessmentRisk(id, riskString);
+        }
+        Log.i(TAG, "Risk value is "+riskString);
     }
 
     private ArrayList<PrevAssessmentListItem> getDB() {
         ArrayList<PrevAssessmentListItem> data = new ArrayList<>();
         Cursor res = answersDB.getAssessmentDetails(id);
         StringBuffer dbContents = new StringBuffer();
-
-        setHasOptionsMenu(true);
 
         if (res.getCount() == 0) {
             DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();

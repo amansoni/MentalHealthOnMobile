@@ -43,6 +43,7 @@ public class AssessmentDetailsFragment extends Fragment {
     private TextView locationTextView;
     private TextView answersTextView;
     private TextView dateOfAssessmentTextView;
+    private TextView riskResultTextView;
     private String TAG = "AssessDetails";
 
 
@@ -67,6 +68,8 @@ public class AssessmentDetailsFragment extends Fragment {
         locationTextView = (TextView) v.findViewById(R.id.location);
         answersTextView = (TextView) v.findViewById(R.id.answers);
         dateOfAssessmentTextView = (TextView) v.findViewById(R.id.date_of_assessment);
+        riskResultTextView = (TextView) v.findViewById(R.id.risk_result);
+
         getDB();
 
         return v;
@@ -93,6 +96,7 @@ public class AssessmentDetailsFragment extends Fragment {
                 String location = res.getString(5).split("\\:")[0];
                 String dateOfAssessment = res.getString(7);
                 String answers = res.getString(8);
+                String risk = res.getString(9);
 
                 dateOfBirthTextView.setText(dateOfBirth);
                 genderTextView.setText(gender);
@@ -101,6 +105,8 @@ public class AssessmentDetailsFragment extends Fragment {
                 locationTextView.setText(location);
                 dateOfAssessmentTextView.setText(dateOfAssessment);
                 answersTextView.setText(formatAnswer(answers));
+                riskResultTextView.setText(risk);
+
                 PrevAssessmentListItem current = new PrevAssessmentListItem(id, dateOfAssessment, gender);
                 data.add(current);
             }

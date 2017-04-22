@@ -214,6 +214,28 @@
                 android:background="@color/colorPrimary"
                 android:elevation="1dp" />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Risk result"
+                    android:textColor="@color/textColour"
+                    android:textSize="@dimen/header_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/risk_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textSize="@dimen/header_text_size" />
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/answers"
                 android:layout_width="wrap_content"
