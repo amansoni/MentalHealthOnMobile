@@ -9,11 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.theom.mmha.DbBitmapUtility;
 import com.example.theom.mmha.Fragments.Places.PlacesList;
@@ -89,6 +91,20 @@ public class AssessmentFinishFragment extends Fragment {
         if (scaleInput != 0) {
             calculateAction(Float.toString(scaleInput), actionButton2, adviceAction2, false);
         }
+
+        //Disable back button
+        v.setFocusableInTouchMode(true);
+        v.requestFocus();
+        v.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    Toast.makeText(getActivity(), "Can't press back from here", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         return v;
     }

@@ -89,7 +89,7 @@
                 android:id="@+id/filter_by_textview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Filter by?"
+                android:text="Sort by?"
                 android:textColor="@color/textColour"
                 android:textSize="50dp"
                 android:gravity="center"/>
@@ -98,7 +98,7 @@
                 android:layout_width="270dp"
                 android:layout_height="40dp"
                 android:textColor="@color/buttonTextColour"
-                android:text="Select filter"
+                android:text="Select option"
                 android:drawableRight="@drawable/ic_navigate_next_black_24px"
                 android:background="@drawable/custom_button"
                 />

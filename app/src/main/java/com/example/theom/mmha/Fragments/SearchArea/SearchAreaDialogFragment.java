@@ -141,7 +141,6 @@ public class SearchAreaDialogFragment extends DialogFragment
 
     private void InsertRecentDatabase(String searchAreaName){
         if (searchAreaName == null || searchAreaName.equals("My Location")){
-            Log.i(TAG, "Not gonna insert my location or null biatch");
         }else {
             boolean isInserted = locationsDB.insertData(searchAreaName, searchLat, searchLong);
             if (isInserted == true)

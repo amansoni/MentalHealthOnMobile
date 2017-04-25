@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.theom.mmha.Fragments.HomepageFragment;
 import com.example.theom.mmha.Fragments.Map.GmapFragment;
 import com.example.theom.mmha.R;
 import com.google.gson.Gson;
@@ -106,7 +107,16 @@ public class PlacesList extends Fragment {
 
         @Override
         protected void onPostExecute(GooglePlaceList places) {
-            reportBack(places);
+            if (places != null) {
+                reportBack(places);
+            }else{
+                Toast.makeText(getActivity(), "No search results found.", Toast.LENGTH_LONG).show();
+                Fragment fragment = new HomepageFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.relativeLayout, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
 
             //return places.getPlaceNames().get(1);
         }
