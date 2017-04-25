@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,15 +105,18 @@ public class PrevAssessmentListAdapter extends RecyclerView.Adapter<PrevAssessme
         //Launch favourite detailed info fragment when card is clicked
         @Override
         public void onClick(View v) {
-                AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                Bundle bundle = new Bundle();
-                bundle.putString("id", id.getText().toString());
-                Fragment fragment = new AssessmentDetailsFragment();
-                fragment.setArguments(bundle);
-                FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.relativeLayout, fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+            Log.i(TAG, "Date of assessment = "+dateOfAssessment.getText().toString());
+               if (!dateOfAssessment.getText().toString().equals("0000-00-00")) {
+                   AppCompatActivity activity = (AppCompatActivity) v.getContext();
+                   Bundle bundle = new Bundle();
+                   bundle.putString("id", id.getText().toString());
+                   Fragment fragment = new AssessmentDetailsFragment();
+                   fragment.setArguments(bundle);
+                   FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+                   transaction.replace(R.id.relativeLayout, fragment);
+                   transaction.addToBackStack(null);
+                   transaction.commit();
+               }
         }
 
         //Start itinerary selection mode

@@ -60,7 +60,7 @@ public class PrevAssessmentListFragment extends Fragment implements PrevAssessme
         if (res.getCount() == 0){
             DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();
             String titleText="There are no previous assessments to display";
-            PrevAssessmentListItem current=new PrevAssessmentListItem("0", "No Assessments Found", "");
+            PrevAssessmentListItem current=new PrevAssessmentListItem("0", "0000-00-00 00:00:00", "");
             data.add(current);
         }else {
             while (res.moveToNext()) {

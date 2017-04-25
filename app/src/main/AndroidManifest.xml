@@ -41,5 +41,5 @@
             android:name=".Fragments.Map.MapsActivity"
             android:label="@string/title_activity_maps" />
     </application>
-
+    <!--android:theme="@style/AppTheme.Launcher"-->
 </manifest>

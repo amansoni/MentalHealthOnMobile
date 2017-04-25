@@ -125,11 +125,12 @@ public class SearchLocalServicesFragment extends Fragment implements View.OnClic
                     return;
                 }
                 String locationType = searchLocationType;
-                if (locationType != null)
-                    bundle.putString("locationType", locationType);
-                else {
+                if (locationType == null || locationType.toString().equals("")) {
                     Toast.makeText(getActivity(), "You've not entered a location type", Toast.LENGTH_SHORT).show();
                     searchLocationType = "hospital";
+                }else {
+                    bundle.putString("locationType", locationType);
+                    Log.i(TAG, "location type " + locationType);
                 }
                 bundle.putDouble("searchAreaLong", searchLong);
                 bundle.putDouble("searchAreaLat", searchLat);
@@ -215,10 +216,7 @@ public class SearchLocalServicesFragment extends Fragment implements View.OnClic
 
         Log.i(TAG, "searchAreaName = "+searchAreaName+", Coordinates: "+searchLat + ", "+searchLong);
         //change the text view above the dialog launch button to show the user their selection
-        if (searchAreaName == null) {
-            whatAreaTextView.setText("My Location");
-            whatAreaTextView.setTextSize(35);
-        } else {
+        if (searchAreaName != null) {
             whatAreaTextView.setText(searchAreaName);
             shrinkTextToFit(whatAreaTextView.getMaxWidth(),whatAreaTextView,35,10);
         }
