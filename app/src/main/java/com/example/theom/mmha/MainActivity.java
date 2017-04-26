@@ -15,12 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.theom.mmha.Fragments.HomepageFragment;
-import com.example.theom.mmha.Fragments.Places.PlacePins;
-import com.example.theom.mmha.Fragments.SearchLocalServicesFragment;
-import com.example.theom.mmha.MySafety_Quiz.AssessmentFinishFragment;
-import com.example.theom.mmha.MySafety_Quiz.QuestionFragment;
-import com.example.theom.mmha.MySafety_Quiz.SetupAssessmentFragment;
+import com.example.theom.mmha.LocalSerivces.Places.PlacePins;
+import com.example.theom.mmha.LocalSerivces.SearchServices.SearchLocalServicesFragment;
+import com.example.theom.mmha.Assessment.AssessmentFinishFragment;
+import com.example.theom.mmha.Assessment.QuestionFragment;
+import com.example.theom.mmha.Assessment.SetupAssessmentFragment;
 import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListFragment;
 
 public class MainActivity extends AppCompatActivity

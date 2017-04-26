@@ -14,9 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.theom.mmha.DbBitmapUtility;
-import com.example.theom.mmha.MySafety_Quiz.AnsweredQuestionsDBHelper;
-import com.example.theom.mmha.MySafety_Quiz.Dialogs.InfoDialog;
-import com.example.theom.mmha.MySafety_Quiz.QuestionObject;
+import com.example.theom.mmha.Assessment.AnsweredQuestionsDBHelper;
+import com.example.theom.mmha.Assessment.Dialogs.InfoDialog;
+import com.example.theom.mmha.Assessment.QuestionObject;
 import com.example.theom.mmha.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
