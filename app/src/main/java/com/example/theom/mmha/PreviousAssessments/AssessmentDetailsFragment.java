@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.theom.mmha.DbBitmapUtility;
-import com.example.theom.mmha.Assessment.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.Assessment.Dialogs.InfoDialog;
 import com.example.theom.mmha.Assessment.QuestionObject;
 import com.example.theom.mmha.R;

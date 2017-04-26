@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.theom.mmha.Assessment.AnsweredQuestionsDBHelper;
+import com.example.theom.mmha.PreviousAssessments.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.Assessment.QuestionObject;
 import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListFragment;
 import com.example.theom.mmha.R;

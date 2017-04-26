@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.theom.mmha.DbBitmapUtility;
 import com.example.theom.mmha.Assessment.Dialogs.ActionDialog;
 import com.example.theom.mmha.Assessment.Dialogs.InfoDialog;
+import com.example.theom.mmha.PreviousAssessments.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListItem;
 import com.example.theom.mmha.R;
 import com.google.android.gms.maps.model.LatLng;

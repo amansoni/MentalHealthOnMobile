@@ -21,6 +21,7 @@ import com.example.theom.mmha.LocalSerivces.SearchServices.SearchArea.SearchArea
 import com.example.theom.mmha.Assessment.Dialogs.DatePickerFragment;
 import com.example.theom.mmha.Assessment.Dialogs.EthnicityPickerDialog;
 import com.example.theom.mmha.Assessment.Dialogs.RelationshipsDialog;
+import com.example.theom.mmha.PreviousAssessments.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.R;
 
 /**

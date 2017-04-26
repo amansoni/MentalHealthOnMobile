@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.theom.mmha.DbBitmapUtility;
-import com.example.theom.mmha.Assessment.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.R;
 
 import java.util.ArrayList;

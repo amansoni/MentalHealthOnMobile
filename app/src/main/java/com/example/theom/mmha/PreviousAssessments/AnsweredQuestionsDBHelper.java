@@ -1,4 +1,4 @@
-package com.example.theom.mmha.Assessment;
+package com.example.theom.mmha.PreviousAssessments;
 
 import android.content.ContentValues;
 import android.content.Context;
