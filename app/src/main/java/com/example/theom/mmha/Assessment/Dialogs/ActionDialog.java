@@ -113,6 +113,7 @@ public class ActionDialog extends DialogFragment {
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.relativeLayout, fragment);
                     transaction.commit();
+                    dismiss();
                 }
             });
         } else if (actionButtonText.equals("Call 111")) {
@@ -141,6 +142,7 @@ public class ActionDialog extends DialogFragment {
                     FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                     transaction.replace(R.id.relativeLayout, fragment);
                     transaction.commit();
+                    dismiss();
                 }
             });
         } else if (actionButtonText.equals("Text friend")) {

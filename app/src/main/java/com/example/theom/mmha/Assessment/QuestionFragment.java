@@ -336,8 +336,7 @@ public class QuestionFragment extends Fragment {
         nextQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar snackbar = Snackbar
-                        .make(frameLayout, "Submitted the value " + likertScaleInput, Snackbar.LENGTH_SHORT);
+                Toast.makeText(getActivity(), "Submitted the value " + likertScaleInput, Toast.LENGTH_SHORT).show();
                 //to retain highest risk mid assessment action
                 Float tempScaleValue = scaleValue;
                 scaleValue = 0f;
@@ -351,7 +350,6 @@ public class QuestionFragment extends Fragment {
                 }else{
                     likertScaleInput = 0;
                 }
-                snackbar.show();
 
                 GetNextQuestion("Yes");
             }
@@ -527,7 +525,7 @@ public class QuestionFragment extends Fragment {
             adviceActionText = "Based on your answer, you should go visit your nearest A&E";
             actionButtonText = "Find A&E";
 
-            ActionDialog extraInfoDialog = ActionDialog.newInstance("Action", location.longitude, location.latitude, actionButtonText, adviceActionText);
+            ActionDialog extraInfoDialog = ActionDialog.newInstance("Action", location.latitude, location.longitude, actionButtonText, adviceActionText);
             extraInfoDialog.setTargetFragment(this, 0);
             extraInfoDialog.show(getActivity().getSupportFragmentManager(), "fragmentDialog");
 
