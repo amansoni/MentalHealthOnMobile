@@ -71,10 +71,9 @@ public class JSON_parser {
         return firstQuestion;
     }
 
-    public QuestionObject runAssessment(String answer, Context ctx) throws JSONException {
+    public QuestionObject progressAssessment(String answer, Context ctx) throws JSONException {
         QuestionObject question;
         String nextQuestion;
-        String nodeInformation = "No node information";
 
         nextQuestion = getNextQuestionCode(answer);
         question = xml_parser.getQuestionText(nList, nextQuestion);
@@ -90,6 +89,12 @@ public class JSON_parser {
         }
         return question;
     }
+
+ /*   for (i = 0; i<3; i++){
+        for (j = 0 j<3; j++){
+
+        }
+    }*/
 
 
     public String getNextQuestionCode(String userAnswer) {

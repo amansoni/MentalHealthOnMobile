@@ -7,6 +7,7 @@ package com.example.theom.mmha.Assessment;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -53,8 +54,7 @@ public class XML_parser extends FragmentActivity{
         String scaleInformation = "No Information found";
         for (int i = 0; i < nList.getLength(); i++) {
             Element e = (Element) nList.item(i);
-            String search_attribute = questionID;
-            if (e.getAttribute("code").equals(search_attribute)) {
+            if (e.getAttribute("code").equals(questionID)) {
                 questionText =  e.getAttribute("question");
                 values = e.getAttribute("values");
                 helpText = e.getAttribute("help");

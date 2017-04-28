@@ -1,43 +1,44 @@
-package com.example;
+package com.example.theom.mmha.Assessment;
 
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
+/**
+ * Created by theom on 15/02/2017.
+ */
+
+
+import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Node;
 import org.w3c.dom.Element;
-import java.io.File;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.*;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Entity;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
+import java.io.InputStream;
 
-public class XML_parser {
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+public class XML_parser extends FragmentActivity{
+
+    String TAG = "XML_Parser";
 
     public static void main(String argv[]) {
 
     }
 
-    public NodeList parseXML(){
+    public NodeList parseXML(Context ctx, Integer xml_file){
         NodeList nList = null;
         try {
-            //File fXmlFile = new File("lib/src/main/java/files/staff.xml");
-            File question_tree = new File("lib/src/main/java/files/qt.xml");
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(question_tree);
-            doc.getDocumentElement().normalize();
-            nList = doc.getElementsByTagName("node");
+            try {
+                InputStream XMLin = ctx.getResources().openRawResource(xml_file);
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                Document doc = dBuilder.parse(new InputSource(XMLin));
+                doc.getDocumentElement().normalize();
+                nList = doc.getElementsByTagName("node");
+            } catch (Exception e) {
+                System.out.println("XML Pasing Excpetion = " + e);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,17 +46,44 @@ public class XML_parser {
         return nList;
     }
 
-    public String getQuestionText(NodeList nList, String questionID) {
+    public QuestionObject getQuestionText(NodeList nList, String questionID) {
         String questionText = "Couldn't find the question";
+        String values = "Question type not found";
+        String helpText= "No help info found";
+        String scaleInformation = "No Information found";
         for (int i = 0; i < nList.getLength(); i++) {
             Element e = (Element) nList.item(i);
             String search_attribute = questionID;
-            //String search_attribute = questionCode;
             if (e.getAttribute("code").equals(search_attribute)) {
                 questionText =  e.getAttribute("question");
-                System.out.println("Question: " + questionText);
+                values = e.getAttribute("values");
+                helpText = e.getAttribute("help");
+                scaleInformation = e.getAttribute("scale-type");
+                //System.out.println("Question: " + questionText);
             }
         }
-        return questionText;
+        QuestionObject question = new QuestionObject(questionText, values, questionID, false, helpText, scaleInformation);
+        return question;
+    }
+
+    public QuestionObject getQuestionFormat(NodeList nList, String questionID, QuestionObject question) {
+        String action = "Action not found";
+        String value_mg = "Value_mg not found";
+        Boolean valueFound = false;
+        // while(valueFound == false) {
+        for (int i = 0; i < nList.getLength(); i++) {
+            Element e = (Element) nList.item(i);
+            String search_attribute = questionID;
+            if (e.getAttribute("code").equals(search_attribute)) {
+                action = e.getAttribute("action");
+                value_mg = e.getAttribute("value-mg");
+                question.setQuestionAction(action);
+                question.setQuestionMG(value_mg);
+                break;
+            }
+        }
+        // }
+
+        return question;
     }
 }

@@ -118,7 +118,7 @@ public class QuestionFragment extends Fragment {
         mYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetNextQuestion("Yes");
+                getNextQuestion("Yes");
             }
         });
 
@@ -126,7 +126,7 @@ public class QuestionFragment extends Fragment {
         mNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetNextQuestion("No");
+                getNextQuestion("No");
             }
         });
 
@@ -169,13 +169,14 @@ public class QuestionFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public void GetNextQuestion(String answer) {
+    //IMPORTANT METHOD ---- Takes user's input, and will retrieve next question if !leafnode, else displays assessment finish
+    public void getNextQuestion(String answer) {
         //Enter answer into hashmap for storing
         Log.i(TAG, "Putting " + currentQuestion.getQuestionText() + " into Hashmap and the answer was " + answer);
         userAnswersHashMap.put(currentQuestion.getQuestionText(), answer);
         try {
             //take users input, ask JSON_Parser for next question
-            QuestionObject question = senorJSON_parser.runAssessment(answer, getActivity());
+            QuestionObject question = senorJSON_parser.progressAssessment(answer, getActivity());
             //Check if this question is a leaf node
             leafNodeReached = question.isLeafNode();
             //update the question fragment to new question's layout
@@ -294,13 +295,13 @@ public class QuestionFragment extends Fragment {
         mYesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetNextQuestion("Yes");
+                getNextQuestion("Yes");
             }
         });
         mNoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GetNextQuestion("No");
+                getNextQuestion("No");
             }
         });
     }
@@ -351,7 +352,7 @@ public class QuestionFragment extends Fragment {
                     likertScaleInput = 0;
                 }
 
-                GetNextQuestion("Yes");
+                getNextQuestion("Yes");
             }
         });
     }
@@ -489,7 +490,7 @@ public class QuestionFragment extends Fragment {
                 Log.i(TAG, "Float value is "+scaleValue);
                 Snackbar snackbar = Snackbar
                         .make(frameLayout, "Nominal value " + nominalValue, Snackbar.LENGTH_SHORT);
-                GetNextQuestion("Yes");
+                getNextQuestion("Yes");
                 snackbar.show();
             }
         });
