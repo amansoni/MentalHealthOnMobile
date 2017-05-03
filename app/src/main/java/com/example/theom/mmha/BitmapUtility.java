@@ -16,28 +16,21 @@ public class BitmapUtility {
 
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) {
-        /*byte [] bytes = null;
-        if(bitmap != null) {*/
             ByteArrayOutputStream stream = null;
             stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
         return stream.toByteArray();
-        //}
-        //return bytes;
     }
 
     // convert from byte array to bitmap
     public static Bitmap getImage(byte[] image) {
-        //Bitmap bitmap = null;
-        //if (image != null) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        //}
         return bitmap;
     }
 
+    // convert drawable to bitmap
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;
-        //if (drawable != null) {
             if (drawable instanceof BitmapDrawable) {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
                 if (bitmapDrawable.getBitmap() != null) {
@@ -54,7 +47,6 @@ public class BitmapUtility {
             Canvas canvas = new Canvas(bitmap);
             drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
             drawable.draw(canvas);
-       // }
         return bitmap;
     }
 }

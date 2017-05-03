@@ -17,27 +17,30 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.NodeList;
 
-
+//Class to pase
 public class JSON_parser {
-
+    //JSON Array object that contains JSON Objects (the questions)
     static JSONArray rows = null;
-    static XML_parser xml_parser = new XML_parser();
-    String JSON_File;
-    JSONObject rootObject;
-    String TAG = "JSON_Parser";
+    //Singleton XML Parser that is used to extract data for question text and supplementary information
+    final static XML_parser xml_parser = new XML_parser();
+    //JSON object that holds the current question text
+    JSONObject currentJSONObject;
+    //Node structure for the qt.xml (the question text)
     NodeList nList;
+    //Flag for when leaf node is reached to stop parsing errors
     Boolean leafNodeReached = false;
+    String TAG = "JSON_Parser";
 
     public static void main(String[] args) throws FileNotFoundException, JSONException {
 
     }
 
+    //Parse JSON to setup the assessment
     public QuestionObject setupAssessment(Context ctx) {
         QuestionObject firstQuestion;
         try {
             try {
-
-                String jsonStr;
+                //Read JSON data in
                 InputStream JSONin = ctx.getResources().openRawResource(R.raw.question_tree);
                 int count = 0;
                 byte[] bytes = new byte[32768];
@@ -45,16 +48,18 @@ public class JSON_parser {
                 while ((count = JSONin.read(bytes, 0, 32768)) > 0) {
                     builder.append(new String(bytes, 0, count));
                 }
-
                 JSONin.close();
-                jsonStr = builder.toString();
-                rootObject = new JSONObject(jsonStr); // Parse the JSON to a JSONObject
-
-                rows = rootObject.getJSONArray("screening-tree"); // Get all JSONArray rows
-
+                //Assign input to String
+                String jsonStr = builder.toString();
+                // Parse the JSON to a JSONObject
+                currentJSONObject = new JSONObject(jsonStr);
+                // Get all JSONArray rows
+                rows = currentJSONObject.getJSONArray("screening-tree");
+                //Setup XML parser to extract question text
                 nList = xml_parser.parseXML(ctx, R.raw.qt);
-
+                //Get question code for the first question
                 String firstQuestionText = getNextQuestionCode("first-question");
+                //Get the question text using the code
                 firstQuestion = xml_parser.getQuestionText(nList, firstQuestionText);
 
             } catch (IOException e) {
@@ -70,18 +75,19 @@ public class JSON_parser {
         return firstQuestion;
     }
 
+    //Run the assessment, taking the user's input and getting the next question
     public QuestionObject progressAssessment(String answer, Context ctx) throws JSONException {
         QuestionObject question;
         String nextQuestion;
-
+        //Get the question code, then the text
         nextQuestion = getNextQuestionCode(answer);
         question = xml_parser.getQuestionText(nList, nextQuestion);
-
+        //If the question type matches any of the following, extract from cat.xml using XML_Parser
         if (question.getQuestionType().equals("layer") || question.getQuestionType().equals("nominal") || question.getQuestionType().equals("scale")) {
             NodeList nListQuestionType = xml_parser.parseXML(ctx, R.raw.cat);
             question = xml_parser.getQuestionFormat(nListQuestionType, nextQuestion, question);
         }
-
+        //If the leaf node is reached, make sure that is indicated in the returned question to the parent QuestionFragment class
         if (leafNodeReached == true) {
             question.setLeadNodeResult(nextQuestion);
             question.setLeafNode(leafNodeReached);
@@ -89,28 +95,27 @@ public class JSON_parser {
         return question;
     }
 
- /*   for (i = 0; i<3; i++){
-        for (j = 0 j<3; j++){
-
-        }
-    }*/
-
-
+    //Get the next question code the user
     public String getNextQuestionCode(String userAnswer) {
         String nextQuestion = "";
         try {
-            for (int i = 0; i < rows.length(); i++) { // Loop over each each row
-                JSONObject row = rows.getJSONObject(i); // Get row object
+            // Loop over each each row
+            for (int i = 0; i < rows.length(); i++) {
+                // Get row object
+                JSONObject row = rows.getJSONObject(i);
+                //Get next question code based on user's answer
                 JSONArray result = row.getJSONArray(userAnswer);
+                //Get the child that result
                 JSONObject child = result.getJSONObject(0);
                 Iterator<String> iterator = child.keys();
                 while (iterator.hasNext()) {
                     nextQuestion = iterator.next();
                 }
-
+                //LOGIC TO DETERMINE IF IT'S A LEAF NODE - If the text doesn't contain 'prob, then it's an ordinary question
                 if (!nextQuestion.contains("prob")) {
                     rows = rows.getJSONObject(0).getJSONArray(userAnswer).getJSONObject(0).getJSONArray(nextQuestion);
                 } else {
+                    //Else it's a leaf node and the contents of which should be extracted for a risk result
                     Log.i(TAG, "Leaf node contains " + nextQuestion);
                     nextQuestion = rows.getJSONObject(0).getJSONArray(userAnswer).getJSONObject(0).toString();
                     leafNodeReached = true;
@@ -125,30 +130,6 @@ public class JSON_parser {
         }
 
         return nextQuestion;
-    }
-
-    //method to call xml parser
-    public String getQuestionText(String quetionCode) {
-        String questionText = new String();
-
-        return questionText;
-    }
-
-    public static String readFile(String filename) {
-        String result = "";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                line = br.readLine();
-            }
-            result = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
 }

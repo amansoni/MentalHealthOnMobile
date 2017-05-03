@@ -22,6 +22,7 @@ import com.example.theom.mmha.Assessment.QuestionFragment;
 import com.example.theom.mmha.Assessment.SetupAssessmentFragment;
 import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListFragment;
 
+//Class from which all the fragments are displayed
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomepageFragment.OnFragmentInteractionListener,
@@ -37,24 +38,25 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Set theme from one set in manifest (used to display loading icon on app launch)
         setTheme(R.style.AppTheme_NoActionBar);
+        //Set the view to the navigation drawer. Present throughout app
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_navigation_drawer);
-
+        //Setup the toolbar for navigation drawer icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //Setup drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+        //Navigation drawer contents
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
         View header = navigationView.getHeaderView(0);
-
+        //Create link in the navigation drawer header to access egrist.org
         TextView egristLink = (TextView) header.findViewById(R.id.more_info_address);
         egristLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
-
+        //Load homepage fragment
         Fragment fragment = new HomepageFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.relativeLayout, fragment).commit();
@@ -73,6 +75,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //Handle back button operations
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -84,6 +87,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    //Handle clicks on items in the navigation drawer
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -111,6 +115,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //Pins for map display
     public static PlacePins returnPlacePins() {
         PlacePins placePins = new PlacePins();
         return placePins;
@@ -122,6 +127,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //Set the title of the fragment to whatever fragment is loaded at the time
     @Override
     public void setTitle(String title) {
         if (getSupportActionBar() != null) {
