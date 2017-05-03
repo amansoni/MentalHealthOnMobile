@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.theom.mmha.DbBitmapUtility;
+import com.example.theom.mmha.BitmapUtility;
 import com.example.theom.mmha.R;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class PrevAssessmentListFragment extends Fragment implements PrevAssessme
         StringBuffer dbContents = new StringBuffer();
 
         if (res.getCount() == 0){
-            DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();
+            BitmapUtility bitmapUtility = new BitmapUtility();
             String titleText="There are no previous assessments to display";
             PrevAssessmentListItem current=new PrevAssessmentListItem("0", "0000-00-00 00:00:00", "");
             data.add(current);

@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.theom.mmha.DbBitmapUtility;
+import com.example.theom.mmha.BitmapUtility;
 import com.example.theom.mmha.Assessment.Dialogs.InfoDialog;
 import com.example.theom.mmha.Assessment.QuestionObject;
 import com.example.theom.mmha.R;
@@ -82,7 +82,7 @@ public class AssessmentDetailsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         if (res.getCount() == 0) {
-            DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();
+            BitmapUtility bitmapUtility = new BitmapUtility();
             String titleText = "There are no previous assessments to display";
             PrevAssessmentListItem current = new PrevAssessmentListItem("0", "0000-00-00 00:00:00", "");
             data.add(current);

@@ -26,15 +26,14 @@ public class JSON_parser {
     JSONObject rootObject;
     String TAG = "JSON_Parser";
     NodeList nList;
-    QuestionObject firstQuestion;
     Boolean leafNodeReached = false;
 
     public static void main(String[] args) throws FileNotFoundException, JSONException {
 
     }
 
-    public QuestionObject setupQuiz(Context ctx) {
-        QuestionObject question;
+    public QuestionObject setupAssessment(Context ctx) {
+        QuestionObject firstQuestion;
         try {
             try {
 

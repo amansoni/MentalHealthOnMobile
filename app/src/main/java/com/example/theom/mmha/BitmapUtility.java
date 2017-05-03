@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream;
  * Created by theom on 17/03/2017.
  */
 
-public class DbBitmapUtility {
+public class BitmapUtility {
 
     // convert from bitmap to byte array
     public static byte[] getBytes(Bitmap bitmap) {

@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomepageFragment.OnFragmentInteractionListener,
         HomepageFragment.OnSetToolbarTitleListener,
-        QuestionFragment.OnFragmentInteractionListener,
         QuestionFragment.OnSetToolbarTitleListener,
         SetupAssessmentFragment.OnSetToolbarTitleListener,
         AssessmentFinishFragment.OnSetToolbarTitleListener,

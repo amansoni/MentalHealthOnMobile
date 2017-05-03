@@ -17,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.theom.mmha.DbBitmapUtility;
+import com.example.theom.mmha.BitmapUtility;
 import com.example.theom.mmha.LocalSerivces.Places.PlacesList;
 import com.example.theom.mmha.PreviousAssessments.AnsweredQuestionsDBHelper;
 import com.example.theom.mmha.PreviousAssessments.PrevAssessmentListItem;
@@ -265,7 +265,7 @@ public class AssessmentFinishFragment extends Fragment {
         StringBuffer dbContents = new StringBuffer();
 
         if (res.getCount() == 0) {
-            DbBitmapUtility dbBitmapUtility = new DbBitmapUtility();
+            BitmapUtility bitmapUtility = new BitmapUtility();
             String titleText = "There are no previous assessments to display";
             PrevAssessmentListItem current = new PrevAssessmentListItem("0", "No Assessments Found", "");
             data.add(current);
